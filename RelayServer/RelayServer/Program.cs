@@ -39,6 +39,14 @@ app.Map("/connect", async (HttpContext context) =>
                     joinedRoom = true;
                     await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
+                else if (msgType == "LEAVE")
+                {
+                    var msgContent = splitMessage[1];
+                    var roomCode = msgContent;
+                    Console.WriteLine($"Attempting to leave room {roomCode}.");
+                    joinedRoom = true;
+                    await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
             }
         }
     }
