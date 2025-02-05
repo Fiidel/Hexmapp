@@ -22,8 +22,8 @@ app.Map("/connect", async (HttpContext context) =>
             if (receiveResult.MessageType == WebSocketMessageType.Text)
             {
                 var message = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-                var msgType = message.Split(':')[0];
-                var msgContent = message.Split(':')[1];
+                var splitMessage = message.Split(':');
+                var msgType = splitMessage[0];
 
                 if (msgType == "CREATE")
                 {
@@ -33,6 +33,7 @@ app.Map("/connect", async (HttpContext context) =>
                 }
                 else if (msgType == "JOIN")
                 {
+                    var msgContent = splitMessage[1];
                     var roomCode = msgContent;
                     Console.WriteLine($"Attempting to join room {roomCode}.");
                     joinedRoom = true;
