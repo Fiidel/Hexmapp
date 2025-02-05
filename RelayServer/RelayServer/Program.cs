@@ -27,7 +27,7 @@ app.Map("/connect", async (HttpContext context) =>
 
                 if (msgType == "CREATE")
                 {
-                    var roomCode = GenerateRoomCode();
+                    var roomCode = "XXXXXXXX";
                     joinedRoom = true;
                     await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Room code: {roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
@@ -46,18 +46,5 @@ app.Map("/connect", async (HttpContext context) =>
         context.Response.StatusCode = StatusCodes.Status400BadRequest;
     }
 });
-
-string GenerateRoomCode()
-{
-    var symbolArray = "ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789";
-    int codeLength = 8;
-    char[] roomCode = new char[codeLength];
-    Random random = new Random();
-    for (int i = 0; i < codeLength; i++)
-    {
-        roomCode[i] = symbolArray[random.Next(0, symbolArray.Length)];
-    }
-    return new string(roomCode);
-}
 
 app.Run();
