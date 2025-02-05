@@ -1,8 +1,9 @@
+using RelayServer.Rooms;
 using System.Net.WebSockets;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IRoomCodeGenerator, RoomCodeGenerator>();
 var app = builder.Build();
 
 app.UseWebSockets();
