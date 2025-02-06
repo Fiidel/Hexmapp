@@ -1,4 +1,5 @@
-﻿using System.Net.WebSockets;
+﻿using System.Net.Sockets;
+using System.Net.WebSockets;
 
 namespace RelayServer.Rooms
 {
@@ -46,16 +47,27 @@ namespace RelayServer.Rooms
             }
         }
 
-        public void LeaveRoom(string roomId, WebSocket player)
+        public async Task LeaveRoom(string roomId, WebSocket player)
         {
             if (_rooms.ContainsKey(roomId))
             {
                 if (_rooms[roomId].AllPlayers.Contains(player))
                 {
-                    _rooms[roomId].AllPlayers.Remove(player);
-
-                    // TODO: gracefully close socket
-                    // TODO: if game master left, throw everyone out gracefully and remove room
+                    // game master host leaving disconnects all players
+                    if (_rooms[roomId].GameMaster == player)
+                    {
+                        foreach (var p in _rooms[roomId].AllPlayers)
+                        {
+                            await CloseWebSocketOnLeave(p);
+                        }
+                        RemoveRoom(roomId);
+                        return;
+                    }
+                    else
+                    {
+                        await CloseWebSocketOnLeave(player);
+                        _rooms[roomId].AllPlayers.Remove(player);
+                    }
                 }
                 else
                 {
@@ -95,6 +107,14 @@ namespace RelayServer.Rooms
             else
             {
                 throw new Exception("Room does not exist");
+            }
+        }
+
+        private async Task CloseWebSocketOnLeave(WebSocket socket)
+        {
+            if (socket.State == WebSocketState.Open)
+            {
+                await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "LEAVE successful", CancellationToken.None);
             }
         }
     }
