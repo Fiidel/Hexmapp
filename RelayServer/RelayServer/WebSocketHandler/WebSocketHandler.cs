@@ -81,10 +81,10 @@ namespace RelayServer.WebSocketHandler
                                 await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
 
-                            case "MESSAGE":
+                            case "MSG":
                                 if (splitMessage.Length < 2)
                                 {
-                                    throw new Exception("Invalid MESSAGE command");
+                                    throw new Exception("Invalid MSG command");
                                 }
                                 var msgContent = splitMessage[1];
                                 _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
