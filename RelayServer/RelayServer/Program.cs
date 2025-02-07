@@ -5,6 +5,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<WebSocketHandler>();
+builder.Services.AddSingleton<IRoomManager, RoomManager>();
 builder.Services.AddTransient<IRoomCodeGenerator, RoomCodeGenerator>();
 var app = builder.Build();
 
