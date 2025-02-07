@@ -5,7 +5,7 @@ namespace RelayServer.Rooms
     public class Room
     {
         public string RoomCode { get; set; } = string.Empty;
-        public WebSocket? GameMaster { get; set; }
-        public List<WebSocket> AllPlayers { get; set; } = new(); /* includes the game master */
+        public required Player GameMaster { get; set; }
+        public List<Player> AllPlayers { get; set; } = new(); /* includes the game master */
     }
 }

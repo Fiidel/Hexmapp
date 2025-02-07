@@ -19,7 +19,8 @@ namespace RelayServer.WebSocketHandler
             if (context.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                await ProcessMessages(webSocket);
+                var player = new Player() { Socket = webSocket };
+                await ProcessMessages(player);
             }
             else
             {
@@ -27,7 +28,7 @@ namespace RelayServer.WebSocketHandler
             }
         }
 
-        private async Task ProcessMessages(WebSocket webSocket)
+        private async Task ProcessMessages(Player player)
         {
             // ==========================================================
             // TODO: aborted and loss of connectivity connections
@@ -36,10 +37,10 @@ namespace RelayServer.WebSocketHandler
             // ==========================================================
 
 
-            while (webSocket.State == WebSocketState.Open)
+            while (player.Socket.State == WebSocketState.Open)
             {
                 var buffer = new byte[1024];
-                var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                var receiveResult = await player.Socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
                 if (receiveResult.MessageType == WebSocketMessageType.Close)
                 {
@@ -47,7 +48,7 @@ namespace RelayServer.WebSocketHandler
                     // TODO: clean up in RoomManager
                     // ==========================================================
 
-                    await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Close message successful, closing", CancellationToken.None);
+                    await player.Socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Close message successful, closing", CancellationToken.None);
                     return;
                 }
                 else if (receiveResult.MessageType == WebSocketMessageType.Text)
@@ -61,8 +62,8 @@ namespace RelayServer.WebSocketHandler
                         switch (msgType)
                         {
                             case "CREATE":
-                                var roomCode = _roomManager.CreateRoom(webSocket);
-                                await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Room code: {roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                var roomCode = _roomManager.CreateRoom(player);
+                                await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Room code: {roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
 
                             case "JOIN":
@@ -71,38 +72,32 @@ namespace RelayServer.WebSocketHandler
                                     throw new Exception("Invalid JOIN command");
                                 }
                                 var joinRoomCode = splitMessage[1];
-                                _roomManager.JoinRoom(joinRoomCode, webSocket);
-                                await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                _roomManager.JoinRoom(joinRoomCode, player);
+                                await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
 
                             case "LEAVE":
-                                if (splitMessage.Length < 2)
-                                {
-                                    throw new Exception("Invalid LEAVE command");
-                                }
-                                var leaveRoomCode = splitMessage[1];
-                                await _roomManager.LeaveRoom(leaveRoomCode, webSocket);
-                                await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                await _roomManager.LeaveCurrentRoom(player);
+                                await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
 
                             case "MESSAGE":
-                                if (splitMessage.Length < 3)
+                                if (splitMessage.Length < 2)
                                 {
                                     throw new Exception("Invalid MESSAGE command");
                                 }
-                                var targetRoom = splitMessage[1];
-                                var msgContent = splitMessage[2];
-                                _roomManager.RelayToRoom(targetRoom, new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), webSocket);
+                                var msgContent = splitMessage[1];
+                                _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
                                 break;
 
                             default:
-                                await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Unknown command.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Unknown command.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Error: {ex.Message}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                        await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Error: {ex.Message}")), WebSocketMessageType.Text, true, CancellationToken.None);
                     }
                 }
             }

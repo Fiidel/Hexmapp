@@ -7,7 +7,7 @@ namespace RelayServer.Rooms
     {
         private Dictionary<string, Room> _rooms = [];
 
-        public string CreateRoom(WebSocket gameMaster)
+        public string CreateRoom(Player gameMaster)
         {
             string roomCode = "";
             var unique = false;
@@ -16,6 +16,7 @@ namespace RelayServer.Rooms
                 roomCode = roomCodeGenerator.GenerateRoomCode();
                 unique = !_rooms.ContainsKey(new string(roomCode));
             }
+            gameMaster.JoinedRoomCode = roomCode;
 
             var room = new Room()
             {
@@ -28,12 +29,13 @@ namespace RelayServer.Rooms
             return roomCode;
         }
 
-        public void JoinRoom(string roomId, WebSocket player)
+        public void JoinRoom(string roomId, Player player)
         {
             if (_rooms.ContainsKey(roomId))
             {
                 if (!_rooms[roomId].AllPlayers.Contains(player))
                 {
+                    player.JoinedRoomCode = roomId;
                     _rooms[roomId].AllPlayers.Add(player);
                 }
                 else
@@ -47,61 +49,71 @@ namespace RelayServer.Rooms
             }
         }
 
-        public async Task LeaveRoom(string roomId, WebSocket player)
+        public async Task LeaveCurrentRoom(Player player)
         {
-            if (_rooms.ContainsKey(roomId))
+            if (player.JoinedRoomCode != null)
             {
-                if (_rooms[roomId].AllPlayers.Contains(player))
+                if (_rooms.ContainsKey(player.JoinedRoomCode))
                 {
-                    // game master host leaving disconnects all players
-                    if (_rooms[roomId].GameMaster == player)
+                    if (_rooms[player.JoinedRoomCode].AllPlayers.Contains(player))
                     {
-                        foreach (var p in _rooms[roomId].AllPlayers)
+                        // game master host leaving closes the room
+                        if (_rooms[player.JoinedRoomCode].GameMaster == player)
                         {
-                            await CloseWebSocketOnLeave(p);
+                            await CloseRoom(player.JoinedRoomCode);
+                            return;
                         }
-                        RemoveRoom(roomId);
-                        return;
+                        else
+                        {
+                            await CloseWebSocketOnLeave(player.Socket);
+                            _rooms[player.JoinedRoomCode].AllPlayers.Remove(player);
+                            player.JoinedRoomCode = null;
+                        }
                     }
                     else
                     {
-                        await CloseWebSocketOnLeave(player);
-                        _rooms[roomId].AllPlayers.Remove(player);
+                        throw new Exception("Player not in room");
                     }
                 }
                 else
                 {
-                    throw new Exception("Player not in room");
+                    throw new Exception("Room does not exist");
                 }
-            }
-            else
-            {
-                throw new Exception("Room does not exist");
             }
         }
 
-        public void RelayToRoom(string roomId, ArraySegment<byte> message, WebSocket originator)
+        public void RelayToRoom(ArraySegment<byte> message, Player originator)
         {
-            if (_rooms.ContainsKey(roomId))
+            if (originator.JoinedRoomCode != null)
             {
-                foreach (var player in _rooms[roomId].AllPlayers)
+                if (_rooms.ContainsKey(originator.JoinedRoomCode))
                 {
-                    if (player != originator)
+                    foreach (var player in _rooms[originator.JoinedRoomCode].AllPlayers)
                     {
-                        player.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                        if (player != originator)
+                        {
+                            player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                        }
                     }
                 }
-            }
-            else
-            {
-                throw new Exception("Room does not exist");
+                else
+                {
+                    throw new Exception("Room does not exist");
+                }
             }
         }
 
-        public void RemoveRoom(string roomId)
+        public async Task CloseRoom(string roomId)
         {
             if (_rooms.ContainsKey(roomId))
             {
+                // close any connected sockets
+                foreach (var player in _rooms[roomId].AllPlayers)
+                {
+                    await CloseWebSocketOnLeave(player.Socket);
+                    player.JoinedRoomCode = null;
+                }
+
                 _rooms.Remove(roomId);
             }
             else
