@@ -44,10 +44,7 @@ namespace RelayServer.WebSocketHandler
 
                 if (receiveResult.MessageType == WebSocketMessageType.Close)
                 {
-                    // ==========================================================
-                    // TODO: clean up in RoomManager
-                    // ==========================================================
-
+                    await _roomManager.LeaveCurrentRoom(player);
                     await player.Socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Close message successful, closing", CancellationToken.None);
                     return;
                 }
