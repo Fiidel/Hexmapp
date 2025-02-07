@@ -72,7 +72,7 @@ namespace RelayServer.WebSocketHandler
                                     throw new Exception("Invalid JOIN command");
                                 }
                                 var joinRoomCode = splitMessage[1];
-                                _roomManager.JoinRoom(joinRoomCode, player);
+                                await _roomManager.JoinRoom(joinRoomCode, player);
                                 await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                 break;
 
@@ -87,7 +87,7 @@ namespace RelayServer.WebSocketHandler
                                     throw new Exception("Invalid MSG command");
                                 }
                                 var msgContent = splitMessage[1];
-                                _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
+                                await _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
                                 break;
 
                             default:

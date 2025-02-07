@@ -7,8 +7,13 @@ namespace RelayServer.Rooms
     {
         private Dictionary<string, Room> _rooms = [];
 
-        public string CreateRoom(Player gameMaster)
+        public async Task<string> CreateRoom(Player gameMaster)
         {
+            if (gameMaster.JoinedRoomCode != null)
+            {
+                await LeaveCurrentRoom(gameMaster);
+            }
+
             string roomCode = "";
             var unique = false;
             while (!unique)
@@ -29,8 +34,13 @@ namespace RelayServer.Rooms
             return roomCode;
         }
 
-        public void JoinRoom(string roomId, Player player)
+        public async Task JoinRoom(string roomId, Player player)
         {
+            if (player.JoinedRoomCode != null)
+            {
+                await LeaveCurrentRoom(player);
+            }
+
             if (_rooms.ContainsKey(roomId))
             {
                 if (!_rooms[roomId].AllPlayers.Contains(player))
@@ -82,7 +92,7 @@ namespace RelayServer.Rooms
             }
         }
 
-        public void RelayToRoom(ArraySegment<byte> message, Player originator)
+        public async Task RelayToRoom(ArraySegment<byte> message, Player originator)
         {
             if (originator.JoinedRoomCode != null)
             {
@@ -92,7 +102,7 @@ namespace RelayServer.Rooms
                     {
                         if (player != originator)
                         {
-                            player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                            await player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
                         }
                     }
                 }
