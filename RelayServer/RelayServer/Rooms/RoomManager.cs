@@ -136,7 +136,7 @@ namespace RelayServer.Rooms
         {
             if (socket.State == WebSocketState.Open)
             {
-                await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "LEAVE successful", CancellationToken.None);
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "LEAVE successful", CancellationToken.None);
             }
         }
     }
