@@ -19,8 +19,12 @@ namespace RelayServer.WebSocketHandler
             if (context.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+
+                using var pulseTimeout = new WebsocketPulseTimeout(TimeSpan.FromSeconds(15), WebSocketTimeoutHandler);
+                pulseTimeout.StartTimeout();
+
                 var player = new Player() { Socket = webSocket };
-                await ProcessMessages(player);
+                await ProcessMessages(player, pulseTimeout);
             }
             else
             {
@@ -28,14 +32,8 @@ namespace RelayServer.WebSocketHandler
             }
         }
 
-        private async Task ProcessMessages(Player player)
+        private async Task ProcessMessages(Player player, WebsocketPulseTimeout pulseTimeout)
         {
-            // ==========================================================
-            // TODO: loss of connectivity connections
-            // implement a timer as per https://learn.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-9.0#handle-client-disconnects
-            // and do clean up in RoomManager (invoke leave room method)
-            // ==========================================================
-
             try
             {
                 while (player.Socket.State == WebSocketState.Open)
@@ -50,6 +48,7 @@ namespace RelayServer.WebSocketHandler
                     if (receiveResult.MessageType == WebSocketMessageType.Close)
                     {
                         await player.Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close message, closing socket", CancellationToken.None);
+                        pulseTimeout.StopTimeout();
                         break; // cleanup in the finally block
                     }
                     else if (receiveResult.MessageType == WebSocketMessageType.Text)
@@ -91,6 +90,10 @@ namespace RelayServer.WebSocketHandler
                                     await _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
                                     break;
 
+                                case "PING":
+                                    pulseTimeout.RefreshTimeout();
+                                    break;
+
                                 default:
                                     await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Unknown command.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
@@ -116,6 +119,15 @@ namespace RelayServer.WebSocketHandler
 
                 await _roomManager.LeaveCurrentRoom(player);
             }
+        }
+
+        private void WebSocketTimeoutHandler(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Console.WriteLine($"WebSocket timed out at {e.SignalTime}");
+            
+            // ==========================================================
+            // TODO: clean up websocket connections and rooms
+            // ==========================================================
         }
     }
 }
