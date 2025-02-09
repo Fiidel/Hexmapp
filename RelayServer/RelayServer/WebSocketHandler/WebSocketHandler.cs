@@ -20,7 +20,7 @@ namespace RelayServer.WebSocketHandler
             {
                 using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                using var pulseTimeout = new WebsocketPulseTimeout(TimeSpan.FromSeconds(15), WebSocketTimeoutHandler);
+                using var pulseTimeout = new WebsocketPulseTimeout(webSocket, TimeSpan.FromSeconds(15));
                 pulseTimeout.StartTimeout();
 
                 var player = new Player() { Socket = webSocket };
@@ -119,15 +119,6 @@ namespace RelayServer.WebSocketHandler
 
                 await _roomManager.LeaveCurrentRoom(player);
             }
-        }
-
-        private void WebSocketTimeoutHandler(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            Console.WriteLine($"WebSocket timed out at {e.SignalTime}");
-            
-            // ==========================================================
-            // TODO: clean up websocket connections and rooms
-            // ==========================================================
         }
     }
 }
