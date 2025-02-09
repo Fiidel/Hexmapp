@@ -1,7 +1,5 @@
 using RelayServer.Rooms;
 using RelayServer.WebSocketHandler;
-using System.Net.WebSockets;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<WebSocketHandler>();
