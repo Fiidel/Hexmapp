@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3jtfjyot3s7h"
-path="res://.godot/imported/sand_dark.png-10b92a540e05774910a1ddd1676ff0d3.ctex"
+uid="uid://oduw04cr4uef"
+path="res://.godot/imported/Grass3.png-ca96d19f001518eaeff68003dd6e0da8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/Tiles/TileBaseTextures/sand_dark.png"
-dest_files=["res://.godot/imported/sand_dark.png-10b92a540e05774910a1ddd1676ff0d3.ctex"]
+source_file="res://PlayerMap/Tiles/TileBaseTextures/Grass3.png"
+dest_files=["res://.godot/imported/Grass3.png-ca96d19f001518eaeff68003dd6e0da8.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dv1aeysnv44xe"
-path="res://.godot/imported/water_textured.png-3039fa7264d06ef5377926743724742c.ctex"
+uid="uid://c3jtfjyot3s7h"
+path="res://.godot/imported/Sand2.png-ea34a9f3367619196d51a80f35616b51.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/Tiles/TileBaseTextures/water_textured.png"
-dest_files=["res://.godot/imported/water_textured.png-3039fa7264d06ef5377926743724742c.ctex"]
+source_file="res://PlayerMap/Tiles/TileBaseTextures/Sand2.png"
+dest_files=["res://.godot/imported/Sand2.png-ea34a9f3367619196d51a80f35616b51.ctex"]
 
 [params]
 

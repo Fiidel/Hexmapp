@@ -5,60 +5,91 @@ public partial class TerrainToolsUi : CanvasLayer
 {
 	[Export]
 	private ButtonGroup buttonGroup;
-	private Array<BaseButton> baseButtons;
+	[Export]
+	private Array<Tile> terrainTiles;
 	private BaseButton selectedButton;
+	private GridContainer terrainTypeGrid;
 	private TextureRect outline;
+	[Export]
+	private PackedScene terrainTileButton;
 
 	public override void _Ready()
 	{
+		// get nodes and resources
 		outline = GetNode<TextureRect>("SelectionOutline");
-		if (outline == null)
-		{
-			GD.Print("Warning: Selection outline not found.");
-			return;
-		}
+		terrainTypeGrid = GetNode<GridContainer>("%TerrainTypeGrid");
 
+
+		// check for missing data and errors
 		if (buttonGroup == null)
 		{
 			GD.Print("No terrain tool button group assigned!");
 			return;
 		}
-
-		baseButtons = buttonGroup.GetButtons();
-		if (baseButtons.Count == 0)
+		if (terrainTiles == null || terrainTiles.Count == 0)
 		{
 			GD.Print("No terrain tool buttons loaded.");
 			return;
 		}
-		buttonGroup.Pressed += OnTerrainButtonPressed;
+		if (terrainTileButton == null)
+		{
+			GD.Print("No terrain tool button scene loaded.");
+			return;
+		}
+		if (outline == null)
+		{
+			GD.Print("Warning: Selection outline not found.");
+			return;
+		}
+		if (terrainTypeGrid == null)
+		{
+			GD.Print("Warning: Terrain type grid not found.");
+			return;
+		}
+		
+
+		// load all Tile resources as UI buttons
+		for (int i = 0; i < terrainTiles.Count; i++)
+		{
+			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
+			button.Name = terrainTiles[i].IdName;
+			button.TextureNormal = terrainTiles[i].Texture;
+			button.ToggleMode = true;
+			button.Connect("pressed", Callable.From(() => OnTerrainButtonPressed(button)));
+			button.AddToGroup(buttonGroup.ResourceName);
+
+			terrainTypeGrid.AddChild(button);
+		}
+
 
 		// select the first button
-		selectedButton = baseButtons[0];
-		// toggle
-		selectedButton.ButtonPressed = true;
-		// outline
-		outline.Visible = true;
-		MoveOutlineToButton(selectedButton);
+		selectedButton = terrainTypeGrid.GetChild(0) as BaseButton;
+		if (selectedButton == null)
+		{
+			GD.Print("Warning: Couldn't convert first child of terrain type grid to BaseButton class.");
+		}
+		else
+		{
+			// toggle
+			selectedButton.ButtonPressed = true;
+			// outline
+			outline.Visible = true;
+			MoveOutlineToButton(selectedButton);
 
-		GD.Print($"Selected tile {selectedButton.Name}");
+			GD.Print($"Selected tile {selectedButton.Name}");
+		}
 	}
 
     private void OnTerrainButtonPressed(BaseButton button)
     {
-        selectedButton = buttonGroup.GetPressedButton();
-		MoveOutlineToButton(selectedButton);
-		GD.Print($"Selected tile {selectedButton.Name}");
+		MoveOutlineToButton(button);
+		GD.Print($"Selected tile {button.Name}");
     }
 
 	private void MoveOutlineToButton(BaseButton button)
 	{
+		outline.Visible = true;
 		outline.Reparent(button);
 		outline.Position = (button.Size - outline.Size) / 2;
-		// outline.Position = Vector2.Zero; // (0,0) local to the button == outline renders where the button renders
 	}
-
-
-	// Get debug print: "Selected tile {name of node}, of type {terrain tool type}"
-	// 1. get the type of the button from metadata (should I create a new class - type enum + path to texture?)
-	// 2. print the debug message
 }
