@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bougp51eusaef" path="res://PlayerMap/Tiles/TileBaseTextures/grass_C.png" id="2_dgoyx"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
 [ext_resource type="Texture2D" uid="uid://bkida1bhgmmo0" path="res://PlayerMap/Tiles/TileBaseTextures/selectOutline.png" id="2_jhsdk"]
-[ext_resource type="Script" path="res://PlayerMap/TerrainToolsUi.cs" id="3_a1ekk"]
+[ext_resource type="Script" path="res://PlayerMap/Scripts/TerrainToolsUi.cs" id="3_a1ekk"]
 [ext_resource type="Texture2D" uid="uid://yjkmpu40fs5t" path="res://PlayerMap/Tiles/TileBaseTextures/sand_light.png" id="3_muimt"]
 [ext_resource type="Texture2D" uid="uid://ciuxfw3kephed" path="res://PlayerMap/Tiles/TileBaseTextures/water_smooth.png" id="4_i32rm"]
 
