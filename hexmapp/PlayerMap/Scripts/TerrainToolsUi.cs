@@ -3,6 +3,7 @@ using Godot.Collections;
 
 public partial class TerrainToolsUi : CanvasLayer
 {
+	public Tile SelectedTile;
 	[Export]
 	private ButtonGroup buttonGroup;
 	[Export]
@@ -52,6 +53,7 @@ public partial class TerrainToolsUi : CanvasLayer
 		for (int i = 0; i < terrainTiles.Count; i++)
 		{
 			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
+			button.SetMeta("Tile", terrainTiles[i]);
 			button.Name = terrainTiles[i].IdName;
 			button.TextureNormal = terrainTiles[i].Texture;
 			button.ToggleMode = true;
@@ -75,6 +77,8 @@ public partial class TerrainToolsUi : CanvasLayer
 			// outline
 			outline.Visible = true;
 			MoveOutlineToButton(selectedButton);
+			// public tile reference
+			SelectedTile = (Tile)selectedButton.GetMeta("Tile");
 
 			GD.Print($"Selected tile {selectedButton.Name}");
 		}
@@ -83,6 +87,7 @@ public partial class TerrainToolsUi : CanvasLayer
     private void OnTerrainButtonPressed(BaseButton button)
     {
 		MoveOutlineToButton(button);
+		SelectedTile = (Tile)button.GetMeta("Tile");
 		GD.Print($"Selected tile {button.Name}");
     }
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=14 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
+[ext_resource type="Texture2D" uid="uid://kluy2s1nxsci" path="res://PlayerMap/Tiles/TileAlphaMasks/alphaMasks_merged.png" id="2_fsfnw"]
 [ext_resource type="Texture2D" uid="uid://bkida1bhgmmo0" path="res://PlayerMap/Tiles/TileBaseTextures/selectOutline.png" id="2_jhsdk"]
 [ext_resource type="Script" path="res://PlayerMap/Scripts/TerrainToolsUi.cs" id="3_a1ekk"]
 [ext_resource type="Resource" uid="uid://dtwiopsxm5pfh" path="res://PlayerMap/Tiles/TileResources/Grass1.tres" id="4_owkl4"]
@@ -13,8 +14,30 @@
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
 tile_size = Vector2i(128, 128)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ooqc"]
+texture = ExtResource("2_fsfnw")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_3jtgc"]
 tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_5ooqc")
+tile_proxies/coords_level = [[0, Vector2i(0, 0)], [17, Vector2i(0, 0)], [1, Vector2i(0, 0)], [17, Vector2i(1, 0)], [2, Vector2i(0, 0)], [17, Vector2i(2, 0)], [3, Vector2i(0, 0)], [17, Vector2i(3, 0)], [4, Vector2i(0, 0)], [17, Vector2i(4, 0)], [5, Vector2i(0, 0)], [17, Vector2i(5, 0)], [6, Vector2i(0, 0)], [17, Vector2i(6, 0)], [7, Vector2i(0, 0)], [17, Vector2i(7, 0)], [8, Vector2i(0, 0)], [17, Vector2i(8, 0)], [9, Vector2i(0, 0)], [17, Vector2i(9, 0)], [10, Vector2i(0, 0)], [17, Vector2i(10, 0)], [11, Vector2i(0, 0)], [17, Vector2i(11, 0)], [12, Vector2i(0, 0)], [17, Vector2i(12, 0)], [13, Vector2i(0, 0)], [17, Vector2i(13, 0)], [14, Vector2i(0, 0)], [17, Vector2i(14, 0)], [15, Vector2i(0, 0)], [17, Vector2i(15, 0)], [23, Vector2i(0, 0)], [16, Vector2i(8, 0)], [24, Vector2i(0, 0)], [16, Vector2i(9, 0)], [34, Vector2i(0, 0)], [16, Vector2i(10, 0)], [123, Vector2i(0, 0)], [16, Vector2i(11, 0)], [124, Vector2i(0, 0)], [16, Vector2i(12, 0)], [134, Vector2i(0, 0)], [16, Vector2i(13, 0)], [234, Vector2i(0, 0)], [16, Vector2i(14, 0)], [1234, Vector2i(0, 0)], [16, Vector2i(15, 0)]]
 
 [node name="PlayerMap" type="Node2D"]
 script = ExtResource("1_li2kt")
