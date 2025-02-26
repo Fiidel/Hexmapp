@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform sampler2D tile_texture : repeat_enable;
-uniform float tiles_to_repeat = 1.0;
+uniform float tiles_to_repeat = 32.0; // how many tiles is the texture spread over
 uniform float tile_size_pixels = 32.0;
 varying vec2 world_position;
 
