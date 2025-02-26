@@ -12,6 +12,8 @@ public partial class PlayerMap : Node2D
 	private int mapHeight = 15;
 	private TileMapLayer displayLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
+	private bool isDrawing;
+	private Vector2I lastTileIndex = new Vector2I(-1, -1);
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 
 	public override void _Ready()
@@ -49,14 +51,34 @@ public partial class PlayerMap : Node2D
 	// Detect base tile indices on click
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		// draw a tile with the selected tile brush
+		// start drawing tiles with the selected tile brush
 		if (@event.IsActionPressed("left_click"))
 		{
 			var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
-			var tileLayer = GetOrCreateTileMapLayer(terrainToolsUi.SelectedTile.IdName);
+			GetOrCreateTileMapLayer(terrainToolsUi.SelectedTile.IdName);
 			AddTile(clickedTile, terrainToolsUi.SelectedTile);
+
+			// for continous drawing
+			isDrawing = true;
+			lastTileIndex = clickedTile;
 			
 			GD.Print($"Tile: {clickedTile}. Terrain: {terrainToolsUi.SelectedTile.IdName}. Layer count: {displayLayersDict.Count}.");
+		}
+		// continous drawing while the left mouse button is down and moving
+		else if (isDrawing && @event is InputEventMouseMotion)
+		{
+			var currentTile = baseLayer.LocalToMap(GetGlobalMousePosition());
+			if (lastTileIndex != currentTile)
+			{
+				lastTileIndex = baseLayer.LocalToMap(GetGlobalMousePosition());
+				AddTile(lastTileIndex, terrainToolsUi.SelectedTile);
+			}
+		}
+		// stop drawing when the left mouse button is released
+		else if (@event.IsActionReleased("left_click"))
+		{
+			isDrawing = false;
+			lastTileIndex = new Vector2I(-1, -1);
 		}
 	}
 
