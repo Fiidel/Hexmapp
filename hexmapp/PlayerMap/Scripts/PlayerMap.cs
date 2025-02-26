@@ -12,6 +12,7 @@ public partial class PlayerMap : Node2D
 	private int mapHeight = 15;
 	private TileMapLayer displayLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
+	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 
 	public override void _Ready()
 	{
@@ -44,12 +45,11 @@ public partial class PlayerMap : Node2D
 			return;
 		}
 	}
-
-	// TODO: draw 1 tile with the selected tile brush
 	
 	// Detect base tile indices on click
 	public override void _UnhandledInput(InputEvent @event)
 	{
+		// draw a tile with the selected tile brush
 		if (@event.IsActionPressed("left_click"))
 		{
 			var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
@@ -73,9 +73,16 @@ public partial class PlayerMap : Node2D
 			{
 				for (int y = 0; y <= mapHeight; y++)
 				{
-					newLayer.SetCell(new Vector2I(x, y), 0, new Vector2I(0,0));
+					newLayer.SetCell(new Vector2I(x, y), 0, Vector2I.Zero);
 				}
 			}
+
+			// apply alpha shader
+			ShaderMaterial material = new();
+			material.Shader = alphaShader;
+			material.SetShaderParameter("tile_texture", terrainToolsUi.SelectedTile.Texture);
+			material.SetShaderParameter("tiles_to_repeat", 1);
+			newLayer.Material = material;
 
 			// add to scene and dictionary
 			terrainGrids.AddChild(newLayer);
@@ -107,30 +114,30 @@ public partial class PlayerMap : Node2D
 			
 			// for alpha cell [0,0]
 			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, -1, -1);
-			layer.SetCell(tileIndex, 0, new Vector2I(atlasIndex, 0));
+			layer.SetCell(tileIndex, atlasIndex, Vector2I.Zero);
 
 			// for alpha cell [1,0]
 			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, 0, -1);
-			layer.SetCell(tileIndex + Vector2I.Right, 0, new Vector2I(atlasIndex, 0));
+			layer.SetCell(tileIndex + Vector2I.Right, atlasIndex, Vector2I.Zero);
 
 			// for alpha cell [0,1]
 			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, -1, 0);
-			layer.SetCell(tileIndex + Vector2I.Down, 0, new Vector2I(atlasIndex, 0));
+			layer.SetCell(tileIndex + Vector2I.Down, atlasIndex, Vector2I.Zero);
 
 			// for alpha cell [1,1]
 			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, 0, 0);
-			layer.SetCell(tileIndex + Vector2I.One, 0, new Vector2I(atlasIndex, 0));
+			layer.SetCell(tileIndex + Vector2I.One, atlasIndex, Vector2I.Zero);
 		}
 	}
 
 	private bool IsTileTypeSame(Tile tileType, int x, int y)
 	{
-		// TODO: need to account for checking non-existent base tiles outside of the grid size!!!!!!!!!!!!!!!!!!!!!!!
-		if (baseTiles[x, y] == tileType)
+		// out of bounds
+		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
 		{
-			return true;
+			return false;
 		}
-		return false;
+		return baseTiles[x, y] == tileType;
 	}
 
 	// xOffset and yOffset signify where the 1st checked base tile starts as compared
