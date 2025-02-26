@@ -28,7 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://bm72tllmj3m8w" path="res://PlayerMap/Tiles/TileAlphaMasks/halfCheckered_TLBR.png" id="18_ge64x"]
 
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
-tile_size = Vector2i(128, 128)
+tile_size = Vector2i(32, 32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bsh2p"]
 resource_local_to_scene = true
@@ -38,86 +38,86 @@ shader_parameter/tile_size_pixels = 128.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ew80i"]
 texture = ExtResource("3_x78ja")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_785b3"]
 texture = ExtResource("4_68lk7")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3gflj"]
 texture = ExtResource("5_3q1ky")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ol8cv"]
 texture = ExtResource("6_qr4o5")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0r75r"]
 texture = ExtResource("7_cicig")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nk2v4"]
 texture = ExtResource("8_5gu55")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xlmp3"]
 texture = ExtResource("9_85fig")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gj3rq"]
 texture = ExtResource("10_bxlbp")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e54j7"]
 texture = ExtResource("11_mcns3")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l4yao"]
 texture = ExtResource("12_85j75")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_81euy"]
 texture = ExtResource("13_wfty6")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nlvhw"]
 texture = ExtResource("14_wtt4n")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cg32c"]
 texture = ExtResource("15_isj60")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kj3ag"]
 texture = ExtResource("16_xkt18")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vvrb4"]
 texture = ExtResource("17_kg3bx")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ovn7e"]
 texture = ExtResource("18_ge64x")
-texture_region_size = Vector2i(128, 128)
+texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_3jtgc"]
-tile_size = Vector2i(128, 128)
+tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ew80i")
 sources/1 = SubResource("TileSetAtlasSource_785b3")
 sources/3 = SubResource("TileSetAtlasSource_l4yao")
@@ -146,7 +146,7 @@ tile_set = SubResource("TileSet_0eg1a")
 
 [node name="DisplayTerrainOffsetGrid" type="TileMapLayer" parent="TerrainGrids"]
 material = SubResource("ShaderMaterial_bsh2p")
-position = Vector2(-64, -64)
+position = Vector2(-16, -16)
 tile_set = SubResource("TileSet_3jtgc")
 
 [node name="TerrainToolsUI" type="CanvasLayer" parent="."]
@@ -209,6 +209,18 @@ text = "TERRAIN TYPE"
 unique_name_in_owner = true
 layout_mode = 2
 columns = 4
+
+[node name="TerrainBrushSizeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Brush Size"
+
+[node name="TerrainBrushSizeSlider" type="HSlider" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+min_value = 1.0
+max_value = 15.0
+step = 2.0
+value = 1.0
 
 [node name="AssetLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
 layout_mode = 2

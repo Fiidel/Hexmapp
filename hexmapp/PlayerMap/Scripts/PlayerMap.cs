@@ -103,7 +103,6 @@ public partial class PlayerMap : Node2D
 			ShaderMaterial material = new();
 			material.Shader = alphaShader;
 			material.SetShaderParameter("tile_texture", terrainToolsUi.SelectedTile.Texture);
-			material.SetShaderParameter("tiles_to_repeat", 1);
 			newLayer.Material = material;
 
 			// add to scene and dictionary
