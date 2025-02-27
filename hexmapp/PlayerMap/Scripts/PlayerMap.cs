@@ -8,34 +8,27 @@ public partial class PlayerMap : Node2D
 	private Node terrainGrids;
 	private TileMapLayer baseLayer;
 	private Tile[,] baseTiles;
-	private int mapWidth = 20;
-	private int mapHeight = 15;
+	private int mapWidth = 200;
+	private int mapHeight = 150;
 	private TileMapLayer displayLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
 	private bool isDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
+	private HSlider brushSlider;
+	private int brushSize = 1;
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 
 	public override void _Ready()
 	{
 		// get nodes and resources
-		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
-		terrainGrids = GetNode<Node>("TerrainGrids");
 		baseLayer = GetNode<TileMapLayer>("TerrainGrids/BaseTerrainGrid");
 		baseTiles = new Tile[mapWidth,mapHeight];
 		displayLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
+		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
+		terrainGrids = GetNode<Node>("TerrainGrids");
+		brushSlider = GetNode<HSlider>("%TerrainBrushSizeSlider");
 
 		// check for missing data and errors
-		if (terrainToolsUi == null)
-		{
-			GD.Print("Terrain tools UI not found.");
-			return;
-		}
-		if (terrainGrids == null)
-		{
-			GD.Print("Terrain grids not found.");
-			return;
-		}
 		if (baseLayer == null)
 		{
 			GD.Print("Base tile map layer not found.");
@@ -46,17 +39,41 @@ public partial class PlayerMap : Node2D
 			GD.Print("Display tile map layer not found.");
 			return;
 		}
+		if (terrainToolsUi == null)
+		{
+			GD.Print("Terrain tools UI not found.");
+			return;
+		}
+		if (terrainGrids == null)
+		{
+			GD.Print("Terrain grids not found.");
+			return;
+		}
+		if (brushSlider == null)
+		{
+			GD.Print("Terrain brush slider not found.");
+			return;
+		}
+
+		// connect signals
+		brushSlider.DragEnded += OnBrushSizeChanged;
 	}
-	
-	// Detect base tile indices on click
-	public override void _UnhandledInput(InputEvent @event)
+
+	public override void _ExitTree()
+    {
+        base._ExitTree();
+		brushSlider.DragEnded -= OnBrushSizeChanged;
+    }
+
+    // Detect base tile indices on click
+    public override void _UnhandledInput(InputEvent @event)
 	{
 		// start drawing tiles with the selected tile brush
 		if (@event.IsActionPressed("left_click"))
 		{
 			var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
 			GetOrCreateTileMapLayer(terrainToolsUi.SelectedTile.IdName);
-			AddTile(clickedTile, terrainToolsUi.SelectedTile);
+			BrushDrawTiles(clickedTile, terrainToolsUi.SelectedTile);
 
 			// for continous drawing
 			isDrawing = true;
@@ -71,7 +88,7 @@ public partial class PlayerMap : Node2D
 			if (lastTileIndex != currentTile)
 			{
 				lastTileIndex = baseLayer.LocalToMap(GetGlobalMousePosition());
-				AddTile(lastTileIndex, terrainToolsUi.SelectedTile);
+				BrushDrawTiles(lastTileIndex, terrainToolsUi.SelectedTile);
 			}
 		}
 		// stop drawing when the left mouse button is released
@@ -112,6 +129,26 @@ public partial class PlayerMap : Node2D
 		}
 		// otherwise get the existing layer for that tile
 		return displayLayersDict[tileName];
+	}
+
+	// Draw using the brush size
+	private void BrushDrawTiles(Vector2I tileIndex, Tile tileType)
+	{
+		int brushRadius = brushSize/2;
+		int roundnessFactor = brushSize/10 + 1;
+
+		for (int x = -brushRadius; x <= brushRadius; x++)
+		{
+			for (int y = -brushRadius; y <= brushRadius; y++)
+			{
+				// skip tiles outside of a circular radius
+				if (x*x + y*y > brushRadius*brushRadius + roundnessFactor)
+				{
+					continue;
+				}
+				AddTile(new Vector2I(x + tileIndex.X, y + tileIndex.Y), tileType);
+			}
+		}
 	}
 
 	// Assign the selected tile texture to the clicked tile on the base grid
@@ -163,7 +200,7 @@ public partial class PlayerMap : Node2D
 
 	// xOffset and yOffset signify where the 1st checked base tile starts as compared
 	// to the center base tile that has been drawn (always the top left one)
-	int CalculateAtlasIndex(Tile tileType, Vector2I tileIndex, int xOffset, int yOffset)
+	private int CalculateAtlasIndex(Tile tileType, Vector2I tileIndex, int xOffset, int yOffset)
 	{
 		int atlasIndex = 0;
 
@@ -187,12 +224,20 @@ public partial class PlayerMap : Node2D
 		return atlasIndex;
 	}
 
+	private void OnBrushSizeChanged(bool valueChanged)
+    {
+        if (valueChanged)
+		{
+			brushSize = (int)brushSlider.Value;
+			GD.Print($"Brush size changed to {brushSize}");
+		}
+    }
 
 
 
+    // B. implement strokes (rather than just setting 1 tile)
+    // C. implement erasing tiles
+    // D. implement it as a command that gathers all drawn tiles
+    // E. implement brush sizes (which will need to account for setting nonexistent tiles at the edge of the base terrain index)
 
-	// B. implement strokes (rather than just setting 1 tile)
-	// C. implement erasing tiles
-	// D. implement it as a command that gathers all drawn tiles
-	// E. implement brush sizes (which will need to account for setting nonexistent tiles at the edge of the base terrain index)
 }
