@@ -37,7 +37,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_hfdbv")
 shader_parameter/tiles_to_repeat = 32.0
 shader_parameter/tile_size_pixels = 32.0
-shader_parameter/noise_scale = 0.125
+shader_parameter/noise_scale = 8.0
 shader_parameter/noise = ExtResource("4_o0u3q")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ew80i"]
@@ -146,8 +146,10 @@ script = ExtResource("1_li2kt")
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(-48, -48)
 anchor_mode = 0
-zoom = Vector2(0.5, 0.5)
+zoom = Vector2(0.75, 0.75)
 script = ExtResource("2_my8gr")
+currentZoom = 0.75
+minZoom = 0.375
 
 [node name="TerrainGrids" type="Node" parent="."]
 
@@ -231,7 +233,7 @@ layout_mode = 2
 min_value = 1.0
 max_value = 15.0
 step = 2.0
-value = 1.0
+value = 5.0
 
 [node name="AssetLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
 layout_mode = 2

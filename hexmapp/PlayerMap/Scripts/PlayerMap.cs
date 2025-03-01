@@ -58,6 +58,9 @@ public partial class PlayerMap : Node2D
 
 		// connect signals
 		brushSlider.DragEnded += OnBrushSizeChanged;
+
+		// inicialize variables
+		brushSize = (int)brushSlider.Value;
 	}
 
 	public override void _ExitTree()
