@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=61 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -28,6 +28,19 @@
 [ext_resource type="Texture2D" uid="uid://cjiyo10wxfmeu" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_TL.png" id="16_xkt18"]
 [ext_resource type="Texture2D" uid="uid://dploxykia3atv" path="res://PlayerMap/Tiles/TileAlphaMasks/quarter_TL.png" id="17_kg3bx"]
 [ext_resource type="Texture2D" uid="uid://bm72tllmj3m8w" path="res://PlayerMap/Tiles/TileAlphaMasks/halfCheckered_TLBR.png" id="18_ge64x"]
+[ext_resource type="Texture2D" uid="uid://m3it5ey4xxx2" path="res://PlayerMap/MapAssets/Broadleaf1.png" id="27_hx44m"]
+[ext_resource type="Texture2D" uid="uid://b4lf81yoka3gx" path="res://PlayerMap/MapAssets/Broadleaf2.png" id="28_qvo2v"]
+[ext_resource type="Texture2D" uid="uid://103vlklqqtxx" path="res://PlayerMap/MapAssets/BroadleafGroup1.png" id="29_tmhs6"]
+[ext_resource type="Texture2D" uid="uid://dnkaio5kaam7c" path="res://PlayerMap/MapAssets/Conifer1.png" id="30_bt41e"]
+[ext_resource type="Texture2D" uid="uid://7gvl5qxd8b2r" path="res://PlayerMap/MapAssets/Conifer2.png" id="31_mpmpb"]
+[ext_resource type="Texture2D" uid="uid://br2kvdghi3gdr" path="res://PlayerMap/MapAssets/Grass1.png" id="32_mtfyy"]
+[ext_resource type="Texture2D" uid="uid://cvd7glu6ry2mw" path="res://PlayerMap/MapAssets/Grass2.png" id="33_l25w4"]
+[ext_resource type="Texture2D" uid="uid://bairh3x7u6hop" path="res://PlayerMap/MapAssets/Grass3.png" id="34_ype4w"]
+[ext_resource type="Texture2D" uid="uid://booib77yqqx26" path="res://PlayerMap/MapAssets/Hill1.png" id="35_od6js"]
+[ext_resource type="Texture2D" uid="uid://d1lijrccrn1go" path="res://PlayerMap/MapAssets/Hill2.png" id="36_2ibgd"]
+[ext_resource type="Texture2D" uid="uid://b77eknwhwhydm" path="res://PlayerMap/MapAssets/Mt1.png" id="37_ljla7"]
+[ext_resource type="Texture2D" uid="uid://d3ymml48w8vp4" path="res://PlayerMap/MapAssets/Mt2.png" id="38_synou"]
+[ext_resource type="Texture2D" uid="uid://gy4vh81402hm" path="res://PlayerMap/MapAssets/Mt3.png" id="39_oueh1"]
 
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
 tile_size = Vector2i(32, 32)
@@ -165,6 +178,7 @@ tile_set = SubResource("TileSet_3jtgc")
 script = ExtResource("3_a1ekk")
 buttonGroup = ExtResource("2_djw3f")
 terrainTiles = Array[Object]([ExtResource("4_owkl4"), ExtResource("5_u8tci"), ExtResource("6_281uw"), ExtResource("7_5pfkt")])
+mapAssets = Array[Texture2D]([ExtResource("27_hx44m"), ExtResource("28_qvo2v"), ExtResource("29_tmhs6"), ExtResource("30_bt41e"), ExtResource("31_mpmpb"), ExtResource("32_mtfyy"), ExtResource("33_l25w4"), ExtResource("34_ype4w"), ExtResource("35_od6js"), ExtResource("36_2ibgd"), ExtResource("37_ljla7"), ExtResource("38_synou"), ExtResource("39_oueh1")])
 terrainTileButton = ExtResource("5_uo0nk")
 
 [node name="SelectionOutline" type="TextureRect" parent="TerrainToolsUI"]

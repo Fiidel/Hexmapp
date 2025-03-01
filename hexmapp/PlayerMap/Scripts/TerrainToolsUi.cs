@@ -9,6 +9,8 @@ public partial class TerrainToolsUi : CanvasLayer
 	private ButtonGroup buttonGroup;
 	[Export]
 	private Array<Tile> terrainTiles;
+	[Export]
+	private Array<Texture2D> mapAssets;
 	private BaseButton selectedButton;
 	private GridContainer terrainTypeGrid;
 	private TextureRect outline;
