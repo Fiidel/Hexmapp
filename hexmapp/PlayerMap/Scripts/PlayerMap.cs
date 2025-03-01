@@ -14,8 +14,6 @@ public partial class PlayerMap : Node2D
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
 	private bool isDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
-	private HSlider brushSlider;
-	private int brushSize = 1;
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
 
@@ -27,7 +25,6 @@ public partial class PlayerMap : Node2D
 		displayLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
 		terrainGrids = GetNode<Node>("TerrainGrids");
-		brushSlider = GetNode<HSlider>("%TerrainBrushSizeSlider");
 
 		// check for missing data and errors
 		if (baseLayer == null)
@@ -50,24 +47,8 @@ public partial class PlayerMap : Node2D
 			GD.Print("Terrain grids not found.");
 			return;
 		}
-		if (brushSlider == null)
-		{
-			GD.Print("Terrain brush slider not found.");
-			return;
-		}
-
-		// connect signals
-		brushSlider.DragEnded += OnBrushSizeChanged;
-
-		// inicialize variables
-		brushSize = (int)brushSlider.Value;
 	}
 
-	public override void _ExitTree()
-    {
-        base._ExitTree();
-		brushSlider.DragEnded -= OnBrushSizeChanged;
-    }
 
     // Detect base tile indices on click
     public override void _UnhandledInput(InputEvent @event)
@@ -139,8 +120,8 @@ public partial class PlayerMap : Node2D
 	// Draw using the brush size
 	private void BrushDrawTiles(Vector2I tileIndex, Tile tileType)
 	{
-		int brushRadius = brushSize/2;
-		int roundnessFactor = brushSize/10 + 1;
+		int brushRadius = terrainToolsUi.BrushSize/2;
+		int roundnessFactor = terrainToolsUi.BrushSize/10 + 1;
 
 		for (int x = -brushRadius; x <= brushRadius; x++)
 		{
@@ -229,14 +210,6 @@ public partial class PlayerMap : Node2D
 		return atlasIndex;
 	}
 
-	private void OnBrushSizeChanged(bool valueChanged)
-    {
-        if (valueChanged)
-		{
-			brushSize = (int)brushSlider.Value;
-			GD.Print($"Brush size changed to {brushSize}");
-		}
-    }
 
 
 

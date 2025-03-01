@@ -4,6 +4,7 @@ using Godot.Collections;
 public partial class TerrainToolsUi : CanvasLayer
 {
 	public Tile SelectedTile;
+	public int BrushSize = 1;
 	[Export]
 	private ButtonGroup buttonGroup;
 	[Export]
@@ -13,12 +14,14 @@ public partial class TerrainToolsUi : CanvasLayer
 	private TextureRect outline;
 	[Export]
 	private PackedScene terrainTileButton;
+	private HSlider brushSlider;
 
 	public override void _Ready()
 	{
 		// get nodes and resources
 		outline = GetNode<TextureRect>("SelectionOutline");
 		terrainTypeGrid = GetNode<GridContainer>("%TerrainTypeGrid");
+		brushSlider = GetNode<HSlider>("%TerrainBrushSizeSlider");
 
 
 		// check for missing data and errors
@@ -45,6 +48,11 @@ public partial class TerrainToolsUi : CanvasLayer
 		if (terrainTypeGrid == null)
 		{
 			GD.Print("Warning: Terrain type grid not found.");
+			return;
+		}
+		if (brushSlider == null)
+		{
+			GD.Print("Terrain brush slider not found.");
 			return;
 		}
 		
@@ -82,7 +90,19 @@ public partial class TerrainToolsUi : CanvasLayer
 
 			GD.Print($"Selected tile {selectedButton.Name}");
 		}
+
+		// connect signals
+		brushSlider.DragEnded += OnBrushSizeChanged;
+
+		// inicialize variables
+		BrushSize = (int)brushSlider.Value;
 	}
+	
+	public override void _ExitTree()
+    {
+        base._ExitTree();
+		brushSlider.DragEnded -= OnBrushSizeChanged;
+    }
 
     private void OnTerrainButtonPressed(BaseButton button)
     {
@@ -97,4 +117,13 @@ public partial class TerrainToolsUi : CanvasLayer
 		outline.Reparent(button);
 		outline.Position = (button.Size - outline.Size) / 2;
 	}
+
+	private void OnBrushSizeChanged(bool valueChanged)
+    {
+        if (valueChanged)
+		{
+			BrushSize = (int)brushSlider.Value;
+			GD.Print($"Brush size changed to {BrushSize}");
+		}
+    }
 }
