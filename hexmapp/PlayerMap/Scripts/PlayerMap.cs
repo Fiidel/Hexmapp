@@ -17,6 +17,7 @@ public partial class PlayerMap : Node2D
 	private HSlider brushSlider;
 	private int brushSize = 1;
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
+	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
 
 	public override void _Ready()
 	{
@@ -120,6 +121,7 @@ public partial class PlayerMap : Node2D
 			ShaderMaterial material = new();
 			material.Shader = alphaShader;
 			material.SetShaderParameter("tile_texture", terrainToolsUi.SelectedTile.Texture);
+			material.SetShaderParameter("noise", alphaNoiseTexture);
 			newLayer.Material = material;
 
 			// add to scene and dictionary
