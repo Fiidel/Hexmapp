@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvd7glu6ry2mw"
-path="res://.godot/imported/Grass2.png-e3e3c7fb86be9140e2f505a613259c59.ctex"
+uid="uid://b4lf81yoka3gx"
+path="res://.godot/imported/Broadleaf2.png-8c8985757c611b91c094bf71aae11aa4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/MapAssets/Grass2.png"
-dest_files=["res://.godot/imported/Grass2.png-e3e3c7fb86be9140e2f505a613259c59.ctex"]
+source_file="res://PlayerMap/MapAssets/Sprites/Broadleaf2.png"
+dest_files=["res://.godot/imported/Broadleaf2.png-8c8985757c611b91c094bf71aae11aa4.ctex"]
 
 [params]
 

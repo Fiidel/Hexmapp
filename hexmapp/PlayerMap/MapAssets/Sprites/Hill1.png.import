@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4lf81yoka3gx"
-path="res://.godot/imported/Broadleaf2.png-254b4d125a0e973a24ad12e3b57ac6a8.ctex"
+uid="uid://booib77yqqx26"
+path="res://.godot/imported/Hill1.png-c2dbccf880344d75456953ebb1b3f377.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/MapAssets/Broadleaf2.png"
-dest_files=["res://.godot/imported/Broadleaf2.png-254b4d125a0e973a24ad12e3b57ac6a8.ctex"]
+source_file="res://PlayerMap/MapAssets/Sprites/Hill1.png"
+dest_files=["res://.godot/imported/Hill1.png-c2dbccf880344d75456953ebb1b3f377.ctex"]
 
 [params]
 

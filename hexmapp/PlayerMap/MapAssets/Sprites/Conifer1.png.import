@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3ymml48w8vp4"
-path="res://.godot/imported/Mt2.png-2c6188e2bcb88378a732a2248778a070.ctex"
+uid="uid://dnkaio5kaam7c"
+path="res://.godot/imported/Conifer1.png-a8a108f85cac37c62637512526abf82d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/MapAssets/Mt2.png"
-dest_files=["res://.godot/imported/Mt2.png-2c6188e2bcb88378a732a2248778a070.ctex"]
+source_file="res://PlayerMap/MapAssets/Sprites/Conifer1.png"
+dest_files=["res://.godot/imported/Conifer1.png-a8a108f85cac37c62637512526abf82d.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bairh3x7u6hop"
-path="res://.godot/imported/Grass3.png-d3306a423900bdad0856c4f9836cf954.ctex"
+uid="uid://d1lijrccrn1go"
+path="res://.godot/imported/Hill2.png-17733927213483979eae27f6a566e2a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://PlayerMap/MapAssets/Grass3.png"
-dest_files=["res://.godot/imported/Grass3.png-d3306a423900bdad0856c4f9836cf954.ctex"]
+source_file="res://PlayerMap/MapAssets/Sprites/Hill2.png"
+dest_files=["res://.godot/imported/Hill2.png-17733927213483979eae27f6a566e2a0.ctex"]
 
 [params]
 
