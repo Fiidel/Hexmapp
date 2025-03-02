@@ -12,10 +12,12 @@ public partial class PlayerMap : Node2D
 	private int mapHeight = 150;
 	private TileMapLayer displayLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
-	private bool isDrawing;
+	private bool isTileDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
+	private Node2D mapAssets;
+	private Sprite2D previewMapAsset;
 
 	public override void _Ready()
 	{
@@ -25,6 +27,7 @@ public partial class PlayerMap : Node2D
 		displayLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
 		terrainGrids = GetNode<Node>("TerrainGrids");
+		mapAssets = GetNode<Node2D>("MapAssets");
 
 		// check for missing data and errors
 		if (baseLayer == null)
@@ -47,8 +50,12 @@ public partial class PlayerMap : Node2D
 			GD.Print("Terrain grids not found.");
 			return;
 		}
+		if (mapAssets == null)
+		{
+			GD.Print("Map assets node not found.");
+			return;
+		}
 	}
-
 
     // Detect base tile indices on click
     public override void _UnhandledInput(InputEvent @event)
@@ -56,43 +63,64 @@ public partial class PlayerMap : Node2D
 		// start drawing tiles with the selected tile brush
 		if (@event.IsActionPressed("left_click"))
 		{
-			var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
-			GetOrCreateTileMapLayer(terrainToolsUi.SelectedTile.IdName);
-			BrushDrawTiles(clickedTile, terrainToolsUi.SelectedTile);
+			if (terrainToolsUi.SelectedTool is Tile tile)
+			{
+				var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
+				GetOrCreateTileMapLayer(tile.IdName);
+				BrushDrawTiles(clickedTile, tile);
 
-			// for continous drawing
-			isDrawing = true;
-			lastTileIndex = clickedTile;
-			
-			GD.Print($"Tile: {clickedTile}. Terrain: {terrainToolsUi.SelectedTile.IdName}. Layer count: {displayLayersDict.Count}.");
+				// for continous drawing
+				isTileDrawing = true;
+				lastTileIndex = clickedTile;
+				
+				GD.Print($"Tile: {clickedTile}. Terrain: {tile.IdName}. Layer count: {displayLayersDict.Count}.");
+			}
+			else if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
+			{
+				var newMapAsset = new Sprite2D();
+				newMapAsset.Texture = mapAsset.Texture;
+				var position = GetGlobalMousePosition();
+				newMapAsset.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
+				newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
+				newMapAsset.ZIndex = 1;
+				mapAssets.AddChild(newMapAsset);
+				GD.Print($"New map asset spawned at {newMapAsset.GlobalPosition}.");
+			}
 		}
 		// continous drawing while the left mouse button is down and moving
-		else if (isDrawing && @event is InputEventMouseMotion)
+		else if (isTileDrawing && @event is InputEventMouseMotion)
 		{
-			var currentTile = baseLayer.LocalToMap(GetGlobalMousePosition());
-			if (lastTileIndex != currentTile)
+			if (terrainToolsUi.SelectedTool is Tile tile)
 			{
-				lastTileIndex = baseLayer.LocalToMap(GetGlobalMousePosition());
-				BrushDrawTiles(lastTileIndex, terrainToolsUi.SelectedTile);
+				var currentTile = baseLayer.LocalToMap(GetGlobalMousePosition());
+				if (lastTileIndex != currentTile)
+				{
+					lastTileIndex = currentTile;
+					BrushDrawTiles(lastTileIndex, tile);
+				}
+			}
+			else
+			{
+				GD.Print("Error: Selected tool is not a tile.");
 			}
 		}
 		// stop drawing when the left mouse button is released
-		else if (@event.IsActionReleased("left_click"))
+		else if (isTileDrawing && @event.IsActionReleased("left_click"))
 		{
-			isDrawing = false;
+			isTileDrawing = false;
 			lastTileIndex = new Vector2I(-1, -1);
 		}
 	}
 
-	// Get or create a tile map layer
-	private TileMapLayer GetOrCreateTileMapLayer(string tileName)
+    // Get or create a tile map layer
+    private TileMapLayer GetOrCreateTileMapLayer(string tileName)
 	{
 		// if the tile hasn't been used yet, create a new layer
-		if (!displayLayersDict.ContainsKey(tileName))
+		if (!displayLayersDict.ContainsKey(tileName) && terrainToolsUi.SelectedTool is Tile tile)
 		{
 			TileMapLayer newLayer = displayLayer.Duplicate() as TileMapLayer;
 			newLayer.Name = $"{tileName}Layer";
-			newLayer.SetMeta("Tile", terrainToolsUi.SelectedTile);
+			newLayer.SetMeta("Tile", tile);
 			for (int x = 0; x <= mapWidth; x++) // <= ... to account for the offset to top left by half a tile
 			{
 				for (int y = 0; y <= mapHeight; y++)
@@ -104,7 +132,7 @@ public partial class PlayerMap : Node2D
 			// apply alpha shader
 			ShaderMaterial material = new();
 			material.Shader = alphaShader;
-			material.SetShaderParameter("tile_texture", terrainToolsUi.SelectedTile.Texture);
+			material.SetShaderParameter("tile_texture", tile.Texture);
 			material.SetShaderParameter("noise", alphaNoiseTexture);
 			newLayer.Material = material;
 

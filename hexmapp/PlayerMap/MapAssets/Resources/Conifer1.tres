@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MapAsset" load_steps=3 format=3 uid="uid://w206pulw2gn6"]
+
+[ext_resource type="Script" path="res://PlayerMap/Scripts/MapAsset.cs" id="1_k4itn"]
+[ext_resource type="Texture2D" uid="uid://dnkaio5kaam7c" path="res://PlayerMap/MapAssets/Sprites/Conifer1.png" id="1_qjsse"]
+
+[resource]
+script = ExtResource("1_k4itn")
+Texture = ExtResource("1_qjsse")
