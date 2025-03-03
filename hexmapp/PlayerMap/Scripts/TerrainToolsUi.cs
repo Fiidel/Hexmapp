@@ -11,9 +11,12 @@ public partial class TerrainToolsUi : CanvasLayer
 	private Array<Tile> terrainTiles;
 	[Export]
 	private Array<MapAsset> mapAssets;
+	[Export]
+	private Array<MapPin> mapPins;
 	private BaseButton selectedButton;
 	private GridContainer terrainTypeGrid;
 	private GridContainer mapAssetGrid;
+	private GridContainer pinGrid;
 	private TextureRect outline;
 	[Export]
 	private PackedScene terrainTileButton;
@@ -25,6 +28,7 @@ public partial class TerrainToolsUi : CanvasLayer
 		outline = GetNode<TextureRect>("SelectionOutline");
 		terrainTypeGrid = GetNode<GridContainer>("%TerrainTypeGrid");
 		mapAssetGrid = GetNode<GridContainer>("%MapAssetGrid");
+		pinGrid = GetNode<GridContainer>("%PinGrid");
 		brushSlider = GetNode<HSlider>("%TerrainBrushSizeSlider");
 
 
@@ -57,6 +61,11 @@ public partial class TerrainToolsUi : CanvasLayer
 		if (mapAssetGrid == null)
 		{
 			GD.Print("Warning: Map asset grid not found.");
+			return;
+		}
+		if (pinGrid == null)
+		{
+			GD.Print("Warning: Pin grid not found.");
 			return;
 		}
 		if (brushSlider == null)
@@ -92,6 +101,19 @@ public partial class TerrainToolsUi : CanvasLayer
 			button.AddToGroup(buttonGroup.ResourceName);
 
 			mapAssetGrid.AddChild(button);
+		}
+
+		// load all MapPin resources as UI buttons
+		for (int i = 0; i < mapPins.Count; i++)
+		{
+			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
+			button.SetMeta("MapPin", mapPins[i]);
+			button.TextureNormal = mapPins[i].Texture;
+			button.ToggleMode = true;
+			button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, TerrainToolTypeEnum.PIN)));
+			button.AddToGroup(buttonGroup.ResourceName);
+
+			pinGrid.AddChild(button);
 		}
 
 
@@ -138,6 +160,9 @@ public partial class TerrainToolsUi : CanvasLayer
 				break;
 			case TerrainToolTypeEnum.MAP_ASSET:
 				SelectedTool = (MapAsset)button.GetMeta("MapAsset");
+				break;
+			case TerrainToolTypeEnum.PIN:
+				SelectedTool = (MapPin)button.GetMeta("MapPin");
 				break;
 			default:
 				GD.Print("Error: Unrecognized tool type selected with button.");

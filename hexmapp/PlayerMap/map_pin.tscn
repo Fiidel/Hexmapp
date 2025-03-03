@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://ugg0cqexbtis"]
+
+[ext_resource type="Texture2D" uid="uid://c8p665g05a7c5" path="res://PlayerMap/MapAssets/Sprites/Pin1.png" id="1_up201"]
+
+[node name="Pin" type="Sprite2D"]
+texture = ExtResource("1_up201")
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="."]
+offset_left = 15.0
+offset_top = 3.0
+offset_right = 457.0
+offset_bottom = 70.0
+theme_override_font_sizes/normal_font_size = 23
+text = "Name"

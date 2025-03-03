@@ -1,5 +1,6 @@
 public enum TerrainToolTypeEnum
 {
     TILE,
-    MAP_ASSET
+    MAP_ASSET,
+    PIN
 }

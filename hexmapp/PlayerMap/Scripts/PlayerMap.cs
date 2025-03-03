@@ -18,6 +18,7 @@ public partial class PlayerMap : Node2D
 	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
 	private Node2D mapAssets;
 	private Sprite2D previewMapAsset;
+	private PackedScene mapPinScene = GD.Load<PackedScene>("res://PlayerMap/map_pin.tscn");
 
 	public override void _Ready()
 	{
@@ -55,6 +56,11 @@ public partial class PlayerMap : Node2D
 			GD.Print("Map assets node not found.");
 			return;
 		}
+		if (mapPinScene == null)
+		{
+			GD.Print("Map pin scene not found.");
+			return;
+		}
 	}
 
     // Detect base tile indices on click
@@ -84,7 +90,14 @@ public partial class PlayerMap : Node2D
 				newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
 				newMapAsset.ZIndex = 1;
 				mapAssets.AddChild(newMapAsset);
-				GD.Print($"New map asset spawned at {newMapAsset.GlobalPosition}.");
+			}
+			else if (terrainToolsUi.SelectedTool is MapPin mapPin)
+			{
+				Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
+				var position = GetGlobalMousePosition();
+				newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
+				newMapPin.ZIndex = 1;
+				mapAssets.AddChild(newMapPin);
 			}
 		}
 		// continous drawing while the left mouse button is down and moving

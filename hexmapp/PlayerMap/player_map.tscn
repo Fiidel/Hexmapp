@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=53 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -32,6 +32,7 @@
 [ext_resource type="Resource" uid="uid://dmkfo3jlbsh5a" path="res://PlayerMap/MapAssets/Resources/Hill1.tres" id="28_es6b3"]
 [ext_resource type="Resource" uid="uid://d0smme7m52v6v" path="res://PlayerMap/MapAssets/Resources/Broadleaf1.tres" id="29_6vj31"]
 [ext_resource type="Resource" uid="uid://w206pulw2gn6" path="res://PlayerMap/MapAssets/Resources/Conifer1.tres" id="30_xf60x"]
+[ext_resource type="Resource" uid="uid://kle3ug3uy2jq" path="res://PlayerMap/MapAssets/Resources/Pin1.tres" id="31_cl0kr"]
 
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
 tile_size = Vector2i(32, 32)
@@ -173,6 +174,7 @@ script = ExtResource("3_a1ekk")
 buttonGroup = ExtResource("2_djw3f")
 terrainTiles = Array[Object]([ExtResource("4_owkl4"), ExtResource("5_u8tci"), ExtResource("6_281uw"), ExtResource("7_5pfkt")])
 mapAssets = Array[Object]([ExtResource("27_gkcgf"), ExtResource("28_es6b3"), ExtResource("29_6vj31"), ExtResource("30_xf60x")])
+mapPins = Array[Object]([ExtResource("31_cl0kr")])
 terrainTileButton = ExtResource("5_uo0nk")
 
 [node name="SelectionOutline" type="TextureRect" parent="TerrainToolsUI"]
@@ -245,7 +247,16 @@ max_value = 15.0
 step = 2.0
 value = 5.0
 
-[node name="MapAssetLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="PinLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+text = "PINS"
+
+[node name="PinGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 4
+
+[node name="MapAssetLabel2" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
 text = "MAP ASSETS"
 

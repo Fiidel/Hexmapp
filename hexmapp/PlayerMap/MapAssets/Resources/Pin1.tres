@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MapPin" load_steps=3 format=3 uid="uid://kle3ug3uy2jq"]
+
+[ext_resource type="Texture2D" uid="uid://c8p665g05a7c5" path="res://PlayerMap/MapAssets/Sprites/Pin1.png" id="1_ia7qi"]
+[ext_resource type="Script" path="res://PlayerMap/Scripts/MapPin.cs" id="1_rvckw"]
+
+[resource]
+script = ExtResource("1_rvckw")
+Texture = ExtResource("1_ia7qi")
+Description = ""
