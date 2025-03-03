@@ -207,40 +207,40 @@ anchor_bottom = 1.0
 offset_right = 353.0
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TerrainToolsUI/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 8
 
-[node name="TerrainTools" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer"]
+[node name="TerrainTools" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="HeadingLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="HeadingLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Terrain Tools"
 
-[node name="TerrainTypeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="TerranTypesContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+
+[node name="TerrainTypeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 layout_mode = 2
 text = "TERRAIN TYPE"
 
-[node name="TerrainTypeGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="TerrainTypeGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 columns = 4
 
-[node name="TerrainBrushSizeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="TerrainBrushSizeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Brush Size"
 
-[node name="TerrainBrushSizeSlider" type="HSlider" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="TerrainBrushSizeSlider" type="HSlider" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
@@ -248,20 +248,26 @@ max_value = 15.0
 step = 2.0
 value = 5.0
 
-[node name="PinLabel" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="PinsContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+
+[node name="PinLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/PinsContainer"]
 layout_mode = 2
 text = "PINS"
 
-[node name="PinGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="PinGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/PinsContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 columns = 4
 
-[node name="MapAssetLabel2" type="Label" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="MapAssetsContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+
+[node name="MapAssetLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/MapAssetsContainer"]
 layout_mode = 2
 text = "MAP ASSETS"
 
-[node name="MapAssetGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/VBoxContainer/MarginContainer/TerrainTools"]
+[node name="MapAssetGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/MapAssetsContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 columns = 4
