@@ -17,6 +17,7 @@ public partial class PlayerMap : Node2D
 	private Node2D mapAssets;
 	private Sprite2D previewMapAsset;
 	private PackedScene mapPinScene = GD.Load<PackedScene>("res://PlayerMap/map_pin.tscn");
+	private DrawTilesCommand currentDrawTilesCommand = null;
 
 	public override void _Ready()
 	{
@@ -72,13 +73,14 @@ public partial class PlayerMap : Node2D
 			{
 				var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
 				GetOrCreateTileMapLayer(tile.IdName);
-				BrushDrawTiles(clickedTile, tile);
-
 				// for continous drawing
 				isTileDrawing = true;
 				lastTileIndex = clickedTile;
+
+				// create a new command that accumulates drawn tiles
+				currentDrawTilesCommand = new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize, tile);
+				// draw the first tile
 				
-				GD.Print($"Tile: {clickedTile}. Terrain: {tile.IdName}. Layer count: {displayLayersDict.Count}.");
 			}
 			else if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
 			{
@@ -108,7 +110,7 @@ public partial class PlayerMap : Node2D
 				if (lastTileIndex != currentTile)
 				{
 					lastTileIndex = currentTile;
-					BrushDrawTiles(lastTileIndex, tile);
+					AddTileToCommandAndDraw(currentTile, tile);
 				}
 			}
 			else
@@ -121,7 +123,18 @@ public partial class PlayerMap : Node2D
 		{
 			isTileDrawing = false;
 			lastTileIndex = new Vector2I(-1, -1);
+
+			// execute the whole tile draw command (in case of simulateneous draw requests over the network)
+			currentDrawTilesCommand.Execute();
+			currentDrawTilesCommand = null;
 		}
+	}
+
+	// 
+	private void AddTileToCommandAndDraw(Vector2I tileIndex, Tile tile)
+	{
+		currentDrawTilesCommand.tileIndices.Add(tileIndex);
+		currentDrawTilesCommand.BrushDrawTiles(tileIndex, tile);
 	}
 
     // Get or create a tile map layer
@@ -157,98 +170,6 @@ public partial class PlayerMap : Node2D
 		return displayLayersDict[tileName];
 	}
 
-	// Draw using the brush size
-	private void BrushDrawTiles(Vector2I tileIndex, Tile tileType)
-	{
-		int brushRadius = terrainToolsUi.BrushSize/2;
-		int roundnessFactor = terrainToolsUi.BrushSize/10 + 1;
-
-		for (int x = -brushRadius; x <= brushRadius; x++)
-		{
-			for (int y = -brushRadius; y <= brushRadius; y++)
-			{
-				// skip tiles outside of a circular radius
-				if (x*x + y*y > brushRadius*brushRadius + roundnessFactor)
-				{
-					continue;
-				}
-				AddTile(new Vector2I(x + tileIndex.X, y + tileIndex.Y), tileType);
-			}
-		}
-	}
-
-	// Assign the selected tile texture to the clicked tile on the base grid
-	private void AddTile(Vector2I tileIndex, Tile tileType)
-	{
-		if (tileIndex.X < 0 || tileIndex.X >= mapWidth || tileIndex.Y < 0 || tileIndex.Y >= mapHeight)
-		{
-			return;
-		}
-		baseTiles[tileIndex.X, tileIndex.Y] = tileType;
-		UpdateDisplayLayers(tileIndex);
-	}
-
-	// Choose the alpha tiles for the 4 surrounding tiles on all the display layers
-	private void UpdateDisplayLayers(Vector2I tileIndex)
-	{
-		foreach (TileMapLayer layer in displayLayersDict.Values)
-		{
-			Tile tileType = (Tile)layer.GetMeta("Tile");
-			int atlasIndex;
-			
-			// for alpha cell [0,0]
-			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, -1, -1);
-			layer.SetCell(tileIndex, atlasIndex, Vector2I.Zero);
-
-			// for alpha cell [1,0]
-			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, 0, -1);
-			layer.SetCell(tileIndex + Vector2I.Right, atlasIndex, Vector2I.Zero);
-
-			// for alpha cell [0,1]
-			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, -1, 0);
-			layer.SetCell(tileIndex + Vector2I.Down, atlasIndex, Vector2I.Zero);
-
-			// for alpha cell [1,1]
-			atlasIndex = CalculateAtlasIndex(tileType, tileIndex, 0, 0);
-			layer.SetCell(tileIndex + Vector2I.One, atlasIndex, Vector2I.Zero);
-		}
-	}
-
-	private bool IsTileTypeSame(Tile tileType, int x, int y)
-	{
-		// out of bounds
-		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
-		{
-			return false;
-		}
-		return baseTiles[x, y] == tileType;
-	}
-
-	// xOffset and yOffset signify where the 1st checked base tile starts as compared
-	// to the center base tile that has been drawn (always the top left one)
-	private int CalculateAtlasIndex(Tile tileType, Vector2I tileIndex, int xOffset, int yOffset)
-	{
-		int atlasIndex = 0;
-
-		if (IsTileTypeSame(tileType, tileIndex.X + xOffset, tileIndex.Y + yOffset))
-		{
-			atlasIndex += 8;
-		}
-		if (IsTileTypeSame(tileType, tileIndex.X + xOffset + 1, tileIndex.Y + yOffset))
-		{
-			atlasIndex += 4;
-		}
-		if (IsTileTypeSame(tileType, tileIndex.X + xOffset, tileIndex.Y + yOffset + 1))
-		{
-			atlasIndex += 2;
-		}
-		if (IsTileTypeSame(tileType, tileIndex.X + xOffset + 1, tileIndex.Y + yOffset + 1))
-		{
-			atlasIndex += 1;
-		}
-
-		return atlasIndex;
-	}
 
 
 
