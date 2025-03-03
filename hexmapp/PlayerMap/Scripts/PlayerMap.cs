@@ -7,9 +7,7 @@ public partial class PlayerMap : Node2D
 	private TerrainToolsUi terrainToolsUi;
 	private Node terrainGrids;
 	private TileMapLayer baseLayer;
-	private Tile[,] baseTiles;
-	private int mapWidth = 200;
-	private int mapHeight = 150;
+	private BaseMapData baseMapData;
 	private TileMapLayer displayLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
 	private bool isTileDrawing;
@@ -24,11 +22,12 @@ public partial class PlayerMap : Node2D
 	{
 		// get nodes and resources
 		baseLayer = GetNode<TileMapLayer>("TerrainGrids/BaseTerrainGrid");
-		baseTiles = new Tile[mapWidth,mapHeight];
 		displayLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
 		terrainGrids = GetNode<Node>("TerrainGrids");
 		mapAssets = GetNode<Node2D>("MapAssets");
+
+		baseMapData = new BaseMapData(200, 150);
 
 		// check for missing data and errors
 		if (baseLayer == null)
@@ -134,9 +133,9 @@ public partial class PlayerMap : Node2D
 			TileMapLayer newLayer = displayLayer.Duplicate() as TileMapLayer;
 			newLayer.Name = $"{tileName}Layer";
 			newLayer.SetMeta("Tile", tile);
-			for (int x = 0; x <= mapWidth; x++) // <= ... to account for the offset to top left by half a tile
+			for (int x = 0; x <= baseMapData.mapWidth; x++) // <= ... to account for the offset to top left by half a tile
 			{
-				for (int y = 0; y <= mapHeight; y++)
+				for (int y = 0; y <= baseMapData.mapHeight; y++)
 				{
 					newLayer.SetCell(new Vector2I(x, y), 0, Vector2I.Zero);
 				}
