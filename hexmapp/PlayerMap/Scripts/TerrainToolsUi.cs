@@ -1,25 +1,26 @@
+using System;
 using Godot;
 using Godot.Collections;
 
 public partial class TerrainToolsUi : CanvasLayer
 {
+	// publically accessible
 	public Resource SelectedTool;
 	public int BrushSize = 1;
-	[Export]
-	private ButtonGroup buttonGroup;
-	[Export]
-	private Array<Tile> terrainTiles;
-	[Export]
-	private Array<MapAsset> mapAssets;
-	[Export]
-	private Array<MapPin> mapPins;
+
+	// editor variables
+	[Export] private PackedScene toolButtonScene;
+	[Export] private ButtonGroup buttonGroup;
+	[Export] private Array<Tile> terrainTiles;
+	[Export] private Array<MapAsset> mapAssets;
+	[Export] private Array<MapPin> mapPins;
+
+	// private variables
 	private BaseButton selectedButton;
 	private GridContainer terrainTypeGrid;
 	private GridContainer mapAssetGrid;
 	private GridContainer pinGrid;
 	private TextureRect outline;
-	[Export]
-	private PackedScene terrainTileButton;
 	private HSlider brushSlider;
 
 	public override void _Ready()
@@ -33,7 +34,64 @@ public partial class TerrainToolsUi : CanvasLayer
 
 
 		// check for missing data and errors
-		if (buttonGroup == null)
+		ValidateLoadsAfterReady();
+		
+
+		// load all Tile resources as UI buttons
+		for (int i = 0; i < terrainTiles.Count; i++)
+		{
+			var newButton = LoadCommonButtonData(terrainTiles[i].Texture, TerrainToolTypeEnum.TILE);
+			newButton.Name = terrainTiles[i].IdName;
+			newButton.SetMeta("Tile", terrainTiles[i]);
+			terrainTypeGrid.AddChild(newButton);
+		}
+
+		// load all MapAsset resources as UI buttons
+		for (int i = 0; i < mapAssets.Count; i++)
+		{
+			var newButton = LoadCommonButtonData(mapAssets[i].Texture, TerrainToolTypeEnum.MAP_ASSET);
+			newButton.SetMeta("MapAsset", mapAssets[i]);
+			mapAssetGrid.AddChild(newButton);
+		}
+
+		// load all MapPin resources as UI buttons
+		for (int i = 0; i < mapPins.Count; i++)
+		{
+			var newButton = LoadCommonButtonData(mapPins[i].Texture, TerrainToolTypeEnum.PIN);
+			newButton.SetMeta("MapPin", mapPins[i]);
+			pinGrid.AddChild(newButton);
+		}
+
+
+		// select the first button
+		selectedButton = terrainTypeGrid.GetChild(0) as BaseButton;
+		if (selectedButton == null)
+		{
+			GD.Print("Warning: Couldn't convert first child of terrain type grid to BaseButton class.");
+		}
+		else
+		{
+			// toggle
+			selectedButton.ButtonPressed = true;
+			// outline
+			outline.Visible = true;
+			MoveOutlineToButton(selectedButton);
+			// public tile reference
+			SelectedTool = (Tile)selectedButton.GetMeta("Tile");
+
+			GD.Print($"Selected tile {selectedButton.Name}");
+		}
+
+		// connect signals
+		brushSlider.DragEnded += OnBrushSizeChanged;
+
+		// inicialize variables
+		BrushSize = (int)brushSlider.Value;
+	}
+
+    private void ValidateLoadsAfterReady()
+    {
+        if (buttonGroup == null)
 		{
 			GD.Print("No terrain tool button group assigned!");
 			return;
@@ -43,7 +101,7 @@ public partial class TerrainToolsUi : CanvasLayer
 			GD.Print("No terrain tool buttons loaded.");
 			return;
 		}
-		if (terrainTileButton == null)
+		if (toolButtonScene == null)
 		{
 			GD.Print("No terrain tool button scene loaded.");
 			return;
@@ -73,81 +131,24 @@ public partial class TerrainToolsUi : CanvasLayer
 			GD.Print("Terrain brush slider not found.");
 			return;
 		}
-		
+    }
 
-		// load all Tile resources as UI buttons
-		for (int i = 0; i < terrainTiles.Count; i++)
-		{
-			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
-			button.SetMeta("Tile", terrainTiles[i]);
-			button.Name = terrainTiles[i].IdName;
-			button.TextureNormal = terrainTiles[i].Texture;
-			button.ToggleMode = true;
-			button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, TerrainToolTypeEnum.TILE)));
-			button.Pressed += () => OnButtonPressed(button, TerrainToolTypeEnum.TILE);
-			button.AddToGroup(buttonGroup.ResourceName);
-
-			terrainTypeGrid.AddChild(button);
-		}
-
-		// load all MapAsset resources as UI buttons
-		for (int i = 0; i < mapAssets.Count; i++)
-		{
-			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
-			button.SetMeta("MapAsset", mapAssets[i]);
-			button.TextureNormal = mapAssets[i].Texture;
-			button.ToggleMode = true;
-			button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, TerrainToolTypeEnum.MAP_ASSET)));
-			button.AddToGroup(buttonGroup.ResourceName);
-
-			mapAssetGrid.AddChild(button);
-		}
-
-		// load all MapPin resources as UI buttons
-		for (int i = 0; i < mapPins.Count; i++)
-		{
-			TextureButton button = (TextureButton)terrainTileButton.Instantiate();
-			button.SetMeta("MapPin", mapPins[i]);
-			button.TextureNormal = mapPins[i].Texture;
-			button.ToggleMode = true;
-			button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, TerrainToolTypeEnum.PIN)));
-			button.AddToGroup(buttonGroup.ResourceName);
-
-			pinGrid.AddChild(button);
-		}
-
-
-		// select the first button
-		selectedButton = terrainTypeGrid.GetChild(0) as BaseButton;
-		if (selectedButton == null)
-		{
-			GD.Print("Warning: Couldn't convert first child of terrain type grid to BaseButton class.");
-		}
-		else
-		{
-			// toggle
-			selectedButton.ButtonPressed = true;
-			// outline
-			outline.Visible = true;
-			MoveOutlineToButton(selectedButton);
-			// public tile reference
-			SelectedTool = (Tile)selectedButton.GetMeta("Tile");
-
-			GD.Print($"Selected tile {selectedButton.Name}");
-		}
-
-		// connect signals
-		brushSlider.DragEnded += OnBrushSizeChanged;
-
-		// inicialize variables
-		BrushSize = (int)brushSlider.Value;
-	}
-	
-	public override void _ExitTree()
+    public override void _ExitTree()
     {
         base._ExitTree();
 		brushSlider.DragEnded -= OnBrushSizeChanged;
     }
+
+	private TextureButton LoadCommonButtonData(Texture2D texture, TerrainToolTypeEnum toolType)
+	{
+		TextureButton button = (TextureButton)toolButtonScene.Instantiate();
+		button.TextureNormal = texture;
+		button.ToggleMode = true;
+		button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, toolType)));
+		button.AddToGroup(buttonGroup.ResourceName);
+
+		return button;
+	}
 
 	private void OnButtonPressed(BaseButton button, TerrainToolTypeEnum toolType)
 	{

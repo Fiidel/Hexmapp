@@ -4,39 +4,51 @@ using System.Collections.Generic;
 
 public partial class PlayerMap : Node2D
 {
+	// general variables
 	private TerrainToolsUi terrainToolsUi;
-	private Node terrainGrids;
-	private TileMapLayer baseLayer;
 	private BaseMapData baseMapData;
-	private TileMapLayer displayLayer;
+	private TileMapLayer baseGridLayer;
+	private TileMapLayer displayGridLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
 	private bool isTileDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
+	private DrawTilesCommand currentDrawTilesCommand = null;
+
+	// parent nodes for other objects
+	private Node terrainGrids;
+	private Node2D mapAssets;
+
+	// resources
+	private PackedScene mapPinScene = GD.Load<PackedScene>("res://PlayerMap/map_pin.tscn");
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
-	private Node2D mapAssets;
-	private Sprite2D previewMapAsset;
-	private PackedScene mapPinScene = GD.Load<PackedScene>("res://PlayerMap/map_pin.tscn");
-	private DrawTilesCommand currentDrawTilesCommand = null;
+
 
 	public override void _Ready()
 	{
 		// get nodes and resources
-		baseLayer = GetNode<TileMapLayer>("TerrainGrids/BaseTerrainGrid");
-		displayLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
+		baseGridLayer = GetNode<TileMapLayer>("TerrainGrids/BaseTerrainGrid");
+		displayGridLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
 		terrainGrids = GetNode<Node>("TerrainGrids");
 		mapAssets = GetNode<Node2D>("MapAssets");
 
+		// create base map
 		baseMapData = new BaseMapData(200, 150);
 
 		// check for missing data and errors
-		if (baseLayer == null)
+		ValiadeLoadsAfterReady();
+	}
+
+
+    private void ValiadeLoadsAfterReady()
+    {
+        if (baseGridLayer == null)
 		{
 			GD.Print("Base tile map layer not found.");
 			return;
 		}
-		if (displayLayer == null)
+		if (displayGridLayer == null)
 		{
 			GD.Print("Display tile map layer not found.");
 			return;
@@ -61,9 +73,19 @@ public partial class PlayerMap : Node2D
 			GD.Print("Map pin scene not found.");
 			return;
 		}
-	}
+		if (alphaShader == null)
+		{
+			GD.Print("Alpha shader not found.");
+			return;
+		}
+		if (alphaNoiseTexture == null)
+		{
+			GD.Print("Alpha noise texture not found.");
+			return;
+		}
+    }
 
-    // Detect base tile indices on click
+
     public override void _UnhandledInput(InputEvent @event)
 	{
 		// start drawing tiles with the selected tile brush
@@ -71,34 +93,15 @@ public partial class PlayerMap : Node2D
 		{
 			if (terrainToolsUi.SelectedTool is Tile tile)
 			{
-				var clickedTile = baseLayer.LocalToMap(GetGlobalMousePosition());
-				GetOrCreateTileMapLayer(tile.IdName);
-				// for continous drawing
-				isTileDrawing = true;
-				lastTileIndex = clickedTile;
-
-				// create a new command that accumulates drawn tiles
-				currentDrawTilesCommand = new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize, tile);
-				// draw the first tile
-				
+				StartDrawingTiles(tile);
 			}
 			else if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
 			{
-				var newMapAsset = new Sprite2D();
-				newMapAsset.Texture = mapAsset.Texture;
-				var position = GetGlobalMousePosition();
-				newMapAsset.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-				newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
-				newMapAsset.ZIndex = 1;
-				mapAssets.AddChild(newMapAsset);
+				PlaceNewMapAsset(mapAsset);
 			}
 			else if (terrainToolsUi.SelectedTool is MapPin mapPin)
 			{
-				Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
-				var position = GetGlobalMousePosition();
-				newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-				newMapPin.ZIndex = 1;
-				mapAssets.AddChild(newMapPin);
+				PlaceNewMapPin(mapPin);
 			}
 		}
 		// continous drawing while the left mouse button is down and moving
@@ -106,36 +109,82 @@ public partial class PlayerMap : Node2D
 		{
 			if (terrainToolsUi.SelectedTool is Tile tile)
 			{
-				var currentTile = baseLayer.LocalToMap(GetGlobalMousePosition());
-				if (lastTileIndex != currentTile)
-				{
-					lastTileIndex = currentTile;
-					AddTileToCommandAndDraw(currentTile, tile);
-				}
-			}
-			else
-			{
-				GD.Print("Error: Selected tool is not a tile.");
+				ContinueDrawingTiles(tile);
 			}
 		}
 		// stop drawing when the left mouse button is released
 		else if (isTileDrawing && @event.IsActionReleased("left_click"))
 		{
-			isTileDrawing = false;
-			lastTileIndex = new Vector2I(-1, -1);
-
-			// execute the whole tile draw command (in case of simulateneous draw requests over the network)
-			currentDrawTilesCommand.Execute();
-			currentDrawTilesCommand = null;
+			StopDrawingTiles();
 		}
 	}
 
-	// 
-	private void AddTileToCommandAndDraw(Vector2I tileIndex, Tile tile)
+
+	private void PlaceNewMapAsset(MapAsset mapAsset)
+    {
+        var newMapAsset = new Sprite2D();
+		newMapAsset.Texture = mapAsset.Texture;
+		var position = GetGlobalMousePosition();
+		newMapAsset.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
+		newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
+		newMapAsset.ZIndex = 1;
+		mapAssets.AddChild(newMapAsset);
+    }
+
+
+    private void PlaceNewMapPin(MapPin mapPin)
+    {
+        Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
+		var position = GetGlobalMousePosition();
+		newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
+		newMapPin.ZIndex = 1;
+		mapAssets.AddChild(newMapPin);
+    }
+
+
+    private void StartDrawingTiles(Tile tile)
+    {
+        var clickedTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		GetOrCreateTileMapLayer(tile.IdName);
+		// for continous drawing
+		isTileDrawing = true;
+		lastTileIndex = clickedTile;
+
+		// create a new command that accumulates drawn tiles
+		currentDrawTilesCommand = new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize, tile);
+		// draw the first tile
+		AddTileToCommandAndDraw(clickedTile, tile);
+    }
+
+
+	private void ContinueDrawingTiles(Tile tile)
+    {
+        var currentTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		if (lastTileIndex != currentTile)
+		{
+			lastTileIndex = currentTile;
+			AddTileToCommandAndDraw(currentTile, tile);
+		}
+    }
+
+
+    private void StopDrawingTiles()
+    {
+        isTileDrawing = false;
+		lastTileIndex = new Vector2I(-1, -1);
+
+		// execute the whole tile draw command (in case of )
+		currentDrawTilesCommand.Execute();
+		currentDrawTilesCommand = null;
+    }
+
+
+    private void AddTileToCommandAndDraw(Vector2I tileIndex, Tile tile)
 	{
 		currentDrawTilesCommand.tileIndices.Add(tileIndex);
 		currentDrawTilesCommand.BrushDrawTiles(tileIndex, tile);
 	}
+
 
     // Get or create a tile map layer
     private TileMapLayer GetOrCreateTileMapLayer(string tileName)
@@ -143,7 +192,7 @@ public partial class PlayerMap : Node2D
 		// if the tile hasn't been used yet, create a new layer
 		if (!displayLayersDict.ContainsKey(tileName) && terrainToolsUi.SelectedTool is Tile tile)
 		{
-			TileMapLayer newLayer = displayLayer.Duplicate() as TileMapLayer;
+			TileMapLayer newLayer = displayGridLayer.Duplicate() as TileMapLayer;
 			newLayer.Name = $"{tileName}Layer";
 			newLayer.SetMeta("Tile", tile);
 			for (int x = 0; x <= baseMapData.mapWidth; x++) // <= ... to account for the offset to top left by half a tile
@@ -169,14 +218,4 @@ public partial class PlayerMap : Node2D
 		// otherwise get the existing layer for that tile
 		return displayLayersDict[tileName];
 	}
-
-
-
-
-
-    // B. implement strokes (rather than just setting 1 tile)
-    // C. implement erasing tiles
-    // D. implement it as a command that gathers all drawn tiles
-    // E. implement brush sizes (which will need to account for setting nonexistent tiles at the edge of the base terrain index)
-
 }

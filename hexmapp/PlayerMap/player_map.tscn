@@ -12,7 +12,6 @@
 [ext_resource type="Resource" uid="uid://dtwiopsxm5pfh" path="res://PlayerMap/Tiles/TileResources/Grass1.tres" id="4_owkl4"]
 [ext_resource type="Texture2D" uid="uid://bp00ekissh78v" path="res://PlayerMap/Tiles/TileAlphaMasks/half_L.png" id="5_3q1ky"]
 [ext_resource type="Resource" uid="uid://cf16khifih2j7" path="res://PlayerMap/Tiles/TileResources/Grass2.tres" id="5_u8tci"]
-[ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://PlayerMap/terrain_tile_button.tscn" id="5_uo0nk"]
 [ext_resource type="Resource" uid="uid://bsxxved3fpai" path="res://PlayerMap/Tiles/TileResources/Sand1.tres" id="6_281uw"]
 [ext_resource type="Texture2D" uid="uid://cloeq7gs0qumu" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_TR.png" id="6_qr4o5"]
 [ext_resource type="Resource" uid="uid://cserkuuarn54l" path="res://PlayerMap/Tiles/TileResources/Water1.tres" id="7_5pfkt"]
@@ -28,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://cjiyo10wxfmeu" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_TL.png" id="16_xkt18"]
 [ext_resource type="Texture2D" uid="uid://dploxykia3atv" path="res://PlayerMap/Tiles/TileAlphaMasks/quarter_TL.png" id="17_kg3bx"]
 [ext_resource type="Texture2D" uid="uid://bm72tllmj3m8w" path="res://PlayerMap/Tiles/TileAlphaMasks/halfCheckered_TLBR.png" id="18_ge64x"]
+[ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://PlayerMap/tool_button.tscn" id="22_7ml6j"]
 [ext_resource type="Resource" uid="uid://c6fxaj30hahva" path="res://PlayerMap/MapAssets/Resources/Mt1.tres" id="27_gkcgf"]
 [ext_resource type="Resource" uid="uid://dmkfo3jlbsh5a" path="res://PlayerMap/MapAssets/Resources/Hill1.tres" id="28_es6b3"]
 [ext_resource type="Resource" uid="uid://d0smme7m52v6v" path="res://PlayerMap/MapAssets/Resources/Broadleaf1.tres" id="29_6vj31"]
@@ -171,11 +171,11 @@ y_sort_enabled = true
 
 [node name="TerrainToolsUI" type="CanvasLayer" parent="."]
 script = ExtResource("3_a1ekk")
+toolButtonScene = ExtResource("22_7ml6j")
 buttonGroup = ExtResource("2_djw3f")
 terrainTiles = Array[Object]([ExtResource("4_owkl4"), ExtResource("5_u8tci"), ExtResource("6_281uw"), ExtResource("7_5pfkt")])
 mapAssets = Array[Object]([ExtResource("27_gkcgf"), ExtResource("28_es6b3"), ExtResource("29_6vj31"), ExtResource("30_xf60x")])
 mapPins = Array[Object]([ExtResource("31_cl0kr")])
-terrainTileButton = ExtResource("5_uo0nk")
 
 [node name="SelectionOutline" type="TextureRect" parent="TerrainToolsUI"]
 visible = false
