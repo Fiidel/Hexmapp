@@ -97,7 +97,8 @@ public partial class PlayerMap : Node2D
 			}
 			else if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
 			{
-				PlaceNewMapAsset(mapAsset);
+				var placeMapAssetCommand = new PlaceMapAssetCommand(mapAssets, mapAsset, GetGlobalMousePosition());
+				placeMapAssetCommand.Execute();
 			}
 			else if (terrainToolsUi.SelectedTool is MapPin mapPin)
 			{
@@ -118,18 +119,6 @@ public partial class PlayerMap : Node2D
 			StopDrawingTiles();
 		}
 	}
-
-
-	private void PlaceNewMapAsset(MapAsset mapAsset)
-    {
-        var newMapAsset = new Sprite2D();
-		newMapAsset.Texture = mapAsset.Texture;
-		var position = GetGlobalMousePosition();
-		newMapAsset.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-		newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
-		newMapAsset.ZIndex = 1;
-		mapAssets.AddChild(newMapAsset);
-    }
 
 
     private void PlaceNewMapPin(MapPin mapPin)
