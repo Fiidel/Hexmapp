@@ -29,7 +29,7 @@ public class PlaceMapPinCommand : Command
         }
         Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
 		newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-		newMapPin.ZIndex = 1;
+		newMapPin.ZIndex = 2;
 		assetContainer.AddChild(newMapPin);
     }
 }

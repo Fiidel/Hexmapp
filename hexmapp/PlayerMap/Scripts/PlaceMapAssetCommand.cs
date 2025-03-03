@@ -24,7 +24,6 @@ public class PlaceMapAssetCommand : Command
         var newMapAsset = new Sprite2D();
 		newMapAsset.Texture = mapAsset.Texture;
 		newMapAsset.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-		newMapAsset.Offset = new Vector2(0, - newMapAsset.Texture.GetSize().Y / 2);
 		newMapAsset.ZIndex = 1;
 		assetContainer.AddChild(newMapAsset);
     }

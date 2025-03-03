@@ -13,6 +13,8 @@ public partial class PlayerMap : Node2D
 	private bool isTileDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
 	private DrawTilesCommand currentDrawTilesCommand = null;
+	private Control uiPanel;
+	private Sprite2D mapAssetPreview;
 
 	// parent nodes for other objects
 	private Node terrainGrids;
@@ -31,12 +33,26 @@ public partial class PlayerMap : Node2D
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
 		terrainGrids = GetNode<Node>("TerrainGrids");
 		mapAssets = GetNode<Node2D>("MapAssets");
+		uiPanel = GetNode<Control>("TerrainToolsUI/PanelContainer");
+		mapAssetPreview = GetNode<Sprite2D>("%MapAssetPreview");
+
+		// check for missing data and errors
+		ValiadeLoadsAfterReady();
 
 		// create base map
 		baseMapData = new BaseMapData(200, 150);
 
-		// check for missing data and errors
-		ValiadeLoadsAfterReady();
+		// register signals
+		uiPanel.MouseEntered += OnUiPanelMouseEntered;
+		uiPanel.MouseExited += OnUiPanelMouseExited;
+	}
+
+
+    public override void _ExitTree()
+	{
+		base._ExitTree();
+		uiPanel.MouseEntered -= OnUiPanelMouseEntered;
+		uiPanel.MouseExited -= OnUiPanelMouseExited;
 	}
 
 
@@ -77,6 +93,11 @@ public partial class PlayerMap : Node2D
 			GD.Print("Alpha noise texture not found.");
 			return;
 		}
+		if (uiPanel == null)
+		{
+			GD.Print("UI panel not found.");
+			return;
+		}
     }
 
 
@@ -114,6 +135,45 @@ public partial class PlayerMap : Node2D
 			StopDrawingTiles();
 		}
 	}
+
+
+    public override void _Process(double delta)
+    {
+        if (mapAssetPreview.Visible)
+		{
+			mapAssetPreview.GlobalPosition = GetGlobalMousePosition();
+		}
+    }
+
+
+    private void OnUiPanelMouseExited()
+    {
+		if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
+		{
+			SetupMapAssetPreview(mapAsset.Texture);
+			mapAssetPreview.ZIndex = 1;
+		}
+		else if (terrainToolsUi.SelectedTool is MapPin mapPin)
+		{
+			SetupMapAssetPreview(mapPin.Texture);
+			mapAssetPreview.ZIndex = 2;
+		}
+    }
+
+
+	private void SetupMapAssetPreview(Texture2D texture)
+	{
+		mapAssetPreview.Texture = texture;
+		Input.MouseMode = Input.MouseModeEnum.Hidden;
+		mapAssetPreview.Visible = true;
+	}
+
+
+    private void OnUiPanelMouseEntered()
+    {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+		mapAssetPreview.Visible = false;
+    }
 
 
     private void StartDrawingTiles(Tile tile)
