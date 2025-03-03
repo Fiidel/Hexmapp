@@ -19,7 +19,6 @@ public partial class PlayerMap : Node2D
 	private Node2D mapAssets;
 
 	// resources
-	private PackedScene mapPinScene = GD.Load<PackedScene>("res://PlayerMap/map_pin.tscn");
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
 	private NoiseTexture2D alphaNoiseTexture = GD.Load<NoiseTexture2D>("res://PlayerMap/player_map_noise.tres");
 
@@ -68,11 +67,6 @@ public partial class PlayerMap : Node2D
 			GD.Print("Map assets node not found.");
 			return;
 		}
-		if (mapPinScene == null)
-		{
-			GD.Print("Map pin scene not found.");
-			return;
-		}
 		if (alphaShader == null)
 		{
 			GD.Print("Alpha shader not found.");
@@ -102,7 +96,8 @@ public partial class PlayerMap : Node2D
 			}
 			else if (terrainToolsUi.SelectedTool is MapPin mapPin)
 			{
-				PlaceNewMapPin(mapPin);
+				var placeMapPinCommand = new PlaceMapPinCommand(mapAssets, mapPin, GetGlobalMousePosition());
+				placeMapPinCommand.Execute();
 			}
 		}
 		// continous drawing while the left mouse button is down and moving
@@ -119,16 +114,6 @@ public partial class PlayerMap : Node2D
 			StopDrawingTiles();
 		}
 	}
-
-
-    private void PlaceNewMapPin(MapPin mapPin)
-    {
-        Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
-		var position = GetGlobalMousePosition();
-		newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
-		newMapPin.ZIndex = 1;
-		mapAssets.AddChild(newMapPin);
-    }
 
 
     private void StartDrawingTiles(Tile tile)
