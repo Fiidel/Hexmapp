@@ -12,6 +12,7 @@ public partial class PlayerMap : Node2D
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
 	private bool isTileDrawing;
 	private Vector2I lastTileIndex = new Vector2I(-1, -1);
+	private TileMapDrawTool tileMapDrawTool;
 	private DrawTilesCommand currentDrawTilesCommand = null;
 	private Control uiPanel;
 	private Sprite2D mapAssetPreview;
@@ -41,6 +42,9 @@ public partial class PlayerMap : Node2D
 
 		// create base map
 		baseMapData = new BaseMapData(200, 150);
+
+		// create the draw tool
+		tileMapDrawTool = new TileMapDrawTool(baseMapData, displayLayersDict);
 
 		// register signals
 		uiPanel.MouseEntered += OnUiPanelMouseEntered;
@@ -216,7 +220,7 @@ public partial class PlayerMap : Node2D
     private void AddTileToCommandAndDraw(Vector2I tileIndex, Tile tile)
 	{
 		currentDrawTilesCommand.tileIndices.Add(tileIndex);
-		currentDrawTilesCommand.BrushDrawTiles(tileIndex, tile);
+		tileMapDrawTool.BrushDrawTiles(tileIndex, tile, terrainToolsUi.BrushSize);
 	}
 
 
