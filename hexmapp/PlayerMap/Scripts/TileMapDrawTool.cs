@@ -5,7 +5,6 @@ public class TileMapDrawTool
 {
     private BaseMapData baseMapData;
     private Dictionary<string, TileMapLayer> displayLayersDict;
-    // KEEP THESE AS A REFERENCE OR PASS AS PARAMETERS?
 
     public TileMapDrawTool(BaseMapData baseMapData, Dictionary<string, TileMapLayer> displayLayersDict)
     {
@@ -35,6 +34,27 @@ public class TileMapDrawTool
 	}
 
 
+    // Erase using the brush size
+	public void BrushEraseTiles(Vector2I tileIndex, int brushSize)
+	{
+		int brushRadius = brushSize/2;
+		int roundnessFactor = brushSize/10 + 1;
+
+		for (int x = -brushRadius; x <= brushRadius; x++)
+		{
+			for (int y = -brushRadius; y <= brushRadius; y++)
+			{
+				// skip tiles outside of a circular radius
+				if (x*x + y*y > brushRadius*brushRadius + roundnessFactor)
+				{
+					continue;
+				}
+				RemoveTile(new Vector2I(x + tileIndex.X, y + tileIndex.Y));
+			}
+		}
+	}
+
+
     // Assign the selected tile texture to the clicked tile on the base grid
 	private void AddTile(Vector2I tileIndex, Tile tileType)
 	{
@@ -43,6 +63,18 @@ public class TileMapDrawTool
 			return;
 		}
 		baseMapData.baseTiles[tileIndex.X, tileIndex.Y] = tileType;
+		UpdateDisplayLayers(tileIndex);
+	}
+
+
+    // Remove assigned tile type from the clicked tile on the base grid
+	private void RemoveTile(Vector2I tileIndex)
+	{
+		if (tileIndex.X < 0 || tileIndex.X >= baseMapData.mapWidth || tileIndex.Y < 0 || tileIndex.Y >= baseMapData.mapHeight)
+		{
+			return;
+		}
+		baseMapData.baseTiles[tileIndex.X, tileIndex.Y] = null;
 		UpdateDisplayLayers(tileIndex);
 	}
 

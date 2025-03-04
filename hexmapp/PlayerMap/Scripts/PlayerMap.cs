@@ -10,10 +10,12 @@ public partial class PlayerMap : Node2D
 	private TileMapLayer baseGridLayer;
 	private TileMapLayer displayGridLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
-	private bool isTileDrawing;
-	private Vector2I lastTileIndex = new Vector2I(-1, -1);
 	private TileMapDrawTool tileMapDrawTool;
+	private bool isTileDrawing;
+	private bool isTileErasing;
+	private Vector2I lastTileIndex = new Vector2I(-1, -1);
 	private DrawTilesCommand currentDrawTilesCommand = null;
+	private EraseTilesCommand currentEraseTilesCommand = null;
 	private Control uiPanel;
 	private Sprite2D mapAssetPreview;
 
@@ -125,6 +127,10 @@ public partial class PlayerMap : Node2D
 				placeMapPinCommand.Execute();
 			}
 		}
+		else if (@event.IsActionPressed("right_click"))
+		{
+			StartErasingTiles();
+		}
 		// continous drawing while the left mouse button is down and moving
 		else if (isTileDrawing && @event is InputEventMouseMotion)
 		{
@@ -133,10 +139,18 @@ public partial class PlayerMap : Node2D
 				ContinueDrawingTiles(tile);
 			}
 		}
+		else if (isTileErasing && @event is InputEventMouseMotion)
+		{
+			ContinueErasingTiles();
+		}
 		// stop drawing when the left mouse button is released
 		else if (isTileDrawing && @event.IsActionReleased("left_click"))
 		{
 			StopDrawingTiles();
+		}
+		else if (isTileErasing && @event.IsActionReleased("right_click"))
+		{
+			StopErasingTiles();
 		}
 	}
 
@@ -180,13 +194,20 @@ public partial class PlayerMap : Node2D
     }
 
 
+	private Vector2I GetAndLogTileIndex()
+	{
+		var clickedTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		lastTileIndex = clickedTile;
+		return clickedTile;
+	}
+
+
     private void StartDrawingTiles(Tile tile)
     {
-        var clickedTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		var clickedTile = GetAndLogTileIndex();
 		GetOrCreateTileMapLayer(tile.IdName);
 		// for continous drawing
 		isTileDrawing = true;
-		lastTileIndex = clickedTile;
 
 		// create a new command that accumulates drawn tiles
 		currentDrawTilesCommand = new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize, tile);
@@ -211,7 +232,7 @@ public partial class PlayerMap : Node2D
         isTileDrawing = false;
 		lastTileIndex = new Vector2I(-1, -1);
 
-		// execute the whole tile draw command (in case of )
+		// execute the whole tile draw command (in case of being overwritten by another player's command in the meantime of being drawn)
 		currentDrawTilesCommand.Execute();
 		currentDrawTilesCommand = null;
     }
@@ -221,6 +242,48 @@ public partial class PlayerMap : Node2D
 	{
 		currentDrawTilesCommand.tileIndices.Add(tileIndex);
 		tileMapDrawTool.BrushDrawTiles(tileIndex, tile, terrainToolsUi.BrushSize);
+	}
+
+
+	private void StartErasingTiles()
+	{
+		var clickedTile = GetAndLogTileIndex();
+		// for continous erasing
+		isTileErasing = true;
+
+		// create a new command that accumulates erased tiles
+		currentEraseTilesCommand = new EraseTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize);
+		// draw the first tile
+		AddTileToCommandAndErase(clickedTile);
+	}
+
+
+	private void ContinueErasingTiles()
+	{
+		var currentTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		if (lastTileIndex != currentTile)
+		{
+			lastTileIndex = currentTile;
+			AddTileToCommandAndErase(currentTile);
+		}
+	}
+
+
+	private void StopErasingTiles()
+	{
+		isTileErasing = false;
+		lastTileIndex = new Vector2I(-1, -1);
+
+		// execute the whole erase command (in case of being overwritten by another player's command in the meantime of being drawn)
+		currentEraseTilesCommand.Execute();
+		currentEraseTilesCommand = null;
+	}
+
+
+	private void AddTileToCommandAndErase(Vector2I tileIndex)
+	{
+		currentEraseTilesCommand.tileIndices.Add(tileIndex);
+		tileMapDrawTool.BrushEraseTiles(tileIndex, terrainToolsUi.BrushSize);
 	}
 
 
