@@ -6,26 +6,37 @@ public partial class TerrainToolsUi : CanvasLayer
 {
 	// publically accessible
 	public Resource SelectedTool;
-	public int BrushSize = 1;
+	public int BrushSize { get; private set; } = 1;
 
 	// editor variables
+	[Export] private ButtonGroup modeButtonGroup;
 	[Export] private PackedScene toolButtonScene;
-	[Export] private ButtonGroup buttonGroup;
+	[Export] private ButtonGroup toolButtonGroup;
 	[Export] private Array<Tile> terrainTiles;
 	[Export] private Array<MapAsset> mapAssets;
 	[Export] private Array<MapPin> mapPins;
 
+	// signals
+	[Signal] public delegate void SelectedModeChangedEventHandler(PlayerMapModeEnum mode);
+
 	// private variables
-	private BaseButton selectedButton;
+	private BaseButton drawModeButton;
+	private BaseButton eraseModeButton;
+	private BaseButton selectModeButton;
+	private BaseButton selectedToolButton;
 	private GridContainer terrainTypeGrid;
 	private GridContainer mapAssetGrid;
 	private GridContainer pinGrid;
 	private TextureRect outline;
 	private HSlider brushSlider;
 
+
 	public override void _Ready()
 	{
 		// get nodes and resources
+		drawModeButton = GetNode<BaseButton>("%DrawButton");
+		eraseModeButton = GetNode<BaseButton>("%EraseButton");
+		selectModeButton = GetNode<BaseButton>("%SelectButton");
 		outline = GetNode<TextureRect>("SelectionOutline");
 		terrainTypeGrid = GetNode<GridContainer>("%TerrainTypeGrid");
 		mapAssetGrid = GetNode<GridContainer>("%MapAssetGrid");
@@ -64,36 +75,62 @@ public partial class TerrainToolsUi : CanvasLayer
 
 
 		// select the first button
-		selectedButton = terrainTypeGrid.GetChild(0) as BaseButton;
-		if (selectedButton == null)
+		selectedToolButton = terrainTypeGrid.GetChild(0) as BaseButton;
+		if (selectedToolButton == null)
 		{
 			GD.Print("Warning: Couldn't convert first child of terrain type grid to BaseButton class.");
 		}
 		else
 		{
 			// toggle
-			selectedButton.ButtonPressed = true;
+			selectedToolButton.ButtonPressed = true;
 			// outline
 			outline.Visible = true;
-			MoveOutlineToButton(selectedButton);
+			MoveOutlineToButton(selectedToolButton);
 			// public tile reference
-			SelectedTool = (Tile)selectedButton.GetMeta("Tile");
+			SelectedTool = (Tile)selectedToolButton.GetMeta("Tile");
 
-			GD.Print($"Selected tile {selectedButton.Name}");
+			GD.Print($"Selected tile {selectedToolButton.Name}");
 		}
 
 		// connect signals
 		brushSlider.DragEnded += OnBrushSizeChanged;
+		drawModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.DRAW);
+        eraseModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.ERASE);
+        selectModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.SELECT);
 
-		// inicialize variables
+		// initialize variables
+		drawModeButton.ButtonPressed = true;
+		// EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.DRAW);
 		BrushSize = (int)brushSlider.Value;
 	}
 
+
     private void ValidateLoadsAfterReady()
     {
-        if (buttonGroup == null)
+        if (toolButtonGroup == null)
 		{
 			GD.Print("No terrain tool button group assigned!");
+			return;
+		}
+		if (modeButtonGroup == null)
+		{
+			GD.Print("No mode button group assigned!");
+			return;
+		}
+		if (drawModeButton == null)
+		{
+			GD.Print("No draw mode button loaded.");
+			return;
+		}
+		if (eraseModeButton == null)
+		{
+			GD.Print("No erase mode button loaded.");
+			return;
+		}
+		if (selectModeButton == null)
+		{
+			GD.Print("No select mode button loaded.");
 			return;
 		}
 		if (terrainTiles == null || terrainTiles.Count == 0)
@@ -133,11 +170,13 @@ public partial class TerrainToolsUi : CanvasLayer
 		}
     }
 
+
     public override void _ExitTree()
     {
         base._ExitTree();
 		brushSlider.DragEnded -= OnBrushSizeChanged;
     }
+
 
 	private TextureButton LoadCommonButtonData(Texture2D texture, TerrainToolTypeEnum toolType)
 	{
@@ -145,10 +184,11 @@ public partial class TerrainToolsUi : CanvasLayer
 		button.TextureNormal = texture;
 		button.ToggleMode = true;
 		button.Connect(Button.SignalName.Pressed, Callable.From(() => OnButtonPressed(button, toolType)));
-		button.AddToGroup(buttonGroup.ResourceName);
+		button.AddToGroup(toolButtonGroup.ResourceName);
 
 		return button;
 	}
+
 
 	private void OnButtonPressed(BaseButton button, TerrainToolTypeEnum toolType)
 	{
@@ -171,12 +211,14 @@ public partial class TerrainToolsUi : CanvasLayer
 		}
 	}
 
+
 	private void MoveOutlineToButton(BaseButton button)
 	{
 		outline.Visible = true;
 		outline.Reparent(button);
 		outline.Position = (button.Size - outline.Size) / 2;
 	}
+
 
 	private void OnBrushSizeChanged(bool valueChanged)
     {

@@ -4,20 +4,22 @@ using System.Collections.Generic;
 
 public partial class PlayerMap : Node2D
 {
+	// public variables
+	public Vector2I lastTileIndex = new Vector2I(-1, -1);
+	public TileMapDrawTool tileMapDrawTool { get; private set; }
+
 	// general variables
-	private TerrainToolsUi terrainToolsUi;
+	public TerrainToolsUi terrainToolsUi;
 	private BaseMapData baseMapData;
 	private TileMapLayer baseGridLayer;
 	private TileMapLayer displayGridLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
-	private TileMapDrawTool tileMapDrawTool;
+	private PlayerMapFSM playerMapFSM;
 	private bool isTileDrawing;
 	private bool isTileErasing;
-	private Vector2I lastTileIndex = new Vector2I(-1, -1);
-	private DrawTilesCommand currentDrawTilesCommand = null;
-	private EraseTilesCommand currentEraseTilesCommand = null;
 	private Control uiPanel;
 	private Sprite2D mapAssetPreview;
+	private RectangleOutline objectSelectionOutline;
 
 	// parent nodes for other objects
 	private Node terrainGrids;
@@ -42,15 +44,15 @@ public partial class PlayerMap : Node2D
 		// check for missing data and errors
 		ValiadeLoadsAfterReady();
 
-		// create base map
+		// initialize
 		baseMapData = new BaseMapData(200, 150);
-
-		// create the draw tool
 		tileMapDrawTool = new TileMapDrawTool(baseMapData, displayLayersDict);
+		playerMapFSM = new PlayerMapFSM(this);
 
 		// register signals
 		uiPanel.MouseEntered += OnUiPanelMouseEntered;
 		uiPanel.MouseExited += OnUiPanelMouseExited;
+		terrainToolsUi.SelectedModeChanged += OnSelectedModeChanged;
 	}
 
 
@@ -59,6 +61,7 @@ public partial class PlayerMap : Node2D
 		base._ExitTree();
 		uiPanel.MouseEntered -= OnUiPanelMouseEntered;
 		uiPanel.MouseExited -= OnUiPanelMouseExited;
+		terrainToolsUi.SelectedModeChanged -= OnSelectedModeChanged;
 	}
 
 
@@ -109,49 +112,7 @@ public partial class PlayerMap : Node2D
 
     public override void _UnhandledInput(InputEvent @event)
 	{
-		// start drawing tiles with the selected tile brush
-		if (@event.IsActionPressed("left_click"))
-		{
-			if (terrainToolsUi.SelectedTool is Tile tile)
-			{
-				StartDrawingTiles(tile);
-			}
-			else if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
-			{
-				var placeMapAssetCommand = new PlaceMapAssetCommand(mapAssets, mapAsset, GetGlobalMousePosition());
-				placeMapAssetCommand.Execute();
-			}
-			else if (terrainToolsUi.SelectedTool is MapPin mapPin)
-			{
-				var placeMapPinCommand = new PlaceMapPinCommand(mapAssets, mapPin, GetGlobalMousePosition());
-				placeMapPinCommand.Execute();
-			}
-		}
-		else if (@event.IsActionPressed("right_click"))
-		{
-			StartErasingTiles();
-		}
-		// continous drawing while the left mouse button is down and moving
-		else if (isTileDrawing && @event is InputEventMouseMotion)
-		{
-			if (terrainToolsUi.SelectedTool is Tile tile)
-			{
-				ContinueDrawingTiles(tile);
-			}
-		}
-		else if (isTileErasing && @event is InputEventMouseMotion)
-		{
-			ContinueErasingTiles();
-		}
-		// stop drawing when the left mouse button is released
-		else if (isTileDrawing && @event.IsActionReleased("left_click"))
-		{
-			StopDrawingTiles();
-		}
-		else if (isTileErasing && @event.IsActionReleased("right_click"))
-		{
-			StopErasingTiles();
-		}
+		playerMapFSM.currentState.ProcessInput(@event);
 	}
 
 
@@ -164,14 +125,59 @@ public partial class PlayerMap : Node2D
     }
 
 
+	private void OnSelectedModeChanged(PlayerMapModeEnum mode)
+    {
+        playerMapFSM.ChangeState(mode);
+    }
+
+
+	public Resource GetSelectedTool()
+	{
+		return terrainToolsUi.SelectedTool;
+	}
+
+
+	public int GetBrushSize()
+	{
+		return terrainToolsUi.BrushSize;
+	}
+
+
+	public void PlaceMapAsset(MapAsset mapAsset)
+	{
+		var placeMapAssetCommand = new PlaceMapAssetCommand(mapAssets, mapAsset, GetGlobalMousePosition());
+		placeMapAssetCommand.Execute();
+	}
+
+
+	public void PlaceMapPin(MapPin mapPin)
+	{
+		var placeMapPinCommand = new PlaceMapPinCommand(mapAssets, mapPin, GetGlobalMousePosition());
+		placeMapPinCommand.Execute();
+	}
+
+
+	public DrawTilesCommand CreateDrawTilesCommand(Tile tile)
+	{
+        GetOrCreateTileMapLayer(tile.IdName);
+		return new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), GetBrushSize(), tile);
+	}
+
+
+	public EraseTilesCommand CreateEraseTilesCommand()
+	{
+		return new EraseTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), GetBrushSize());
+	}
+
+
     private void OnUiPanelMouseExited()
     {
-		if (terrainToolsUi.SelectedTool is MapAsset mapAsset)
+		if (GetSelectedTool() is MapAsset mapAsset)
 		{
 			SetupMapAssetPreview(mapAsset.Texture);
 			mapAssetPreview.ZIndex = 1;
 		}
-		else if (terrainToolsUi.SelectedTool is MapPin mapPin)
+		else if (GetSelectedTool() is MapPin mapPin)
 		{
 			SetupMapAssetPreview(mapPin.Texture);
 			mapAssetPreview.ZIndex = 2;
@@ -194,96 +200,17 @@ public partial class PlayerMap : Node2D
     }
 
 
-	private Vector2I GetAndLogTileIndex()
+	public Vector2I GetTileIndex()
 	{
-		var clickedTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
+		return baseGridLayer.LocalToMap(GetGlobalMousePosition());
+	}
+
+
+	public Vector2I GetAndLogTileIndex()
+	{
+		var clickedTile = GetTileIndex();
 		lastTileIndex = clickedTile;
 		return clickedTile;
-	}
-
-
-    private void StartDrawingTiles(Tile tile)
-    {
-		var clickedTile = GetAndLogTileIndex();
-		GetOrCreateTileMapLayer(tile.IdName);
-		// for continous drawing
-		isTileDrawing = true;
-
-		// create a new command that accumulates drawn tiles
-		currentDrawTilesCommand = new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize, tile);
-		// draw the first tile
-		AddTileToCommandAndDraw(clickedTile, tile);
-    }
-
-
-	private void ContinueDrawingTiles(Tile tile)
-    {
-        var currentTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
-		if (lastTileIndex != currentTile)
-		{
-			lastTileIndex = currentTile;
-			AddTileToCommandAndDraw(currentTile, tile);
-		}
-    }
-
-
-    private void StopDrawingTiles()
-    {
-        isTileDrawing = false;
-		lastTileIndex = new Vector2I(-1, -1);
-
-		// execute the whole tile draw command (in case of being overwritten by another player's command in the meantime of being drawn)
-		currentDrawTilesCommand.Execute();
-		currentDrawTilesCommand = null;
-    }
-
-
-    private void AddTileToCommandAndDraw(Vector2I tileIndex, Tile tile)
-	{
-		currentDrawTilesCommand.tileIndices.Add(tileIndex);
-		tileMapDrawTool.BrushDrawTiles(tileIndex, tile, terrainToolsUi.BrushSize);
-	}
-
-
-	private void StartErasingTiles()
-	{
-		var clickedTile = GetAndLogTileIndex();
-		// for continous erasing
-		isTileErasing = true;
-
-		// create a new command that accumulates erased tiles
-		currentEraseTilesCommand = new EraseTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), terrainToolsUi.BrushSize);
-		// draw the first tile
-		AddTileToCommandAndErase(clickedTile);
-	}
-
-
-	private void ContinueErasingTiles()
-	{
-		var currentTile = baseGridLayer.LocalToMap(GetGlobalMousePosition());
-		if (lastTileIndex != currentTile)
-		{
-			lastTileIndex = currentTile;
-			AddTileToCommandAndErase(currentTile);
-		}
-	}
-
-
-	private void StopErasingTiles()
-	{
-		isTileErasing = false;
-		lastTileIndex = new Vector2I(-1, -1);
-
-		// execute the whole erase command (in case of being overwritten by another player's command in the meantime of being drawn)
-		currentEraseTilesCommand.Execute();
-		currentEraseTilesCommand = null;
-	}
-
-
-	private void AddTileToCommandAndErase(Vector2I tileIndex)
-	{
-		currentEraseTilesCommand.tileIndices.Add(tileIndex);
-		tileMapDrawTool.BrushEraseTiles(tileIndex, terrainToolsUi.BrushSize);
 	}
 
 
@@ -291,7 +218,7 @@ public partial class PlayerMap : Node2D
     private TileMapLayer GetOrCreateTileMapLayer(string tileName)
 	{
 		// if the tile hasn't been used yet, create a new layer
-		if (!displayLayersDict.ContainsKey(tileName) && terrainToolsUi.SelectedTool is Tile tile)
+		if (!displayLayersDict.ContainsKey(tileName) && GetSelectedTool() is Tile tile)
 		{
 			TileMapLayer newLayer = displayGridLayer.Duplicate() as TileMapLayer;
 			newLayer.Name = $"{tileName}Layer";
@@ -318,5 +245,22 @@ public partial class PlayerMap : Node2D
 		}
 		// otherwise get the existing layer for that tile
 		return displayLayersDict[tileName];
+	}
+
+
+	private void AddRectOutline(Node objectToOutline, Texture2D objectTexture)
+	{
+		objectSelectionOutline = new RectangleOutline(objectTexture);
+		objectSelectionOutline.Reparent(objectToOutline);
+	}
+
+
+	private void RemoveRectOutline()
+	{
+		if (objectSelectionOutline != null)
+		{
+			objectSelectionOutline.QueueFree();
+			objectSelectionOutline = null;
+		}
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=54 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -33,6 +33,7 @@
 [ext_resource type="Resource" uid="uid://d0smme7m52v6v" path="res://PlayerMap/MapAssets/Resources/Broadleaf1.tres" id="29_6vj31"]
 [ext_resource type="Resource" uid="uid://w206pulw2gn6" path="res://PlayerMap/MapAssets/Resources/Conifer1.tres" id="30_xf60x"]
 [ext_resource type="Resource" uid="uid://kle3ug3uy2jq" path="res://PlayerMap/MapAssets/Resources/Pin1.tres" id="31_cl0kr"]
+[ext_resource type="ButtonGroup" uid="uid://ci08gi1837w6w" path="res://PlayerMap/UI/ToolModeButtonGroup.tres" id="34_s44ye"]
 
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
 tile_size = Vector2i(32, 32)
@@ -175,8 +176,9 @@ z_index = 1
 
 [node name="TerrainToolsUI" type="CanvasLayer" parent="."]
 script = ExtResource("3_a1ekk")
+modeButtonGroup = ExtResource("34_s44ye")
 toolButtonScene = ExtResource("22_7ml6j")
-buttonGroup = ExtResource("2_djw3f")
+toolButtonGroup = ExtResource("2_djw3f")
 terrainTiles = Array[Object]([ExtResource("4_owkl4"), ExtResource("5_u8tci"), ExtResource("6_281uw"), ExtResource("7_5pfkt")])
 mapAssets = Array[Object]([ExtResource("27_gkcgf"), ExtResource("28_es6b3"), ExtResource("29_6vj31"), ExtResource("30_xf60x")])
 mapPins = Array[Object]([ExtResource("31_cl0kr")])
@@ -222,6 +224,31 @@ theme_override_constants/separation = 16
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Terrain Tools"
+
+[node name="ToolModeButtons" type="HBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+alignment = 1
+
+[node name="DrawButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("34_s44ye")
+text = "Draw"
+
+[node name="EraseButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("34_s44ye")
+text = "Erase"
+
+[node name="SelectButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("34_s44ye")
+text = "Select"
 
 [node name="TerranTypesContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
