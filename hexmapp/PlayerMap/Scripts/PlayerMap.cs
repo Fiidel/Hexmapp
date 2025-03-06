@@ -170,17 +170,30 @@ public partial class PlayerMap : Node2D
 	}
 
 
+	private bool IsMouseOverUi()
+	{
+		return uiPanel.GetGlobalRect().HasPoint(GetGlobalMousePosition());
+	}
+
+
     private void OnUiPanelMouseExited()
     {
-		if (GetSelectedTool() is MapAsset mapAsset)
+		if (!IsMouseOverUi() && playerMapFSM.currentState is DrawState)
 		{
-			SetupMapAssetPreview(mapAsset.Texture);
-			mapAssetPreview.ZIndex = 1;
+			if (GetSelectedTool() is MapAsset mapAsset)
+			{
+				SetupMapAssetPreview(mapAsset.Texture);
+				mapAssetPreview.ZIndex = 1;
+			}
+			else if (GetSelectedTool() is MapPin mapPin)
+			{
+				SetupMapAssetPreview(mapPin.Texture);
+				mapAssetPreview.ZIndex = 2;
+			}
 		}
-		else if (GetSelectedTool() is MapPin mapPin)
+		else
 		{
-			SetupMapAssetPreview(mapPin.Texture);
-			mapAssetPreview.ZIndex = 2;
+			HideAssetPreview();
 		}
     }
 
@@ -195,9 +208,15 @@ public partial class PlayerMap : Node2D
 
     private void OnUiPanelMouseEntered()
     {
-        Input.MouseMode = Input.MouseModeEnum.Visible;
-		mapAssetPreview.Visible = false;
+        HideAssetPreview();
     }
+
+
+	private void HideAssetPreview()
+	{
+		Input.MouseMode = Input.MouseModeEnum.Visible;
+		mapAssetPreview.Visible = false;
+	}
 
 
 	public Vector2I GetTileIndex()
