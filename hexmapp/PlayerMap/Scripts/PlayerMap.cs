@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// TODO: MAP ASSET AND PIN MOVE/DELETE!!!
 // TODO: MAP PIN NAME AND RENAME
 
 public partial class PlayerMap : Node2D
@@ -22,7 +21,6 @@ public partial class PlayerMap : Node2D
 	private bool isTileErasing;
 	private Control uiPanel;
 	private Sprite2D mapAssetPreview;
-	private RectangleOutline objectSelectionOutline;
 
 	// parent nodes for other objects
 	private Node terrainGrids;
@@ -267,22 +265,5 @@ public partial class PlayerMap : Node2D
 		}
 		// otherwise get the existing layer for that tile
 		return displayLayersDict[tileName];
-	}
-
-
-	private void AddRectOutline(Node objectToOutline, Texture2D objectTexture)
-	{
-		objectSelectionOutline = new RectangleOutline(objectTexture);
-		objectSelectionOutline.Reparent(objectToOutline);
-	}
-
-
-	private void RemoveRectOutline()
-	{
-		if (objectSelectionOutline != null)
-		{
-			objectSelectionOutline.QueueFree();
-			objectSelectionOutline = null;
-		}
 	}
 }

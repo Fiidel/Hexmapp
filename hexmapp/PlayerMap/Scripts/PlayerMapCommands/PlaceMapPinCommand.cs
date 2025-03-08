@@ -30,7 +30,7 @@ public class PlaceMapPinCommand : Command
         Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
 
         // set texture
-        Sprite2D pinTexture = newMapPin.GetNode<Sprite2D>("PinTexture");
+        Sprite2D pinTexture = newMapPin.GetNode<Sprite2D>("Texture");
 		pinTexture.Texture = pinAsset.Texture;
 		
         // set collision shape size

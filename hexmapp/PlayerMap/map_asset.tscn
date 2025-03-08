@@ -7,7 +7,7 @@
 [node name="MapAsset" type="Area2D"]
 script = ExtResource("1_ud0b3")
 
-[node name="AssetTexture" type="Sprite2D" parent="."]
+[node name="Texture" type="Sprite2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_f61ue")

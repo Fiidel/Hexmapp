@@ -5,6 +5,7 @@ public class SelectState : IPlayerMapState
     private PlayerMap context;
     private Area2D selectedObject;
     private bool isDragging;
+    private RectangleOutline currentSelectionOutline;
 
     public SelectState(PlayerMap playerMap)
     {
@@ -22,6 +23,7 @@ public class SelectState : IPlayerMapState
     {
         SignalBus.Instance.ClickedPlayerMapObject -= OnMapObjectClicked;
         selectedObject = null;
+        RemoveRectOutline();
     }
 
 
@@ -47,5 +49,27 @@ public class SelectState : IPlayerMapState
     private void OnMapObjectClicked(Area2D mapObject)
     {
         selectedObject = mapObject;
+
+        // selection rectangle
+        var objectTexture = mapObject.GetNode<Sprite2D>("Texture").Texture;
+        RemoveRectOutline();
+        AddRectOutline(mapObject, objectTexture);
     }
+
+
+    private void AddRectOutline(Area2D objectToOutline, Texture2D objectTexture)
+	{
+		currentSelectionOutline = new RectangleOutline(objectTexture);
+		objectToOutline.AddChild(currentSelectionOutline);
+	}
+
+
+	private void RemoveRectOutline()
+	{
+		if (currentSelectionOutline != null)
+		{
+			currentSelectionOutline.QueueFree();
+			currentSelectionOutline = null;
+		}
+	}
 }

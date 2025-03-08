@@ -30,7 +30,7 @@ public class PlaceMapAssetCommand : Command
         Node2D newMapAsset = mapAssetScene.Instantiate() as Node2D;
 
         // set texture
-        Sprite2D assetTexture = newMapAsset.GetNode<Sprite2D>("AssetTexture");
+        Sprite2D assetTexture = newMapAsset.GetNode<Sprite2D>("Texture");
 		assetTexture.Texture = mapAsset.Texture;
 		
         // set collision shape size
