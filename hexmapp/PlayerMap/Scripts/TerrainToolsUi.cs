@@ -101,7 +101,6 @@ public partial class TerrainToolsUi : CanvasLayer
 
 		// initialize variables
 		drawModeButton.ButtonPressed = true;
-		// EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.DRAW);
 		BrushSize = (int)brushSlider.Value;
 	}
 

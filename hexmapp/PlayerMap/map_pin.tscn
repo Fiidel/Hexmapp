@@ -1,9 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://ugg0cqexbtis"]
+[gd_scene load_steps=3 format=3 uid="uid://ugg0cqexbtis"]
 
-[ext_resource type="Texture2D" uid="uid://c8p665g05a7c5" path="res://PlayerMap/MapAssets/Sprites/Pin1.png" id="1_up201"]
+[ext_resource type="Script" path="res://PlayerMap/Scripts/MapObject.cs" id="1_xfhp4"]
 
-[node name="Pin" type="Sprite2D"]
-texture = ExtResource("1_up201")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m0br7"]
+
+[node name="MapPin" type="Area2D"]
+script = ExtResource("1_xfhp4")
+
+[node name="PinTexture" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_m0br7")
 
 [node name="DescriptionLabel" type="RichTextLabel" parent="."]
 offset_left = 15.0

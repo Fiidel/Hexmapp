@@ -12,6 +12,12 @@ public class DrawState : IPlayerMapState
     }
 
 
+	public void EnterState() { }
+
+
+	public void ExitState() { }
+
+
     public void ProcessInput(InputEvent @event)
     {
         // start drawing tiles with the selected tile brush

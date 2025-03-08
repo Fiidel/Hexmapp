@@ -17,10 +17,10 @@ public class PlaceMapPinCommand : Command
 
     public override void Execute()
     {
-        PlaceNewMapPin(pinAsset);
+        PlaceNewMapPin();
     }
 
-    private void PlaceNewMapPin(MapPin mapPin)
+    private void PlaceNewMapPin()
     {
         if (mapPinScene == null)
         {
@@ -28,7 +28,19 @@ public class PlaceMapPinCommand : Command
             return;
         }
         Node2D newMapPin = mapPinScene.Instantiate() as Node2D;
-		newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
+
+        // set texture
+        Sprite2D pinTexture = newMapPin.GetNode<Sprite2D>("PinTexture");
+		pinTexture.Texture = pinAsset.Texture;
+		
+        // set collision shape size
+        CollisionShape2D collisionShape = newMapPin.GetNode<CollisionShape2D>("CollisionShape2D");
+        var rectShape = new RectangleShape2D();
+        rectShape.Size = pinTexture.Texture.GetSize();
+        collisionShape.Shape = rectShape;
+
+        // place
+        newMapPin.GlobalPosition = new Vector2(MathF.Truncate(position.X), MathF.Truncate(position.Y));
 		newMapPin.ZIndex = 2;
 		assetContainer.AddChild(newMapPin);
     }

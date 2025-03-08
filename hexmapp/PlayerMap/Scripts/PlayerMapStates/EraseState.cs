@@ -12,6 +12,12 @@ public class EraseState : IPlayerMapState
     }
 
 
+	public void EnterState() { }
+
+
+	public void ExitState() { }
+
+
     public void ProcessInput(InputEvent @event)
     {
         if (@event.IsActionPressed("left_click"))

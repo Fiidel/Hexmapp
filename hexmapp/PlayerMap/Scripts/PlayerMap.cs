@@ -2,6 +2,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+// TODO: MAP ASSET AND PIN MOVE/DELETE!!!
+// TODO: MAP PIN NAME AND RENAME
+
 public partial class PlayerMap : Node2D
 {
 	// public variables

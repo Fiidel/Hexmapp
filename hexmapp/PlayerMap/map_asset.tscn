@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgnotlv3m22sy"]
+
+[ext_resource type="Script" path="res://PlayerMap/Scripts/MapObject.cs" id="1_ud0b3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f61ue"]
+
+[node name="MapAsset" type="Area2D"]
+script = ExtResource("1_ud0b3")
+
+[node name="AssetTexture" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_f61ue")

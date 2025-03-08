@@ -2,14 +2,16 @@ public class PlayerMapFSM
 {
     public IPlayerMapState currentState;
     private PlayerMap context;
-    private IPlayerMapState drawState;
-    private IPlayerMapState eraseState;
+    private DrawState drawState;
+    private EraseState eraseState;
+    private SelectState selectState;
 
     public PlayerMapFSM(PlayerMap playerMap)
     {
         context = playerMap;
         drawState = new DrawState(context);
         eraseState = new EraseState(context);
+        selectState = new SelectState(context);
 
         Init();
     }
@@ -17,7 +19,8 @@ public class PlayerMapFSM
 
     public void Init()
     {
-        ChangeState(PlayerMapModeEnum.DRAW);
+        currentState = drawState;
+        currentState.EnterState();
     }
 
 
@@ -26,13 +29,22 @@ public class PlayerMapFSM
         switch (mode)
         {
             case PlayerMapModeEnum.DRAW:
-				currentState = drawState;
+                ExitSetEnterState(drawState);
 				break;
 			case PlayerMapModeEnum.ERASE:
-                currentState = eraseState;
+                ExitSetEnterState(eraseState);
 				break;
 			case PlayerMapModeEnum.SELECT:
+                ExitSetEnterState(selectState);
 				break;
         }
+    }
+
+
+    public void ExitSetEnterState(IPlayerMapState newState)
+    {
+        currentState.ExitState();
+        currentState = newState;
+        currentState.EnterState();
     }
 }
