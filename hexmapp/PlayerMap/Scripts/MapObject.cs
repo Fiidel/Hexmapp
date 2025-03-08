@@ -13,6 +13,7 @@ public partial class MapObject : Area2D
     {
         if (@event.IsActionPressed("left_click"))
         {
+            GetViewport().SetInputAsHandled();
             SignalBus.Instance.EmitSignal(SignalBus.SignalName.ClickedPlayerMapObject, this);
         }
     }

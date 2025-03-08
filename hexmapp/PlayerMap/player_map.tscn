@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=55 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -146,6 +146,8 @@ sources/15 = SubResource("TileSetAtlasSource_gj3rq")
 sources/2 = SubResource("TileSetAtlasSource_e54j7")
 tile_proxies/coords_level = [[0, Vector2i(0, 0)], [17, Vector2i(0, 0)], [1, Vector2i(0, 0)], [17, Vector2i(1, 0)], [2, Vector2i(0, 0)], [17, Vector2i(2, 0)], [3, Vector2i(0, 0)], [17, Vector2i(3, 0)], [4, Vector2i(0, 0)], [17, Vector2i(4, 0)], [5, Vector2i(0, 0)], [17, Vector2i(5, 0)], [6, Vector2i(0, 0)], [17, Vector2i(6, 0)], [7, Vector2i(0, 0)], [17, Vector2i(7, 0)], [8, Vector2i(0, 0)], [17, Vector2i(8, 0)], [9, Vector2i(0, 0)], [17, Vector2i(9, 0)], [10, Vector2i(0, 0)], [17, Vector2i(10, 0)], [11, Vector2i(0, 0)], [17, Vector2i(11, 0)], [12, Vector2i(0, 0)], [17, Vector2i(12, 0)], [13, Vector2i(0, 0)], [17, Vector2i(13, 0)], [14, Vector2i(0, 0)], [17, Vector2i(14, 0)], [15, Vector2i(0, 0)], [17, Vector2i(15, 0)], [23, Vector2i(0, 0)], [16, Vector2i(8, 0)], [24, Vector2i(0, 0)], [16, Vector2i(9, 0)], [34, Vector2i(0, 0)], [16, Vector2i(10, 0)], [123, Vector2i(0, 0)], [16, Vector2i(11, 0)], [124, Vector2i(0, 0)], [16, Vector2i(12, 0)], [134, Vector2i(0, 0)], [16, Vector2i(13, 0)], [234, Vector2i(0, 0)], [16, Vector2i(14, 0)], [1234, Vector2i(0, 0)], [16, Vector2i(15, 0)]]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prs5b"]
+
 [node name="PlayerMap" type="Node2D"]
 script = ExtResource("1_li2kt")
 
@@ -166,6 +168,13 @@ tile_set = SubResource("TileSet_0eg1a")
 material = SubResource("ShaderMaterial_bsh2p")
 position = Vector2(-16, -16)
 tile_set = SubResource("TileSet_3jtgc")
+
+[node name="BackgroundDetectLayer" type="Area2D" parent="TerrainGrids"]
+unique_name_in_owner = true
+priority = -1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TerrainGrids/BackgroundDetectLayer"]
+shape = SubResource("RectangleShape2D_prs5b")
 
 [node name="MapAssets" type="Node2D" parent="."]
 y_sort_enabled = true

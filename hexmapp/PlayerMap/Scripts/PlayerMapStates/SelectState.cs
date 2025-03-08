@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public class SelectState : IPlayerMapState
@@ -16,12 +17,14 @@ public class SelectState : IPlayerMapState
     public void EnterState()
     {
         SignalBus.Instance.ClickedPlayerMapObject += OnMapObjectClicked;
+        SignalBus.Instance.ClickedPlayerMapBackground += OnMapBackgroundClicked;
     }
 
 
     public void ExitState()
     {
         SignalBus.Instance.ClickedPlayerMapObject -= OnMapObjectClicked;
+        SignalBus.Instance.ClickedPlayerMapBackground -= OnMapBackgroundClicked;
         selectedObject = null;
         RemoveRectOutline();
     }
@@ -54,6 +57,13 @@ public class SelectState : IPlayerMapState
         var objectTexture = mapObject.GetNode<Sprite2D>("Texture").Texture;
         RemoveRectOutline();
         AddRectOutline(mapObject, objectTexture);
+    }
+
+
+    private void OnMapBackgroundClicked()
+    {
+        RemoveRectOutline();
+        selectedObject = null;
     }
 
 

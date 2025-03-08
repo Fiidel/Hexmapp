@@ -12,4 +12,5 @@ public partial class SignalBus : Node
 
     // PlayerMap
     [Signal] public delegate void ClickedPlayerMapObjectEventHandler(Area2D playerMapObject);
+    [Signal] public delegate void ClickedPlayerMapBackgroundEventHandler();
 }

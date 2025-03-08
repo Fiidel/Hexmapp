@@ -13,6 +13,7 @@ public partial class PlayerMap : Node2D
 	// general variables
 	public TerrainToolsUi terrainToolsUi;
 	private BaseMapData baseMapData;
+	private Area2D backgroundDetectArea;
 	private TileMapLayer baseGridLayer;
 	private TileMapLayer displayGridLayer;
 	private Dictionary<string, TileMapLayer> displayLayersDict = new();
@@ -34,6 +35,7 @@ public partial class PlayerMap : Node2D
 	public override void _Ready()
 	{
 		// get nodes and resources
+		backgroundDetectArea = GetNode<Area2D>("%BackgroundDetectLayer");
 		baseGridLayer = GetNode<TileMapLayer>("TerrainGrids/BaseTerrainGrid");
 		displayGridLayer = GetNode<TileMapLayer>("TerrainGrids/DisplayTerrainOffsetGrid");
 		terrainToolsUi = GetNode<TerrainToolsUi>("TerrainToolsUI");
@@ -54,6 +56,15 @@ public partial class PlayerMap : Node2D
 		uiPanel.MouseEntered += OnUiPanelMouseEntered;
 		uiPanel.MouseExited += OnUiPanelMouseExited;
 		terrainToolsUi.SelectedModeChanged += OnSelectedModeChanged;
+
+
+		// set up background click detection
+		var backgroundDetectCollider = backgroundDetectArea.GetNode<CollisionShape2D>("CollisionShape2D");
+		var tileSize = displayGridLayer.TileSet.TileSize.X;
+		var mapSize = new Vector2(baseMapData.mapWidth * tileSize, baseMapData.mapHeight * tileSize);
+		backgroundDetectCollider.Shape = new RectangleShape2D{Size = mapSize};
+		backgroundDetectCollider.Position = mapSize / 2;
+		backgroundDetectArea.InputEvent += OnBackgroundInputEvent;
 	}
 
 
@@ -63,11 +74,17 @@ public partial class PlayerMap : Node2D
 		uiPanel.MouseEntered -= OnUiPanelMouseEntered;
 		uiPanel.MouseExited -= OnUiPanelMouseExited;
 		terrainToolsUi.SelectedModeChanged -= OnSelectedModeChanged;
+		backgroundDetectArea.InputEvent -= OnBackgroundInputEvent;
 	}
 
 
     private void ValiadeLoadsAfterReady()
     {
+		if (backgroundDetectArea == null)
+		{
+			GD.Print("Background detection area layer not found.");
+			return;
+		}
         if (baseGridLayer == null)
 		{
 			GD.Print("Base tile map layer not found.");
@@ -129,6 +146,15 @@ public partial class PlayerMap : Node2D
 	private void OnSelectedModeChanged(PlayerMapModeEnum mode)
     {
         playerMapFSM.ChangeState(mode);
+    }
+
+
+	private void OnBackgroundInputEvent(Node viewport, InputEvent @event, long shapeIdx)
+    {
+		if (playerMapFSM.currentState is SelectState && @event.IsActionPressed("left_click"))
+		{
+			SignalBus.Instance.EmitSignal(SignalBus.SignalName.ClickedPlayerMapBackground);
+		}
     }
 
 
