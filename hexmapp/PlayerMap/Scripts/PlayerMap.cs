@@ -23,7 +23,7 @@ public partial class PlayerMap : Node2D
 
 	// parent nodes for other objects
 	private Node terrainGrids;
-	private Node2D mapAssets;
+	public Node2D mapAssets;
 
 	// resources
 	private Shader alphaShader = GD.Load<Shader>("res://PlayerMap/alpha_mask.gdshader");
@@ -172,17 +172,11 @@ public partial class PlayerMap : Node2D
 	}
 
 
-	public void PlaceMapAsset(MapAsset mapAsset)
+	public bool IsClickInMapBounds(Vector2 position)
 	{
-		var placeMapAssetCommand = new PlaceMapAssetCommand(mapAssets, mapAsset, GetGlobalMousePosition());
-		placeMapAssetCommand.Execute();
-	}
-
-
-	public void PlaceMapPin(MapPin mapPin)
-	{
-		var placeMapPinCommand = new PlaceMapPinCommand(mapAssets, mapPin, GetGlobalMousePosition());
-		placeMapPinCommand.Execute();
+		var tileSize = displayGridLayer.TileSet.TileSize.X;
+		var mapSize = new Vector2(baseMapData.mapWidth * tileSize, baseMapData.mapHeight * tileSize);
+		return position.X >= 0 && position.Y >= 0 && position.X <= mapSize.X && position.Y <= mapSize.Y;
 	}
 
 

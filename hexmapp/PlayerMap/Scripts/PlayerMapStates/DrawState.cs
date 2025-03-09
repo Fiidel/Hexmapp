@@ -29,11 +29,11 @@ public class DrawState : IPlayerMapState
 			}
 			else if (context.GetSelectedTool() is MapAsset mapAsset)
 			{
-				context.PlaceMapAsset(mapAsset);
+				PlaceMapAsset(mapAsset, context.GetGlobalMousePosition());
 			}
 			else if (context.GetSelectedTool() is MapPin mapPin)
 			{
-				context.PlaceMapPin(mapPin);
+				PlaceMapPin(mapPin, context.GetGlobalMousePosition());
 			}
 		}
 
@@ -93,5 +93,25 @@ public class DrawState : IPlayerMapState
 	{
 		currentDrawTilesCommand.tileIndices.Add(tileIndex);
 		context.tileMapDrawTool.BrushDrawTiles(tileIndex, tile, context.GetBrushSize());
+	}
+
+
+	public void PlaceMapAsset(MapAsset mapAsset, Vector2 position)
+	{
+		if (context.IsClickInMapBounds(position))
+		{
+			var placeMapAssetCommand = new PlaceMapAssetCommand(context.mapAssets, mapAsset, position);
+			placeMapAssetCommand.Execute();
+		}
+	}
+
+
+	public void PlaceMapPin(MapPin mapPin, Vector2 position)
+	{
+		if (context.IsClickInMapBounds(position))
+		{
+			var placeMapPinCommand = new PlaceMapPinCommand(context.mapAssets, mapPin, position);
+			placeMapPinCommand.Execute();
+		}
 	}
 }
