@@ -76,7 +76,7 @@ public class SelectState : IPlayerMapState
 
     private void AddRectOutline(Area2D objectToOutline, Texture2D objectTexture)
 	{
-		currentSelectionOutline = new RectangleOutline(objectTexture);
+		currentSelectionOutline = new RectangleOutline(objectTexture.GetSize());
 		objectToOutline.AddChild(currentSelectionOutline);
 	}
 

@@ -2,8 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// TODO: MAP PIN NAME AND RENAME
-
 public partial class PlayerMap : Node2D
 {
 	// public variables
@@ -57,7 +55,6 @@ public partial class PlayerMap : Node2D
 		uiPanel.MouseExited += OnUiPanelMouseExited;
 		terrainToolsUi.SelectedModeChanged += OnSelectedModeChanged;
 
-
 		// set up background click detection
 		var backgroundDetectCollider = backgroundDetectArea.GetNode<CollisionShape2D>("CollisionShape2D");
 		var tileSize = displayGridLayer.TileSet.TileSize.X;
@@ -65,6 +62,11 @@ public partial class PlayerMap : Node2D
 		backgroundDetectCollider.Shape = new RectangleShape2D{Size = mapSize};
 		backgroundDetectCollider.Position = mapSize / 2;
 		backgroundDetectArea.InputEvent += OnBackgroundInputEvent;
+
+		// draw map outline
+		var mapOutline = new RectangleOutline(mapSize, 5, new Color(0.5f, 0.5f, 0.5f));
+		mapOutline.GlobalPosition = mapSize / 2;
+		AddChild(mapOutline);
 	}
 
 
