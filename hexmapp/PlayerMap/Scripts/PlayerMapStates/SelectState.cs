@@ -45,6 +45,13 @@ public class SelectState : IPlayerMapState
                 var moveMapObjectCommand = new MoveMapObjectCommand(selectedObject, context.GetGlobalMousePosition());
 		        moveMapObjectCommand.Execute();
             }
+            else if (@event.IsActionPressed("delete"))
+            {
+                RemoveRectOutline();
+                var deleteMapObjectCommand = new DeleteMapObjectCommand(selectedObject);
+                deleteMapObjectCommand.Execute();
+                selectedObject = null;
+            }
         }
     }
 
