@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=54 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://PlayerMap/Scripts/TerrainToolsUi.cs" id="3_a1ekk"]
 [ext_resource type="Texture2D" uid="uid://cr3sixnk10u33" path="res://PlayerMap/Tiles/TileAlphaMasks/blank.png" id="3_x78ja"]
 [ext_resource type="Texture2D" uid="uid://v0xam7fmms7k" path="res://PlayerMap/Tiles/TileAlphaMasks/quarter_BR.png" id="4_68lk7"]
-[ext_resource type="Texture2D" uid="uid://q3bmlqkq5i35" path="res://PlayerMap/player_map_noise.tres" id="4_o0u3q"]
 [ext_resource type="Resource" uid="uid://dtwiopsxm5pfh" path="res://PlayerMap/Tiles/TileResources/Grass1.tres" id="4_owkl4"]
 [ext_resource type="Texture2D" uid="uid://bp00ekissh78v" path="res://PlayerMap/Tiles/TileAlphaMasks/half_L.png" id="5_3q1ky"]
 [ext_resource type="Resource" uid="uid://cf16khifih2j7" path="res://PlayerMap/Tiles/TileResources/Grass2.tres" id="5_u8tci"]
@@ -43,8 +42,6 @@ resource_local_to_scene = true
 shader = ExtResource("2_hfdbv")
 shader_parameter/tiles_to_repeat = 32.0
 shader_parameter/tile_size_pixels = 32.0
-shader_parameter/noise_scale = 8.0
-shader_parameter/noise = ExtResource("4_o0u3q")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ew80i"]
 texture = ExtResource("3_x78ja")
