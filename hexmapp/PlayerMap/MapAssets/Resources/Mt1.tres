@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="MapAsset" load_steps=3 format=3 uid="uid://c6fxaj30hahva"]
 
 [ext_resource type="Texture2D" uid="uid://b77eknwhwhydm" path="res://PlayerMap/MapAssets/Sprites/Mt1.png" id="1_36qxl"]
-[ext_resource type="Script" path="res://PlayerMap/Scripts/MapAsset.cs" id="2_n3bgl"]
+[ext_resource type="Script" uid="uid://ce7etw1k5wbnk" path="res://PlayerMap/Scripts/MapAsset.cs" id="2_n3bgl"]
 
 [resource]
 script = ExtResource("2_n3bgl")

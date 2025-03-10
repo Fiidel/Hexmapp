@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgnotlv3m22sy"]
 
-[ext_resource type="Script" path="res://PlayerMap/Scripts/MapObject.cs" id="1_ud0b3"]
+[ext_resource type="Script" uid="uid://cmh1cv7o85w4s" path="res://PlayerMap/Scripts/MapObject.cs" id="1_ud0b3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f61ue"]
 
