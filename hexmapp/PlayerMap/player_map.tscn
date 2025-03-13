@@ -222,18 +222,19 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_q0wsr")
 [node name="MarginContainer" type="MarginContainer" parent="TerrainToolsUI/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 8
 
 [node name="TerrainTools" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 20
 
 [node name="HeadingLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Terrain Tools"
+horizontal_alignment = 1
 
 [node name="ToolModeButtons" type="HBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
@@ -242,6 +243,7 @@ alignment = 1
 [node name="DrawButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 button_group = ExtResource("34_s44ye")
 text = "Draw"
@@ -249,6 +251,7 @@ text = "Draw"
 [node name="EraseButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 button_group = ExtResource("34_s44ye")
 text = "Erase"
@@ -256,15 +259,18 @@ text = "Erase"
 [node name="SelectButton" type="Button" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 button_group = ExtResource("34_s44ye")
 text = "Select"
 
 [node name="TerranTypesContainer" type="VBoxContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="TerrainTypeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 19
 text = "TERRAIN TYPE"
 
 [node name="TerrainTypeGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
@@ -274,8 +280,9 @@ columns = 4
 
 [node name="TerrainBrushSizeLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "Brush Size"
+vertical_alignment = 1
 
 [node name="TerrainBrushSizeSlider" type="HSlider" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/TerranTypesContainer"]
 unique_name_in_owner = true
@@ -290,6 +297,7 @@ layout_mode = 2
 
 [node name="PinLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/PinsContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 19
 text = "PINS"
 
 [node name="PinGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/PinsContainer"]
@@ -302,6 +310,7 @@ layout_mode = 2
 
 [node name="MapAssetLabel" type="Label" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/MapAssetsContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 19
 text = "MAP ASSETS"
 
 [node name="MapAssetGrid" type="GridContainer" parent="TerrainToolsUI/PanelContainer/MarginContainer/TerrainTools/MapAssetsContainer"]

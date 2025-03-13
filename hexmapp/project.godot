@@ -31,6 +31,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="Hexmapp"
 
+[gui]
+
+theme/custom_font="uid://cd87bki3uwx3d"
+
 [input]
 
 left_click={
