@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://crmhpjvlveoy2"]
+[gd_scene load_steps=70 format=3 uid="uid://crmhpjvlveoy2"]
 
 [ext_resource type="Script" uid="uid://drwjrdg2qhien" path="res://PlayerMap/Scripts/PlayerMap.cs" id="1_li2kt"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="2_djw3f"]
@@ -8,12 +8,8 @@
 [ext_resource type="Script" uid="uid://bg7150cwd1vjy" path="res://PlayerMap/Scripts/TerrainToolsUi.cs" id="3_a1ekk"]
 [ext_resource type="Texture2D" uid="uid://cr3sixnk10u33" path="res://PlayerMap/Tiles/TileAlphaMasks/blank.png" id="3_x78ja"]
 [ext_resource type="Texture2D" uid="uid://v0xam7fmms7k" path="res://PlayerMap/Tiles/TileAlphaMasks/quarter_BR.png" id="4_68lk7"]
-[ext_resource type="Resource" uid="uid://dtwiopsxm5pfh" path="res://PlayerMap/Tiles/TileResources/Grass1.tres" id="4_owkl4"]
 [ext_resource type="Texture2D" uid="uid://bp00ekissh78v" path="res://PlayerMap/Tiles/TileAlphaMasks/half_L.png" id="5_3q1ky"]
-[ext_resource type="Resource" uid="uid://cf16khifih2j7" path="res://PlayerMap/Tiles/TileResources/Grass2.tres" id="5_u8tci"]
-[ext_resource type="Resource" uid="uid://bsxxved3fpai" path="res://PlayerMap/Tiles/TileResources/Sand1.tres" id="6_281uw"]
 [ext_resource type="Texture2D" uid="uid://cloeq7gs0qumu" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_TR.png" id="6_qr4o5"]
-[ext_resource type="Resource" uid="uid://cserkuuarn54l" path="res://PlayerMap/Tiles/TileResources/Water1.tres" id="7_5pfkt"]
 [ext_resource type="Texture2D" uid="uid://dy8710pb73xy6" path="res://PlayerMap/Tiles/TileAlphaMasks/half_T.png" id="7_cicig"]
 [ext_resource type="Texture2D" uid="uid://kbtytthmjjpc" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_BL.png" id="8_5gu55"]
 [ext_resource type="Texture2D" uid="uid://f1nfv5j860qf" path="res://PlayerMap/Tiles/TileAlphaMasks/threeQuarters_BR.png" id="9_85fig"]
@@ -27,12 +23,31 @@
 [ext_resource type="Texture2D" uid="uid://dploxykia3atv" path="res://PlayerMap/Tiles/TileAlphaMasks/quarter_TL.png" id="17_kg3bx"]
 [ext_resource type="Texture2D" uid="uid://bm72tllmj3m8w" path="res://PlayerMap/Tiles/TileAlphaMasks/halfCheckered_TLBR.png" id="18_ge64x"]
 [ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://PlayerMap/tool_button.tscn" id="22_7ml6j"]
+[ext_resource type="Resource" uid="uid://hykx617g20ld" path="res://PlayerMap/Tiles/TileResources/GrassA.tres" id="24_55smb"]
+[ext_resource type="Resource" uid="uid://cmy4rps5kxt07" path="res://PlayerMap/Tiles/TileResources/CorruptedA.tres" id="24_smodr"]
+[ext_resource type="Resource" uid="uid://bdejmge4at2ml" path="res://PlayerMap/Tiles/TileResources/CorruptedB.tres" id="25_xdhgj"]
+[ext_resource type="Resource" uid="uid://yc3fcp0036rn" path="res://PlayerMap/Tiles/TileResources/CorruptedC.tres" id="26_gt45l"]
 [ext_resource type="Resource" uid="uid://c6fxaj30hahva" path="res://PlayerMap/MapAssets/Resources/Mt1.tres" id="27_gkcgf"]
 [ext_resource type="Resource" uid="uid://dmkfo3jlbsh5a" path="res://PlayerMap/MapAssets/Resources/Hill1.tres" id="28_es6b3"]
+[ext_resource type="Resource" uid="uid://c4hkggy6qdsmg" path="res://PlayerMap/Tiles/TileResources/GrassB.tres" id="28_vl5wp"]
 [ext_resource type="Resource" uid="uid://d0smme7m52v6v" path="res://PlayerMap/MapAssets/Resources/Broadleaf1.tres" id="29_6vj31"]
+[ext_resource type="Resource" uid="uid://clngmkui5ko03" path="res://PlayerMap/Tiles/TileResources/GrassC.tres" id="29_q7qjg"]
+[ext_resource type="Resource" uid="uid://bah7ctnce7dp0" path="res://PlayerMap/Tiles/TileResources/IceA.tres" id="30_qav71"]
 [ext_resource type="Resource" uid="uid://w206pulw2gn6" path="res://PlayerMap/MapAssets/Resources/Conifer1.tres" id="30_xf60x"]
 [ext_resource type="Resource" uid="uid://kle3ug3uy2jq" path="res://PlayerMap/MapAssets/Resources/Pin1.tres" id="31_cl0kr"]
+[ext_resource type="Resource" uid="uid://cd6r5to5q1umc" path="res://PlayerMap/Tiles/TileResources/IceB.tres" id="31_s4yo7"]
+[ext_resource type="Resource" uid="uid://cg5ki7bcax8h1" path="res://PlayerMap/Tiles/TileResources/RedA.tres" id="32_skhbb"]
+[ext_resource type="Resource" uid="uid://40xbn6yxrbxe" path="res://PlayerMap/Tiles/TileResources/SandA.tres" id="33_inhao"]
+[ext_resource type="Resource" uid="uid://bcl8d4yerpwqs" path="res://PlayerMap/Tiles/TileResources/SavannahA.tres" id="34_adh3w"]
 [ext_resource type="ButtonGroup" uid="uid://ci08gi1837w6w" path="res://PlayerMap/UI/ToolModeButtonGroup.tres" id="34_s44ye"]
+[ext_resource type="Resource" uid="uid://b62e6l24h43ro" path="res://PlayerMap/Tiles/TileResources/SavannahB.tres" id="35_a7jf4"]
+[ext_resource type="Resource" uid="uid://b6wkrucakngme" path="res://PlayerMap/Tiles/TileResources/SavannahC.tres" id="36_6cyxa"]
+[ext_resource type="Resource" uid="uid://bu1yu1dhjg248" path="res://PlayerMap/Tiles/TileResources/SnowA.tres" id="37_qsbv3"]
+[ext_resource type="Resource" uid="uid://bym1jixjxvxrq" path="res://PlayerMap/Tiles/TileResources/SnowB.tres" id="38_onaff"]
+[ext_resource type="Resource" uid="uid://d4iop5r2sa6ff" path="res://PlayerMap/Tiles/TileResources/SnowC.tres" id="39_1q1jy"]
+[ext_resource type="Resource" uid="uid://qb1o2e2yy0ta" path="res://PlayerMap/Tiles/TileResources/WaterA.tres" id="40_hovpt"]
+[ext_resource type="Resource" uid="uid://3rkre4qdxrvx" path="res://PlayerMap/Tiles/TileResources/WaterB.tres" id="41_ky5x4"]
+[ext_resource type="Resource" uid="uid://dlxi2jduamxr1" path="res://PlayerMap/Tiles/TileResources/WaterC.tres" id="42_gmoud"]
 
 [sub_resource type="TileSet" id="TileSet_0eg1a"]
 tile_size = Vector2i(32, 32)
@@ -188,7 +203,7 @@ script = ExtResource("3_a1ekk")
 modeButtonGroup = ExtResource("34_s44ye")
 toolButtonScene = ExtResource("22_7ml6j")
 toolButtonGroup = ExtResource("2_djw3f")
-terrainTiles = Array[Object]([ExtResource("4_owkl4"), ExtResource("5_u8tci"), ExtResource("6_281uw"), ExtResource("7_5pfkt")])
+terrainTiles = Array[Object]([ExtResource("24_smodr"), ExtResource("25_xdhgj"), ExtResource("26_gt45l"), ExtResource("24_55smb"), ExtResource("28_vl5wp"), ExtResource("29_q7qjg"), ExtResource("30_qav71"), ExtResource("31_s4yo7"), ExtResource("32_skhbb"), ExtResource("33_inhao"), ExtResource("34_adh3w"), ExtResource("35_a7jf4"), ExtResource("36_6cyxa"), ExtResource("37_qsbv3"), ExtResource("38_onaff"), ExtResource("39_1q1jy"), ExtResource("40_hovpt"), ExtResource("41_ky5x4"), ExtResource("42_gmoud")])
 mapAssets = Array[Object]([ExtResource("27_gkcgf"), ExtResource("28_es6b3"), ExtResource("29_6vj31"), ExtResource("30_xf60x")])
 mapPins = Array[Object]([ExtResource("31_cl0kr")])
 

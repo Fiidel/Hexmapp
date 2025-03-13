@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Tile" load_steps=3 format=3 uid="uid://bcl8d4yerpwqs"]
+
+[ext_resource type="Texture2D" uid="uid://cqrrt1faubyns" path="res://PlayerMap/Tiles/TileBaseTextures/SavannahA.png" id="1_2tdeo"]
+[ext_resource type="Script" uid="uid://cy5bnxn6hk74h" path="res://PlayerMap/Scripts/Tile.cs" id="1_u8dny"]
+
+[resource]
+script = ExtResource("1_u8dny")
+IdName = "SavannahA"
+Texture = ExtResource("1_2tdeo")
+metadata/_custom_type_script = "uid://cy5bnxn6hk74h"

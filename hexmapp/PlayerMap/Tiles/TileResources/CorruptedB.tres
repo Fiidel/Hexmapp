@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Tile" load_steps=3 format=3 uid="uid://bdejmge4at2ml"]
+
+[ext_resource type="Script" uid="uid://cy5bnxn6hk74h" path="res://PlayerMap/Scripts/Tile.cs" id="1_s5dp2"]
+[ext_resource type="Texture2D" uid="uid://b6khoikj0ectm" path="res://PlayerMap/Tiles/TileBaseTextures/CorruptedB.png" id="1_yyr2s"]
+
+[resource]
+script = ExtResource("1_s5dp2")
+IdName = "CorruptedB"
+Texture = ExtResource("1_yyr2s")
+metadata/_custom_type_script = "uid://cy5bnxn6hk74h"

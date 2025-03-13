@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Tile" load_steps=3 format=3 uid="uid://clngmkui5ko03"]
+
+[ext_resource type="Script" uid="uid://cy5bnxn6hk74h" path="res://PlayerMap/Scripts/Tile.cs" id="1_jgriu"]
+[ext_resource type="Texture2D" uid="uid://qy2j7cecg7kx" path="res://PlayerMap/Tiles/TileBaseTextures/GrassC.png" id="1_t1myg"]
+
+[resource]
+script = ExtResource("1_jgriu")
+IdName = "GrassC"
+Texture = ExtResource("1_t1myg")
+metadata/_custom_type_script = "uid://cy5bnxn6hk74h"
