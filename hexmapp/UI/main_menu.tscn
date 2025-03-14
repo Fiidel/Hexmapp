@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3 uid="uid://5fylr8f87fqr"]
+
+[ext_resource type="Script" uid="uid://dumieebkdy6mq" path="res://UI/MainMenu.cs" id="1_d8nwk"]
+[ext_resource type="FontFile" uid="uid://d1pja8kg83o4a" path="res://Common/Fonts/CinzelDecorative-Bold.ttf" id="1_p8ccj"]
+[ext_resource type="Texture2D" uid="uid://c0vw6k0qywo1b" path="res://UI/MainMenuBg.png" id="1_tk8dj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yyqw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p8ccj"]
+bg_color = Color(0.537255, 0.419608, 0.329412, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 10.0
+expand_margin_top = 8.0
+expand_margin_right = 10.0
+expand_margin_bottom = 8.0
+shadow_color = Color(0, 0, 0, 0.227451)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5yyqw"]
+bg_color = Color(0.454902, 0.34902, 0.270588, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 10.0
+expand_margin_top = 8.0
+expand_margin_right = 10.0
+expand_margin_bottom = 8.0
+shadow_color = Color(0, 0, 0, 0.227451)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tk8dj"]
+bg_color = Color(0.65098, 0.521569, 0.419608, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 10.0
+expand_margin_top = 8.0
+expand_margin_right = 10.0
+expand_margin_bottom = 8.0
+shadow_color = Color(0, 0, 0, 0.227451)
+shadow_size = 6
+
+[sub_resource type="Theme" id="Theme_p8ccj"]
+Button/styles/focus = SubResource("StyleBoxEmpty_5yyqw")
+Button/styles/hover = SubResource("StyleBoxFlat_p8ccj")
+Button/styles/normal = SubResource("StyleBoxFlat_5yyqw")
+Button/styles/pressed = SubResource("StyleBoxFlat_tk8dj")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d8nwk")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_tk8dj")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 368.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.65098, 0.521569, 0.419608, 1)
+theme_override_fonts/font = ExtResource("1_p8ccj")
+theme_override_font_sizes/font_size = 120
+text = "Hexmapp"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="CreateCampaignButton" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = SubResource("Theme_p8ccj")
+theme_override_font_sizes/font_size = 36
+text = "Create Campaign"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CreateCampaignButton" to="." method="OnCreateCampaignButtonPressed"]
