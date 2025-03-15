@@ -29,9 +29,7 @@
 [ext_resource type="Resource" uid="uid://w206pulw2gn6" path="res://PlayerMap/MapAssets/Resources/Conifer1.tres" id="27_674yc"]
 [ext_resource type="Resource" uid="uid://kle3ug3uy2jq" path="res://PlayerMap/MapAssets/Resources/Pin1.tres" id="28_tp3fs"]
 [ext_resource type="Texture2D" uid="uid://bkida1bhgmmo0" path="res://PlayerMap/Tiles/TileBaseTextures/selectOutline.png" id="29_27poh"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q0wsr"]
-bg_color = Color(0.262933, 0.262932, 0.262932, 1)
+[ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="30_mx5og"]
 
 [node name="TerrainToolsUI" type="CanvasLayer"]
 script = ExtResource("1_tn673")
@@ -67,7 +65,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 353.0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_q0wsr")
+theme = ExtResource("30_mx5og")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -131,6 +129,7 @@ text = "TERRAIN TYPE"
 [node name="TerrainTypeGrid" type="GridContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools/TerranTypesContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/v_separation = 8
 columns = 4
 
 [node name="BrushSize" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools/TerranTypesContainer"]
