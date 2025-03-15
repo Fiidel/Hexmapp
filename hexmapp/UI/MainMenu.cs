@@ -5,6 +5,6 @@ public partial class MainMenu : Control
 {
     private void OnCreateCampaignButtonPressed()
     {
-        GameManager.Instance.SetCurrentScene("uid://crmhpjvlveoy2");
+        GameManager.Instance.LoadCampaign();
     }
 }

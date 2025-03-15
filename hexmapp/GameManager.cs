@@ -7,6 +7,8 @@ public partial class GameManager : Node
     private const string mainMenuSceneUid = "uid://5fylr8f87fqr";
     private const string playerMapSceneUid = "uid://crmhpjvlveoy2";
     private Node playerMapInstance;
+    private const string leftNavbarSceneUid = "uid://dqahxqpqd1cql";
+    private Node leftNavbarInstance;
     private Node currentScene;
     private string currentSceneUid;
     private PackedScene mainMenuScene;
@@ -25,6 +27,14 @@ public partial class GameManager : Node
 
         playerMapScene = GD.Load<PackedScene>(playerMapSceneUid);
         playerMapInstance = playerMapScene.Instantiate();
+    }
+
+
+    public void LoadCampaign()
+    {
+        leftNavbarInstance = GD.Load<PackedScene>(leftNavbarSceneUid).Instantiate();
+        AddChild(leftNavbarInstance);
+        SetCurrentScene(playerMapSceneUid);
     }
 
 

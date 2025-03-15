@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqahxqpqd1cql"]
+
+[ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_raa1c"]
+[ext_resource type="PackedScene" uid="uid://xx0su0ph6sbg" path="res://UI/nav_module_button.tscn" id="2_i47ye"]
+[ext_resource type="Texture2D" uid="uid://cubqiatnu0tm8" path="res://UI/Icons/brushIcon.png" id="3_3n4lk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_raa1c"]
+bg_color = Color(0.166296, 0.122451, 0.100559, 1)
+
+[node name="UI" type="CanvasLayer"]
+layer = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 64.0
+grow_vertical = 2
+theme = ExtResource("1_raa1c")
+theme_override_styles/panel = SubResource("StyleBoxFlat_raa1c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="HexMap" parent="PanelContainer/VBoxContainer" instance=ExtResource("2_i47ye")]
+layout_mode = 2
+moduleName = "Hex Map"
+
+[node name="PlayerMap" parent="PanelContainer/VBoxContainer" instance=ExtResource("2_i47ye")]
+layout_mode = 2
+texture_normal = ExtResource("3_3n4lk")
+moduleName = "Player Map"
