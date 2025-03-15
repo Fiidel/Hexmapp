@@ -9,6 +9,8 @@ public partial class GameManager : Node
     private Node playerMapInstance;
     private const string leftNavbarSceneUid = "uid://dqahxqpqd1cql";
     private Node leftNavbarInstance;
+    private const string chatSceneUid = "uid://dt22gmsms27up";
+    private Node chatInstance;
     private Node currentScene;
     private string currentSceneUid;
     private PackedScene mainMenuScene;
@@ -34,6 +36,10 @@ public partial class GameManager : Node
     {
         leftNavbarInstance = GD.Load<PackedScene>(leftNavbarSceneUid).Instantiate();
         AddChild(leftNavbarInstance);
+
+        chatInstance = GD.Load<PackedScene>(chatSceneUid).Instantiate();
+        AddChild(chatInstance);
+
         SetCurrentScene(playerMapSceneUid);
     }
 

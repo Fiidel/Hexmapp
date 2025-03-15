@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt22gmsms27up"]
+
+[ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_8meuy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3pd0p"]
+bg_color = Color(0, 0, 0, 0.501961)
+
+[node name="Chat" type="CanvasLayer"]
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -368.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("1_8meuy")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="ChatBox" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3pd0p")
+
+[node name="ChatMessages" type="TextEdit" parent="PanelContainer/MarginContainer/VBoxContainer/ChatBox"]
+layout_mode = 2
+editable = false
+
+[node name="TextEdit" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+placeholder_text = "Message..."
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 12
+text = "Send"
