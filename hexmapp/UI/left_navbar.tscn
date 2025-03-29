@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqahxqpqd1cql"]
+[gd_scene load_steps=6 format=3 uid="uid://dqahxqpqd1cql"]
 
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_raa1c"]
 [ext_resource type="PackedScene" uid="uid://xx0su0ph6sbg" path="res://UI/nav_module_button.tscn" id="2_i47ye"]
 [ext_resource type="Texture2D" uid="uid://cubqiatnu0tm8" path="res://UI/Icons/brushIcon.png" id="3_3n4lk"]
+[ext_resource type="Texture2D" uid="uid://kx3pcg5ygjoi" path="res://UI/Icons/networkIcon.png" id="4_diq0c"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_raa1c"]
 bg_color = Color(0.166296, 0.122451, 0.100559, 1)
@@ -29,3 +30,10 @@ moduleName = "Hex Map"
 layout_mode = 2
 texture_normal = ExtResource("3_3n4lk")
 moduleName = "Player Map"
+
+[node name="Network" parent="PanelContainer/VBoxContainer" instance=ExtResource("2_i47ye")]
+layout_mode = 2
+texture_normal = ExtResource("4_diq0c")
+moduleName = "Host Game"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Network" to="PanelContainer/VBoxContainer/Network" method="OnHostButtonPressed"]

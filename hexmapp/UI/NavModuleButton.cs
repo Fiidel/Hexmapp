@@ -41,4 +41,10 @@ public partial class NavModuleButton : TextureButton
         Modulate = new Color(1, 1, 1, 1);
         background.Visible = false;
     }
+
+
+    public void OnHostButtonPressed()
+    {
+        WsClient.Instance.HostGame();
+    }
 }

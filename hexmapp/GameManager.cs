@@ -15,6 +15,9 @@ public partial class GameManager : Node
     private string currentSceneUid;
     private PackedScene mainMenuScene;
     private PackedScene playerMapScene;
+    // room code popup scene for hosting game
+    private const string roomCodePopupSceneUid = "uid://bfagl48eikacy";
+    private PackedScene roomCodePopupScene;
 
 
     public override void _Ready()
@@ -29,6 +32,9 @@ public partial class GameManager : Node
 
         playerMapScene = GD.Load<PackedScene>(playerMapSceneUid);
         playerMapInstance = playerMapScene.Instantiate();
+
+        // listen to room code received signal
+        WsClient.Instance.RoomCodeReceived += DisplayRoomCodePopup;
     }
 
 
@@ -87,5 +93,13 @@ public partial class GameManager : Node
     private bool IsAlwaysActiveScene(string sceneUid)
     {
         return sceneUid == playerMapSceneUid; // add any more always-loaded uids (||)
+    }
+
+
+    // display room code when hosting a game
+    private void DisplayRoomCodePopup()
+    {
+        var roomCodePopup = GD.Load<PackedScene>(roomCodePopupSceneUid).Instantiate();
+        AddChild(roomCodePopup);
     }
 }
