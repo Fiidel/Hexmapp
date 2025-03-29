@@ -62,8 +62,8 @@ namespace RelayServer.WebSocketHandler
                             switch (msgType)
                             {
                                 case "CREATE":
-                                    var roomCode = _roomManager.CreateRoom(player);
-                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Room code: {roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    var roomCode = await _roomManager.CreateRoom(player);
+                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"RC:{roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
 
                                 case "JOIN":
