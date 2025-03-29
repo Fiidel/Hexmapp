@@ -31,6 +31,7 @@ variation_opentype = {
 }
 
 [node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("2_6g48a")
 
 [node name="RoomCodePopup" type="Panel" parent="."]
 z_index = 100
@@ -43,7 +44,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_plxrd")
 theme_override_styles/panel = SubResource("StyleBoxFlat_6g48a")
-script = ExtResource("2_6g48a")
 
 [node name="RoomCodePopupBg" type="PanelContainer" parent="RoomCodePopup"]
 layout_mode = 1
@@ -101,4 +101,4 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "OK"
 
-[connection signal="pressed" from="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/OkButton" to="RoomCodePopup" method="OnRoomCodePopupOk"]
+[connection signal="pressed" from="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/OkButton" to="." method="OnRoomCodePopupOk"]
