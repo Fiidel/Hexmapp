@@ -4,6 +4,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 public partial class WsClient : Node
@@ -13,6 +14,7 @@ public partial class WsClient : Node
     private WebSocketPeer wsPeer = new();
     private string ServerAddress = "ws://localhost:5044/connect";
     public static WsClient Instance { get; private set; }
+    private CancellationTokenSource pingKeepAliveCts;
 
     // signals for communicating outside this script
     [Signal] public delegate void RoomCodeReceivedEventHandler();
@@ -30,11 +32,6 @@ public partial class WsClient : Node
 
     public override void _Process(double delta)
     {
-        // =============================================================
-        // =============================================================
-        // TODO: START PING PULSE KEEPALIVE
-        // =============================================================
-
         wsPeer.Poll();
 
         if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
@@ -49,6 +46,38 @@ public partial class WsClient : Node
         {
             SetProcess(false);
         }
+    }
+
+
+    private async Task StartKeepAlivePing()
+    {
+        pingKeepAliveCts = new CancellationTokenSource();
+        var token = pingKeepAliveCts.Token;
+
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(15000);
+
+                if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
+                {
+                    RelayMessage("PING");
+                }
+            }
+        }
+        catch (OperationCanceledException ex)
+        {
+            GD.Print($"Keep-alive ping task was cancelled: {ex.Message}");
+        }
+    }
+
+
+    private void StopKeepAlivePing()
+    {
+        pingKeepAliveCts?.Cancel();
+        pingKeepAliveCts?.Dispose();
+        pingKeepAliveCts = null;
     }
 
 
@@ -121,6 +150,9 @@ public partial class WsClient : Node
             wsPeer.Poll();
             if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
             {
+                // activate keepalive ping
+                _ = StartKeepAlivePing(); // do not await - can't block the further execution of this method
+
                 // start polling
                 SetProcess(true);
                 
@@ -135,6 +167,7 @@ public partial class WsClient : Node
 
     private void DisconnectFromServer()
     {
+        StopKeepAlivePing();
         wsPeer.Close();
         GD.Print("WebSocket disconnected.");
     }
