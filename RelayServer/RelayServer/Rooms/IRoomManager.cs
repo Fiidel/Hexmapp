@@ -7,7 +7,7 @@ namespace RelayServer.Rooms
         Task<string> CreateRoom(Player gameMaster);
         Task JoinRoom(string roomId, Player player);
         Task LeaveCurrentRoom(Player player);
-        Task RelayToRoom(ArraySegment<byte> data, Player originator);
+        Task RelayToRoom(ArraySegment<byte> data, Player originator, bool excludeOriginator = false);
         Task CloseRoom(string roomId);
     }
 }

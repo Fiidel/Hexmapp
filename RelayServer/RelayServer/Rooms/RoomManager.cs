@@ -92,7 +92,7 @@ namespace RelayServer.Rooms
             }
         }
 
-        public async Task RelayToRoom(ArraySegment<byte> message, Player originator)
+        public async Task RelayToRoom(ArraySegment<byte> message, Player originator, bool excludeOriginator = false)
         {
             if (originator.JoinedRoomCode != null)
             {
@@ -100,10 +100,11 @@ namespace RelayServer.Rooms
                 {
                     foreach (var player in _rooms[originator.JoinedRoomCode].AllPlayers)
                     {
-                        //if (player != originator)
-                        //{
-                            await player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
-                        //}
+                        if (excludeOriginator && player == originator)
+                        {
+                            continue; // skip originator if exclusion is set to true
+                        }
+                        await player.Socket.SendAsync(message, WebSocketMessageType.Binary, true, CancellationToken.None);  
                     }
                 }
                 else
