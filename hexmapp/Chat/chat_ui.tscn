@@ -1,11 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://dt22gmsms27up"]
+[gd_scene load_steps=5 format=3 uid="uid://dt22gmsms27up"]
 
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_8meuy"]
+[ext_resource type="Script" uid="uid://cpc78w2jbfntd" path="res://Chat/Scripts/Chat.cs" id="1_b0aik"]
+[ext_resource type="FontVariation" uid="uid://cwh1bl2p3qpbo" path="res://UI/chat_font.tres" id="2_3pd0p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3pd0p"]
 bg_color = Color(0, 0, 0, 0.501961)
 
 [node name="Chat" type="CanvasLayer"]
+script = ExtResource("1_b0aik")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 11
@@ -32,20 +35,31 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3pd0p")
 
-[node name="ChatMessages" type="TextEdit" parent="PanelContainer/MarginContainer/VBoxContainer/ChatBox"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ChatBox"]
 layout_mode = 2
-editable = false
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="TextEdit" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ChatLog" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/ChatBox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ChatInput" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("2_3pd0p")
 placeholder_text = "Message..."
 
-[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SendButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 12
 text = "Send"
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/SendButton" to="." method="SendMessage"]

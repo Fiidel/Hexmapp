@@ -3,6 +3,7 @@
 
 using Godot;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 public partial class WsClient : Node
@@ -15,6 +16,7 @@ public partial class WsClient : Node
 
     // signals for communicating outside this script
     [Signal] public delegate void RoomCodeReceivedEventHandler();
+    [Signal] public delegate void ChatMessageReceivedEventHandler(string nickname, string message);
 
 
     public override void _Ready()
@@ -63,11 +65,11 @@ public partial class WsClient : Node
     }
 
 
-    public async void JoinRoom(string roomCode)
+    public async void JoinRoom(string roomCode, string nickname)
     {
         if (await ConnectToServer())
         {
-            RelayMessage($"JOIN:{roomCode.ToUpper()}");
+            RelayMessage($"JOIN:{roomCode.ToUpper()}:{nickname}");
         }
         else
         {
@@ -148,6 +150,11 @@ public partial class WsClient : Node
             case "RC":
                 RoomCode = messageSplit[1];
                 EmitSignal(SignalName.RoomCodeReceived);
+                break;
+            case "CHAT":
+                var nickname = messageSplit[1];
+                var chatMessage = $"{string.Join(':', messageSplit.Skip(2))}";
+                EmitSignal(SignalName.ChatMessageReceived, nickname, chatMessage);
                 break;
             default:
                 break;

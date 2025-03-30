@@ -6,5 +6,6 @@ namespace RelayServer.Rooms
     {
         public required WebSocket Socket { get; set; }
         public string? JoinedRoomCode { get; set; } = null;
+        public string Nickname { get; set; } = "";
     }
 }

@@ -64,14 +64,16 @@ namespace RelayServer.WebSocketHandler
                                 case "CREATE":
                                     var roomCode = await _roomManager.CreateRoom(player);
                                     await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"RC:{roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    player.Nickname = "Game Master";
                                     break;
 
                                 case "JOIN":
-                                    if (splitMessage.Length < 2)
+                                    if (splitMessage.Length < 3)
                                     {
                                         throw new Exception("Invalid JOIN command");
                                     }
                                     var joinRoomCode = splitMessage[1];
+                                    player.Nickname = splitMessage[2];
                                     await _roomManager.JoinRoom(joinRoomCode, player);
                                     await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
@@ -81,12 +83,12 @@ namespace RelayServer.WebSocketHandler
                                     await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
                                     break;
 
-                                case "MSG":
+                                case "CHAT":
                                     if (splitMessage.Length < 2)
                                     {
-                                        throw new Exception("Invalid MSG command");
+                                        throw new Exception("Invalid CHAT command");
                                     }
-                                    var msgContent = splitMessage[1];
+                                    var msgContent = $"CHAT:{player.Nickname}:{string.Join(":", splitMessage.Skip(1))}";
                                     await _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
                                     break;
 

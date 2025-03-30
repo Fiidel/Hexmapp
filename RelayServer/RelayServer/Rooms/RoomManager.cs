@@ -100,10 +100,10 @@ namespace RelayServer.Rooms
                 {
                     foreach (var player in _rooms[originator.JoinedRoomCode].AllPlayers)
                     {
-                        if (player != originator)
-                        {
+                        //if (player != originator)
+                        //{
                             await player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
-                        }
+                        //}
                     }
                 }
                 else

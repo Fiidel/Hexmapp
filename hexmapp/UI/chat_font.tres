@@ -1,0 +1,12 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://cwh1bl2p3qpbo"]
+
+[ext_resource type="FontFile" uid="uid://cs375svc66bio" path="res://Common/Fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf" id="1_6ogtr"]
+
+[resource]
+base_font = ExtResource("1_6ogtr")
+variation_opentype = {
+1498696771: 500,
+1869640570: 12,
+2003072104: 100,
+2003265652: 400
+}

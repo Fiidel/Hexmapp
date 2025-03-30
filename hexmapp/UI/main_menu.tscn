@@ -141,6 +141,15 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
+[node name="NicknameInput" type="LineEdit" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_4cwpn")
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Nickname"
+alignment = 1
+max_length = 8
+
 [node name="RoomCodeInput" type="LineEdit" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
