@@ -67,17 +67,24 @@ namespace RelayServer.Rooms
                 {
                     if (_rooms[player.JoinedRoomCode].AllPlayers.Contains(player))
                     {
-                        // game master host leaving closes the room
-                        if (_rooms[player.JoinedRoomCode].GameMaster == player)
+                        try
                         {
-                            await CloseRoom(player.JoinedRoomCode);
-                            return;
+                            // game master host leaving closes the room
+                            if (_rooms[player.JoinedRoomCode].GameMaster == player)
+                            {
+                                await CloseRoom(player.JoinedRoomCode);
+                                return;
+                            }
+                            else
+                            {
+                                _rooms[player.JoinedRoomCode].AllPlayers.Remove(player);
+                                player.JoinedRoomCode = null;
+                                await CloseWebSocketOnLeave(player.Socket);
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            await CloseWebSocketOnLeave(player.Socket);
-                            _rooms[player.JoinedRoomCode].AllPlayers.Remove(player);
-                            player.JoinedRoomCode = null;
+                            Console.WriteLine(e);
                         }
                     }
                     else
@@ -96,15 +103,27 @@ namespace RelayServer.Rooms
         {
             if (originator.JoinedRoomCode != null)
             {
-                if (_rooms.ContainsKey(originator.JoinedRoomCode))
+                if (_rooms.TryGetValue(originator.JoinedRoomCode, out var room))
                 {
-                    foreach (var player in _rooms[originator.JoinedRoomCode].AllPlayers)
+                    foreach (var player in room.AllPlayers)
                     {
                         if (excludeOriginator && player == originator)
                         {
                             continue; // skip originator if exclusion is set to true
                         }
-                        await player.Socket.SendAsync(message, WebSocketMessageType.Binary, true, CancellationToken.None);  
+
+                        try
+                        {
+                            if (player.Socket.State == WebSocketState.Open)
+                            {
+                                await player.Socket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
                     }
                 }
                 else
@@ -121,8 +140,17 @@ namespace RelayServer.Rooms
                 // close any connected sockets
                 foreach (var player in _rooms[roomId].AllPlayers)
                 {
-                    await CloseWebSocketOnLeave(player.Socket);
-                    player.JoinedRoomCode = null;
+                    try
+                    {
+                        player.JoinedRoomCode = null;
+                        await CloseWebSocketOnLeave(player.Socket);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
 
                 _rooms.Remove(roomId);
@@ -135,9 +163,16 @@ namespace RelayServer.Rooms
 
         private async Task CloseWebSocketOnLeave(WebSocket socket)
         {
-            if (socket.State == WebSocketState.Open)
+            try
             {
-                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "LEAVE successful", CancellationToken.None);
+                if (socket.State == WebSocketState.Open || socket.State == WebSocketState.CloseReceived)
+                {
+                    await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "LEAVE successful", CancellationToken.None);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
     }

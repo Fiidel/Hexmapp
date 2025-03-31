@@ -1,5 +1,6 @@
 ﻿using RelayServer.Rooms;
 using System.Net.WebSockets;
+using System.Numerics;
 using System.Text;
 
 namespace RelayServer.WebSocketHandler
@@ -18,13 +19,29 @@ namespace RelayServer.WebSocketHandler
         {
             if (context.WebSockets.IsWebSocketRequest)
             {
-                using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                WebSocket? webSocket = null;
+                try
+                {
+                    webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                using var pulseTimeout = new WebsocketPulseTimeout(webSocket, TimeSpan.FromSeconds(15));
-                pulseTimeout.StartTimeout();
+                    using var pulseTimeout = new WebsocketPulseTimeout(webSocket, TimeSpan.FromSeconds(15));
+                    pulseTimeout.StartTimeout();
 
-                var player = new Player() { Socket = webSocket };
-                await ProcessMessages(player, pulseTimeout);
+                    var player = new Player() { Socket = webSocket };
+                    await ProcessMessages(player, pulseTimeout);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+                finally
+                {
+                    if (webSocket != null)
+                    {
+                        CloseWebSocket(webSocket, "Finalizing connection, closing websocket.");
+                    }
+                }
             }
             else
             {
@@ -43,13 +60,28 @@ namespace RelayServer.WebSocketHandler
                     // ==========================================================
 
                     var buffer = new byte[1024];
-                    var receiveResult = await player.Socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    WebSocketReceiveResult? receiveResult;
+
+                    try
+                    {
+                        receiveResult = await player.Socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    }
+                    catch (WebSocketException wse)
+                    {
+                        Console.WriteLine($"WebSocket ReceiveAsync error: {wse.Message}");
+                        break; // exit and cleanup in the finally block
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        break;
+                    }
 
                     if (receiveResult.MessageType == WebSocketMessageType.Close)
                     {
-                        await player.Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Close message, closing socket", CancellationToken.None);
+                        await CloseWebSocket(player.Socket, "Close message received, closing socket.");
                         pulseTimeout.StopTimeout();
-                        break; // cleanup in the finally block
+                        break; // exit and cleanup in the finally block
                     }
                     else if (receiveResult.MessageType == WebSocketMessageType.Text)
                     {
@@ -63,7 +95,7 @@ namespace RelayServer.WebSocketHandler
                             {
                                 case "CREATE":
                                     var roomCode = await _roomManager.CreateRoom(player);
-                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"RC:{roomCode}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    await SendTextMessageAsync(player.Socket, $"RC:{roomCode}");
                                     player.Nickname = "Game Master";
                                     break;
 
@@ -75,12 +107,12 @@ namespace RelayServer.WebSocketHandler
                                     var joinRoomCode = splitMessage[1];
                                     player.Nickname = splitMessage[2];
                                     await _roomManager.JoinRoom(joinRoomCode, player);
-                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Joined room.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    await SendTextMessageAsync(player.Socket, "JOIN:ACK");
                                     break;
 
                                 case "LEAVE":
                                     await _roomManager.LeaveCurrentRoom(player);
-                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Left room.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    await SendTextMessageAsync(player.Socket, "LEAVE:ACK");
                                     break;
 
                                 case "CHAT":
@@ -97,29 +129,65 @@ namespace RelayServer.WebSocketHandler
                                     break;
 
                                 default:
-                                    await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("Unknown command.")), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    await SendTextMessageAsync(player.Socket, "ERR:Unknown network command type.");
                                     break;
                             }
                         }
                         catch (Exception ex)
                         {
-                            await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Error: {ex.Message}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                            await SendTextMessageAsync(player.Socket, $"ERR:{ex.Message}");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                await player.Socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes($"Error: {ex.Message}")), WebSocketMessageType.Text, true, CancellationToken.None);
+                await SendTextMessageAsync(player.Socket, $"ERR:{ex.Message}");
             }
             finally
             {
-                if (player.Socket.State == WebSocketState.Open || player.Socket.State == WebSocketState.CloseReceived)
-                {
-                    await player.Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing closed socket", CancellationToken.None);
-                }
+                pulseTimeout.StopTimeout();
 
-                await _roomManager.LeaveCurrentRoom(player);
+                try
+                {
+                    await _roomManager.LeaveCurrentRoom(player);
+                    await CloseWebSocket(player.Socket);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
+
+        private async Task SendTextMessageAsync(WebSocket socket, string message)
+        {
+            if (socket.State == WebSocketState.Open)
+            {
+                try
+                {
+                    await socket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+
+        private async Task CloseWebSocket(WebSocket socket, string message = "Closing websocket connection.")
+        {
+            try
+            {
+                if (socket.State == WebSocketState.Open || socket.State == WebSocketState.CloseReceived)
+                {
+                    await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, message, CancellationToken.None);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
     }
