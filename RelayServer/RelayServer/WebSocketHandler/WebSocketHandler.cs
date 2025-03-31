@@ -1,20 +1,11 @@
 ﻿using RelayServer.Rooms;
 using System.Net.WebSockets;
-using System.Numerics;
 using System.Text;
 
 namespace RelayServer.WebSocketHandler
 {
-    public class WebSocketHandler
+    public class WebSocketHandler(IRoomManager roomManager)
     {
-        private readonly IRoomManager _roomManager;
-        
-        public WebSocketHandler(IRoomManager roomManager)
-        {
-            _roomManager = roomManager;
-        }
-
-
         public async Task HandleConnection(HttpContext context)
         {
             if (context.WebSockets.IsWebSocketRequest)
@@ -39,7 +30,7 @@ namespace RelayServer.WebSocketHandler
                 {
                     if (webSocket != null)
                     {
-                        CloseWebSocket(webSocket, "Finalizing connection, closing websocket.");
+                        await CloseWebSocket(webSocket, "Finalizing connection, closing websocket.");
                     }
                 }
             }
@@ -94,7 +85,7 @@ namespace RelayServer.WebSocketHandler
                             switch (msgType)
                             {
                                 case "CREATE":
-                                    var roomCode = await _roomManager.CreateRoom(player);
+                                    var roomCode = await roomManager.CreateRoom(player);
                                     await SendTextMessageAsync(player.Socket, $"RC:{roomCode}");
                                     player.Nickname = "Game Master";
                                     break;
@@ -106,12 +97,12 @@ namespace RelayServer.WebSocketHandler
                                     }
                                     var joinRoomCode = splitMessage[1];
                                     player.Nickname = splitMessage[2];
-                                    await _roomManager.JoinRoom(joinRoomCode, player);
+                                    await roomManager.JoinRoom(joinRoomCode, player);
                                     await SendTextMessageAsync(player.Socket, "JOIN:ACK");
                                     break;
 
                                 case "LEAVE":
-                                    await _roomManager.LeaveCurrentRoom(player);
+                                    await roomManager.LeaveCurrentRoom(player);
                                     await SendTextMessageAsync(player.Socket, "LEAVE:ACK");
                                     break;
 
@@ -121,7 +112,7 @@ namespace RelayServer.WebSocketHandler
                                         throw new Exception("Invalid CHAT command");
                                     }
                                     var msgContent = $"CHAT:{player.Nickname}:{string.Join(":", splitMessage.Skip(1))}";
-                                    await _roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
+                                    await roomManager.RelayToRoom(new ArraySegment<byte>(Encoding.UTF8.GetBytes(msgContent)), player);
                                     break;
 
                                 case "PING":
@@ -150,7 +141,7 @@ namespace RelayServer.WebSocketHandler
 
                 try
                 {
-                    await _roomManager.LeaveCurrentRoom(player);
+                    await roomManager.LeaveCurrentRoom(player);
                     await CloseWebSocket(player.Socket);
                 }
                 catch (Exception e)
