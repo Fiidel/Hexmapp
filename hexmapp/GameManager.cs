@@ -23,7 +23,11 @@ public partial class GameManager : Node
     public override void _Ready()
     {
         Instance = this;
-        
+
+        // disable auto-quit (properly handle app quit)
+        GetTree().AutoAcceptQuit = false;
+
+        // load scenes
         mainMenuScene = GD.Load<PackedScene>(mainMenuSceneUid);
         var mainMenu = mainMenuScene.Instantiate();
         AddChild(mainMenu);
@@ -35,6 +39,17 @@ public partial class GameManager : Node
 
         // listen to room code received signal
         WsClient.Instance.RoomCodeReceived += DisplayRoomCodePopup;
+    }
+
+
+    public override void _Notification(int notificationCode)
+    {
+        if (notificationCode == NotificationWMCloseRequest)
+        {
+            WsClient.Instance.LeaveRoom();
+            GD.Print("Quit: Left room.");
+            GetTree().Quit();
+        }
     }
 
 
