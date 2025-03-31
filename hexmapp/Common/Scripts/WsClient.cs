@@ -130,10 +130,24 @@ public partial class WsClient : Node
 
     private async Task<bool> ConnectToServer()
     {
-        if (wsPeer.GetReadyState() == WebSocketPeer.State.Open)
+        // close websocket if open
+        if (wsPeer.GetReadyState() != WebSocketPeer.State.Closed)
         {
-            GD.Print("Already connected.");
-            return true;
+            wsPeer.Close();
+            // buffer time for closing
+            for (int i = 0; i < 10; i++)
+            {
+                wsPeer.Poll();
+                await Task.Delay(10);
+                if (wsPeer.GetReadyState() == WebSocketPeer.State.Closed)
+                    break;
+            }
+            
+            // create a new instance if the websocket wasn't able to close yet to really assure a clean connection
+            if (wsPeer.GetReadyState() != WebSocketPeer.State.Closed)
+            {
+                wsPeer = new WebSocketPeer();
+            }
         }
 
         var err = wsPeer.ConnectToUrl(ServerAddress);
@@ -168,7 +182,20 @@ public partial class WsClient : Node
     private void DisconnectFromServer()
     {
         StopKeepAlivePing();
-        wsPeer.Close();
+
+        if (wsPeer.GetReadyState() != WebSocketPeer.State.Closed)
+        {
+            wsPeer.Close();
+            // buffer time for closing
+            for (int i = 0; i < 10; i++)
+            {
+                wsPeer.Poll();
+                if (wsPeer.GetReadyState() == WebSocketPeer.State.Closed)
+                    break;
+                Thread.Sleep(10);
+            }
+        }
+        
         GD.Print("WebSocket disconnected.");
     }
 
