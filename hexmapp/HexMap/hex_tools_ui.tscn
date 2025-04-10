@@ -1,0 +1,161 @@
+[gd_scene load_steps=36 format=3 uid="uid://d2t53s310dfds"]
+
+[ext_resource type="Script" uid="uid://umotggnxgtxj" path="res://HexMap/Scripts/HexToolsUi.cs" id="1_1kxjq"]
+[ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_8xu51"]
+[ext_resource type="Texture2D" uid="uid://bkida1bhgmmo0" path="res://PlayerMap/Tiles/TileBaseTextures/selectOutline.png" id="2_0g27l"]
+[ext_resource type="Resource" uid="uid://blgseipd4sk82" path="res://HexMap/Resources/HexColor/hex_color_empty.tres" id="2_bw43h"]
+[ext_resource type="ButtonGroup" uid="uid://ci08gi1837w6w" path="res://PlayerMap/UI/ToolModeButtonGroup.tres" id="2_elmdn"]
+[ext_resource type="Resource" uid="uid://cw6mrq6a853mw" path="res://HexMap/Resources/HexColor/hex_color_barren.tres" id="3_5pcny"]
+[ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://Common/UI/tool_button.tscn" id="3_b5wxm"]
+[ext_resource type="ButtonGroup" uid="uid://c1yfgv02nvmk4" path="res://HexMap/HexButtonGroup.tres" id="4_duqsj"]
+[ext_resource type="Resource" uid="uid://88j1jopqohcd" path="res://HexMap/Resources/HexColor/hex_color_desert.tres" id="4_ed3n6"]
+[ext_resource type="Resource" uid="uid://b7sd4s1lu7e75" path="res://HexMap/Resources/HexColor/hex_color_greendark.tres" id="5_0yeki"]
+[ext_resource type="Resource" uid="uid://bqcbdetmu062c" path="res://HexMap/Resources/HexColor/hex_color_greenlight.tres" id="6_38doo"]
+[ext_resource type="Resource" uid="uid://io7np1s620qo" path="res://HexMap/Resources/HexColor/hex_color_white.tres" id="7_y6vxu"]
+[ext_resource type="Resource" uid="uid://3j67o2utb21v" path="res://HexMap/Resources/HexColor/hex_color_hills.tres" id="8_mhiue"]
+[ext_resource type="Resource" uid="uid://vkl0nygadoia" path="res://HexMap/Resources/HexColor/hex_color_mountains.tres" id="9_x78ds"]
+[ext_resource type="Resource" uid="uid://bs365nr0c0m35" path="res://HexMap/Resources/HexColor/hex_color_swamp.tres" id="10_hwlhu"]
+[ext_resource type="Resource" uid="uid://cxi2i6w7f3dm7" path="res://HexMap/Resources/HexColor/hex_color_urban.tres" id="11_okyep"]
+[ext_resource type="Resource" uid="uid://cwch6w5hcpqpd" path="res://HexMap/Resources/HexColor/hex_color_waterdark.tres" id="12_3xlvv"]
+[ext_resource type="Resource" uid="uid://u5v705epgtw5" path="res://HexMap/Resources/HexColor/hex_color_waterlight.tres" id="13_jdpbb"]
+[ext_resource type="Resource" uid="uid://byhmoie82f2o4" path="res://HexMap/Resources/HexTerrain/hex_terrain_grass.tres" id="16_1kxjq"]
+[ext_resource type="Resource" uid="uid://dgyi5ai4f0il2" path="res://HexMap/Resources/HexTerrain/hex_terrain_hills.tres" id="17_0g27l"]
+[ext_resource type="Resource" uid="uid://da2b7tbnw81p0" path="res://HexMap/Resources/HexTerrain/hex_terrain_mountains.tres" id="18_p57t5"]
+[ext_resource type="Resource" uid="uid://ci7xkus8twnnc" path="res://HexMap/Resources/HexTerrain/hex_terrain_sand.tres" id="19_rb7lc"]
+[ext_resource type="Resource" uid="uid://uwjfe8h16d6h" path="res://HexMap/Resources/HexTerrain/hex_terrain_swamp.tres" id="20_nij8c"]
+[ext_resource type="Resource" uid="uid://dr1tprxwpg6sd" path="res://HexMap/Resources/HexTerrain/hex_terrain_forest.tres" id="21_m3166"]
+[ext_resource type="Resource" uid="uid://ctj380ye241rl" path="res://HexMap/Resources/HexTerrain/hex_terrain_water.tres" id="22_hy341"]
+[ext_resource type="Resource" uid="uid://bds7wu50fnme7" path="res://HexMap/Resources/HexIcons/hex_icon_alert.tres" id="23_1kxjq"]
+[ext_resource type="Resource" uid="uid://cchk7cm57ng36" path="res://HexMap/Resources/HexIcons/hex_icon_capital.tres" id="24_0g27l"]
+[ext_resource type="Resource" uid="uid://dpx00gw4740eq" path="res://HexMap/Resources/HexIcons/hex_icon_castle.tres" id="25_p57t5"]
+[ext_resource type="Resource" uid="uid://c1hscxwxm5d01" path="res://HexMap/Resources/HexIcons/hex_icon_city.tres" id="26_rb7lc"]
+[ext_resource type="Resource" uid="uid://cbtiantj3abyp" path="res://HexMap/Resources/HexIcons/hex_icon_fort.tres" id="27_nij8c"]
+[ext_resource type="Resource" uid="uid://s3siigh6a3un" path="res://HexMap/Resources/HexIcons/hex_icon_town.tres" id="28_m3166"]
+[ext_resource type="Resource" uid="uid://bvff3avcs708t" path="res://HexMap/Resources/HexIcons/hex_icon_village.tres" id="29_hy341"]
+[ext_resource type="Resource" uid="uid://m84epll4836t" path="res://HexMap/Resources/HexIcons/hex_icon_small1.tres" id="30_jd4i8"]
+[ext_resource type="Resource" uid="uid://nq5f5o1x8b5o" path="res://HexMap/Resources/HexIcons/hex_icon_small4.tres" id="31_3hl4u"]
+[ext_resource type="Resource" uid="uid://cuf1k0nllrkni" path="res://HexMap/Resources/HexIcons/hex_icon_small5.tres" id="32_k8dtq"]
+
+[node name="HexToolsUI" type="CanvasLayer"]
+script = ExtResource("1_1kxjq")
+toolButtonScene = ExtResource("3_b5wxm")
+hexButtonGroup = ExtResource("4_duqsj")
+hexColors = Array[Object]([ExtResource("2_bw43h"), ExtResource("3_5pcny"), ExtResource("4_ed3n6"), ExtResource("5_0yeki"), ExtResource("6_38doo"), ExtResource("7_y6vxu"), ExtResource("8_mhiue"), ExtResource("9_x78ds"), ExtResource("10_hwlhu"), ExtResource("11_okyep"), ExtResource("12_3xlvv"), ExtResource("13_jdpbb")])
+hexTerrain = Array[Object]([ExtResource("16_1kxjq"), ExtResource("17_0g27l"), ExtResource("18_p57t5"), ExtResource("19_rb7lc"), ExtResource("20_nij8c"), ExtResource("21_m3166"), ExtResource("22_hy341")])
+hexIcons = Array[Object]([ExtResource("23_1kxjq"), ExtResource("24_0g27l"), ExtResource("25_p57t5"), ExtResource("26_rb7lc"), ExtResource("27_nij8c"), ExtResource("28_m3166"), ExtResource("29_hy341"), ExtResource("30_jd4i8"), ExtResource("31_3hl4u"), ExtResource("32_k8dtq")])
+
+[node name="SelectionOutline" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(66, 66)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -33.0
+offset_right = 33.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_0g27l")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 390.0
+grow_vertical = 2
+theme = ExtResource("1_8xu51")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="TerrainTools" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HeadingLabel" type="Label" parent="PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Hex Map Tools"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ToolModeButtons" type="HBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+alignment = 1
+
+[node name="DrawButton" type="Button" parent="PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+button_group = ExtResource("2_elmdn")
+text = "Draw"
+
+[node name="EraseButton" type="Button" parent="PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+button_group = ExtResource("2_elmdn")
+text = "Erase"
+
+[node name="SelectButton" type="Button" parent="PanelContainer/MarginContainer/TerrainTools/ToolModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+button_group = ExtResource("2_elmdn")
+text = "Select"
+
+[node name="Tools" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools"]
+layout_mode = 2
+theme_override_constants/separation = 36
+
+[node name="HexColorContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HexColorLabel" type="Label" parent="PanelContainer/MarginContainer/TerrainTools/Tools/HexColorContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "HEX COLOR"
+
+[node name="HexColorGrid" type="GridContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools/HexColorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="TerrainContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools"]
+layout_mode = 2
+
+[node name="TerrainLabel" type="Label" parent="PanelContainer/MarginContainer/TerrainTools/Tools/TerrainContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "TERRAIN"
+
+[node name="TerrainGrid" type="GridContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools/TerrainContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 4
+
+[node name="IconsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools"]
+layout_mode = 2
+
+[node name="IconsLabel" type="Label" parent="PanelContainer/MarginContainer/TerrainTools/Tools/IconsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "ICONS"
+
+[node name="IconsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools/IconsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 4
