@@ -1,4 +1,4 @@
-public enum PlayerMapModeEnum
+public enum MapModeEnum
 {
     DRAW,
     ERASE,

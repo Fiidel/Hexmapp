@@ -1,12 +1,12 @@
 using Godot;
 
-public class EraseState : IPlayerMapState
+public class PlayerEraseState : IMapState
 {
     private PlayerMap context;
     private EraseTilesCommand currentEraseTilesCommand = null;
     private bool isTileErasing = false;
 
-    public EraseState(PlayerMap playerMap)
+    public PlayerEraseState(PlayerMap playerMap)
     {
         context = playerMap;
     }

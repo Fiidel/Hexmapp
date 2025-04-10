@@ -43,7 +43,7 @@ public partial class PlayerMap : Node2D
 		mapAssetPreview = GetNode<Sprite2D>("%MapAssetPreview");
 
 		// check for missing data and errors
-		ValiadeLoadsAfterReady();
+		ValidateLoadsAfterReady();
 
 		// initialize
 		baseMapData = new BaseMapData(200, 150);
@@ -80,7 +80,7 @@ public partial class PlayerMap : Node2D
 	}
 
 
-    private void ValiadeLoadsAfterReady()
+    private void ValidateLoadsAfterReady()
     {
 		if (backgroundDetectArea == null)
 		{
@@ -145,7 +145,7 @@ public partial class PlayerMap : Node2D
     }
 
 
-	private void OnSelectedModeChanged(PlayerMapModeEnum mode)
+	private void OnSelectedModeChanged(MapModeEnum mode)
     {
         playerMapFSM.ChangeState(mode);
     }
@@ -153,7 +153,7 @@ public partial class PlayerMap : Node2D
 
 	private void OnBackgroundInputEvent(Node viewport, InputEvent @event, long shapeIdx)
     {
-		if (playerMapFSM.currentState is SelectState && @event.IsActionPressed("left_click"))
+		if (playerMapFSM.currentState is PlayerSelectState && @event.IsActionPressed("left_click"))
 		{
 			SignalBus.Instance.EmitSignal(SignalBus.SignalName.ClickedPlayerMapBackground);
 		}
@@ -201,7 +201,7 @@ public partial class PlayerMap : Node2D
 
     private void OnUiPanelMouseExited()
     {
-		if (!IsMouseOverUi() && playerMapFSM.currentState is DrawState)
+		if (!IsMouseOverUi() && playerMapFSM.currentState is PlayerDrawState)
 		{
 			if (GetSelectedTool() is MapAsset mapAsset)
 			{

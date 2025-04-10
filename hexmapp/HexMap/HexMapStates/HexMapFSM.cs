@@ -1,17 +1,17 @@
-public class PlayerMapFSM
+public class HexMapFSM
 {
+    public HexMap context;
     public IMapState currentState;
-    private PlayerMap context;
-    private PlayerDrawState drawState;
-    private PlayerEraseState eraseState;
-    private PlayerSelectState selectState;
-
-    public PlayerMapFSM(PlayerMap playerMap)
+    private HexDrawState drawState;
+    private HexEraseState eraseState;
+    private HexSelectState selectState;
+    
+    public HexMapFSM(HexMap hexMap)
     {
-        context = playerMap;
-        drawState = new PlayerDrawState(context);
-        eraseState = new PlayerEraseState(context);
-        selectState = new PlayerSelectState(context);
+        context = hexMap;
+        drawState = new HexDrawState(context);
+        eraseState = new HexEraseState(context);
+        selectState = new HexSelectState(context);
 
         Init();
     }

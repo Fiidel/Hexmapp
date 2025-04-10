@@ -1,0 +1,283 @@
+[gd_scene load_steps=66 format=3 uid="uid://cbs7jcluvxucs"]
+
+[ext_resource type="Script" uid="uid://c1o8yd1w5a1eo" path="res://HexMap/Scripts/HexMap.cs" id="1_odg5p"]
+[ext_resource type="Script" uid="uid://db2ik8tlrv25o" path="res://PlayerMap/Scripts/CameraMovement.cs" id="2_uh3t7"]
+[ext_resource type="Texture2D" uid="uid://bo7ow17moxko7" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/barren.png" id="3_jkla4"]
+[ext_resource type="PackedScene" uid="uid://d2t53s310dfds" path="res://HexMap/hex_tools_ui.tscn" id="3_uh3t7"]
+[ext_resource type="Texture2D" uid="uid://0ra6hd0oqa5s" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/desert.png" id="4_4pi8y"]
+[ext_resource type="Texture2D" uid="uid://03y74lhtwiql" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/forest.png" id="5_gy8yb"]
+[ext_resource type="Texture2D" uid="uid://07c0hy1lfvwt" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/grassland.png" id="6_a4dvq"]
+[ext_resource type="Texture2D" uid="uid://bxhq0ku1sd1j3" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/hex_white.png" id="7_53flq"]
+[ext_resource type="Texture2D" uid="uid://cgsf3i7k11y28" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/hills.png" id="8_3qnpn"]
+[ext_resource type="Texture2D" uid="uid://cpcfvaigdt4ev" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/mountains.png" id="9_7tyfy"]
+[ext_resource type="Texture2D" uid="uid://ccslkr7xu0h84" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/swamp.png" id="10_f8r8u"]
+[ext_resource type="Texture2D" uid="uid://by3uhvv0psjid" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/urban.png" id="11_cy42s"]
+[ext_resource type="Texture2D" uid="uid://caw4fhrvq38eo" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/water_deep.png" id="12_yeyed"]
+[ext_resource type="Texture2D" uid="uid://dgoyhn7menbqp" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/water_shallow.png" id="13_ronk7"]
+[ext_resource type="Texture2D" uid="uid://bbaqsrl0y5w56" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/empty.png" id="14_0h7qv"]
+[ext_resource type="Texture2D" uid="uid://cnpgfnfl4072f" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Grass/hex_grass3.png" id="15_yeyed"]
+[ext_resource type="Texture2D" uid="uid://bl37c0top4ed8" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Hills/hill_1.png" id="16_ronk7"]
+[ext_resource type="Texture2D" uid="uid://bkh2ww838ejef" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Mountains/hex_mountain3.png" id="17_0h7qv"]
+[ext_resource type="Texture2D" uid="uid://cwy3ydps7kuil" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/city.png" id="17_odg5p"]
+[ext_resource type="Texture2D" uid="uid://gtpoutcguqyu" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/fort.png" id="18_nme6e"]
+[ext_resource type="Texture2D" uid="uid://cqk5f307s2pvm" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Sand/hex_sand2.png" id="18_t050u"]
+[ext_resource type="Texture2D" uid="uid://c0qonml1w87cg" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/town.png" id="19_hf63k"]
+[ext_resource type="Texture2D" uid="uid://by05y2pndxfj" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Swamp/swamp3.png" id="19_qrwmh"]
+[ext_resource type="Texture2D" uid="uid://c6ccu7rxwojq2" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/village.png" id="20_mutbn"]
+[ext_resource type="Texture2D" uid="uid://ka1jvwvkickr" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Trees/tree1.png" id="20_tsvw2"]
+[ext_resource type="Texture2D" uid="uid://cqe3c6f41v8ke" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Water/water2.png" id="21_l30my"]
+[ext_resource type="Texture2D" uid="uid://cxen26mgxuvjy" path="res://HexMap/HexAssets/HK-Ordinal Simple/Buildings/Small/hex_small1.png" id="21_prowx"]
+[ext_resource type="Texture2D" uid="uid://dgr2cnufocbs4" path="res://HexMap/HexAssets/HK-Ordinal Simple/Buildings/Small/hex_small4.png" id="22_8uu0i"]
+[ext_resource type="Texture2D" uid="uid://dgf5rvqhim154" path="res://HexMap/HexAssets/HK-Ordinal Simple/Buildings/Small/hex_small5.png" id="23_1hi28"]
+[ext_resource type="Texture2D" uid="uid://bpjcrcn8nv2gj" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/alert.png" id="29_rurb4"]
+[ext_resource type="Texture2D" uid="uid://cm3xd1hn75y0t" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/capital.png" id="30_l8epp"]
+[ext_resource type="Texture2D" uid="uid://djl2paukojqbh" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/castle.png" id="31_hk461"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hf63k"]
+texture = ExtResource("14_0h7qv")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dbxjh"]
+texture = ExtResource("11_cy42s")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_odg5p"]
+texture = ExtResource("12_yeyed")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nme6e"]
+texture = ExtResource("13_ronk7")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sc8mn"]
+texture = ExtResource("3_jkla4")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lf8jj"]
+texture = ExtResource("4_4pi8y")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t050u"]
+texture = ExtResource("5_gy8yb")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qrwmh"]
+texture = ExtResource("6_a4dvq")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tsvw2"]
+texture = ExtResource("7_53flq")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l30my"]
+texture = ExtResource("8_3qnpn")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m0d3a"]
+texture = ExtResource("9_7tyfy")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mgotg"]
+texture = ExtResource("10_f8r8u")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_l62ss"]
+tile_shape = 3
+tile_layout = 5
+tile_size = Vector2i(156, 180)
+sources/12 = SubResource("TileSetAtlasSource_nme6e")
+sources/11 = SubResource("TileSetAtlasSource_odg5p")
+sources/10 = SubResource("TileSetAtlasSource_dbxjh")
+sources/9 = SubResource("TileSetAtlasSource_mgotg")
+sources/8 = SubResource("TileSetAtlasSource_m0d3a")
+sources/7 = SubResource("TileSetAtlasSource_l30my")
+sources/6 = SubResource("TileSetAtlasSource_tsvw2")
+sources/5 = SubResource("TileSetAtlasSource_qrwmh")
+sources/4 = SubResource("TileSetAtlasSource_t050u")
+sources/3 = SubResource("TileSetAtlasSource_lf8jj")
+sources/2 = SubResource("TileSetAtlasSource_sc8mn")
+sources/1 = SubResource("TileSetAtlasSource_hf63k")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mutbn"]
+texture = ExtResource("15_yeyed")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_prowx"]
+texture = ExtResource("16_ronk7")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8uu0i"]
+texture = ExtResource("17_0h7qv")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1hi28"]
+texture = ExtResource("18_t050u")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rurb4"]
+texture = ExtResource("19_qrwmh")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l8epp"]
+texture = ExtResource("20_tsvw2")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hk461"]
+texture = ExtResource("21_l30my")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_nnn83"]
+tile_shape = 3
+tile_layout = 5
+tile_size = Vector2i(156, 180)
+sources/7 = SubResource("TileSetAtlasSource_hk461")
+sources/6 = SubResource("TileSetAtlasSource_l8epp")
+sources/5 = SubResource("TileSetAtlasSource_rurb4")
+sources/4 = SubResource("TileSetAtlasSource_1hi28")
+sources/3 = SubResource("TileSetAtlasSource_8uu0i")
+sources/2 = SubResource("TileSetAtlasSource_prowx")
+sources/1 = SubResource("TileSetAtlasSource_mutbn")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnn83"]
+texture = ExtResource("29_rurb4")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8colk"]
+texture = ExtResource("23_1hi28")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qc82o"]
+texture = ExtResource("30_l8epp")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ndl2n"]
+texture = ExtResource("31_hk461")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3xlkw"]
+texture = ExtResource("17_odg5p")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qmi67"]
+texture = ExtResource("18_nme6e")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vyhcb"]
+texture = ExtResource("19_hf63k")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gvgfe"]
+texture = ExtResource("20_mutbn")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_upx2g"]
+texture = ExtResource("21_prowx")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iyor8"]
+texture = ExtResource("22_8uu0i")
+margins = Vector2i(21, 7)
+texture_region_size = Vector2i(168, 198)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_qaxdp"]
+tile_shape = 3
+tile_layout = 5
+tile_size = Vector2i(156, 180)
+sources/1 = SubResource("TileSetAtlasSource_nnn83")
+sources/2 = SubResource("TileSetAtlasSource_qc82o")
+sources/3 = SubResource("TileSetAtlasSource_ndl2n")
+sources/4 = SubResource("TileSetAtlasSource_3xlkw")
+sources/5 = SubResource("TileSetAtlasSource_qmi67")
+sources/6 = SubResource("TileSetAtlasSource_vyhcb")
+sources/7 = SubResource("TileSetAtlasSource_gvgfe")
+sources/8 = SubResource("TileSetAtlasSource_upx2g")
+sources/9 = SubResource("TileSetAtlasSource_iyor8")
+sources/10 = SubResource("TileSetAtlasSource_8colk")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_prcjv"]
+resource_name = "HexButtons"
+
+[node name="HexMap" type="Node2D"]
+script = ExtResource("1_odg5p")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(-48, -48)
+anchor_mode = 0
+zoom = Vector2(0.75, 0.75)
+script = ExtResource("2_uh3t7")
+currentZoom = 0.75
+minZoom = 0.375
+
+[node name="Grids" type="Node2D" parent="."]
+
+[node name="HexGrid" type="TileMapLayer" parent="Grids"]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_l62ss")
+
+[node name="TerrainGrid" type="TileMapLayer" parent="Grids"]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_nnn83")
+
+[node name="IconsGrid" type="TileMapLayer" parent="Grids"]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_qaxdp")
+
+[node name="HexToolsUI" parent="." instance=ExtResource("3_uh3t7")]
+hexButtonGroup = SubResource("ButtonGroup_prcjv")

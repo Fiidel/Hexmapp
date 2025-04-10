@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bg7150cwd1vjy" path="res://PlayerMap/Scripts/TerrainToolsUi.cs" id="1_tn673"]
 [ext_resource type="ButtonGroup" uid="uid://ci08gi1837w6w" path="res://PlayerMap/UI/ToolModeButtonGroup.tres" id="2_mx5og"]
-[ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://PlayerMap/tool_button.tscn" id="3_bvbwh"]
+[ext_resource type="PackedScene" uid="uid://bltu1da1tx5cs" path="res://Common/UI/tool_button.tscn" id="3_bvbwh"]
 [ext_resource type="ButtonGroup" uid="uid://drrlg6mqufuqr" path="res://PlayerMap/UI/TerrainToolButtons.tres" id="4_cif0d"]
 [ext_resource type="Resource" uid="uid://cmy4rps5kxt07" path="res://PlayerMap/Tiles/TileResources/CorruptedA.tres" id="5_adoxb"]
 [ext_resource type="Resource" uid="uid://bdejmge4at2ml" path="res://PlayerMap/Tiles/TileResources/CorruptedB.tres" id="6_n0hvr"]

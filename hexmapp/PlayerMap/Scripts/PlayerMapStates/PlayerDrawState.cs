@@ -1,12 +1,12 @@
 using Godot;
 
-public class DrawState : IPlayerMapState
+public class PlayerDrawState : IMapState
 {
     private PlayerMap context;
     private DrawTilesCommand currentDrawTilesCommand = null;
     private bool isTileDrawing = false;
 
-    public DrawState(PlayerMap playerMap)
+    public PlayerDrawState(PlayerMap playerMap)
     {
         context = playerMap;
     }

@@ -1,14 +1,14 @@
 using System;
 using Godot;
 
-public class SelectState : IPlayerMapState
+public class PlayerSelectState : IMapState
 {
     private PlayerMap context;
     private Area2D selectedObject;
     private bool isDragging;
     private RectangleOutline currentSelectionOutline;
 
-    public SelectState(PlayerMap playerMap)
+    public PlayerSelectState(PlayerMap playerMap)
     {
         context = playerMap;
     }

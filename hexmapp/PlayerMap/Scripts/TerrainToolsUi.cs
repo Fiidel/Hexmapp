@@ -17,7 +17,7 @@ public partial class TerrainToolsUi : CanvasLayer
 	[Export] private Array<MapPin> mapPins;
 
 	// signals
-	[Signal] public delegate void SelectedModeChangedEventHandler(PlayerMapModeEnum mode);
+	[Signal] public delegate void SelectedModeChangedEventHandler(MapModeEnum mode);
 
 	// private variables
 	private BaseButton drawModeButton;
@@ -95,9 +95,9 @@ public partial class TerrainToolsUi : CanvasLayer
 
 		// connect signals
 		brushSlider.DragEnded += OnBrushSizeChanged;
-		drawModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.DRAW);
-        eraseModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.ERASE);
-        selectModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)PlayerMapModeEnum.SELECT);
+		drawModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.DRAW);
+        eraseModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.ERASE);
+        selectModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.SELECT);
 
 		// initialize variables
 		drawModeButton.ButtonPressed = true;

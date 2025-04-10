@@ -1,6 +1,6 @@
 using Godot;
 
-public interface IPlayerMapState
+public interface IMapState
 {
     public void ProcessInput(InputEvent @event);
     public void EnterState();
