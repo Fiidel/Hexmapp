@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://cbtiantj3abyp"]
+
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_3t1gl"]
+[ext_resource type="Texture2D" uid="uid://gtpoutcguqyu" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/fort.png" id="1_fp45p"]
+
+[resource]
+script = ExtResource("1_3t1gl")
+Texture = ExtResource("1_fp45p")
+TilesetId = 5
+AssetType = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"

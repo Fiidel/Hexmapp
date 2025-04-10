@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://da2b7tbnw81p0"]
+
+[ext_resource type="Texture2D" uid="uid://bkh2ww838ejef" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Mountains/hex_mountain3.png" id="1_lratr"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_wl0a7"]
+
+[resource]
+script = ExtResource("1_wl0a7")
+Texture = ExtResource("1_lratr")
+TilesetId = 3
+AssetType = 1
+metadata/_custom_type_script = "uid://ce33osergt2y8"

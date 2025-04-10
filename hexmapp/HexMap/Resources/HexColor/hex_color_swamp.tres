@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://bs365nr0c0m35"]
+
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_8y8rp"]
+[ext_resource type="Texture2D" uid="uid://ccslkr7xu0h84" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/swamp.png" id="1_e6uwl"]
+
+[resource]
+script = ExtResource("1_8y8rp")
+Texture = ExtResource("1_e6uwl")
+TilesetId = 9
+metadata/_custom_type_script = "uid://ce33osergt2y8"

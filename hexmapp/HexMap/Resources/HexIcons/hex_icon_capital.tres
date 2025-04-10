@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://cchk7cm57ng36"]
+
+[ext_resource type="Texture2D" uid="uid://cm3xd1hn75y0t" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/capital.png" id="1_iys0h"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_x542j"]
+
+[resource]
+script = ExtResource("1_x542j")
+Texture = ExtResource("1_iys0h")
+TilesetId = 2
+AssetType = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"

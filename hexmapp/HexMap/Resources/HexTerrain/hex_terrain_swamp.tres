@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://uwjfe8h16d6h"]
+
+[ext_resource type="Texture2D" uid="uid://by05y2pndxfj" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Swamp/swamp3.png" id="1_g5xgu"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_i0o4m"]
+
+[resource]
+script = ExtResource("1_i0o4m")
+Texture = ExtResource("1_g5xgu")
+TilesetId = 5
+AssetType = 1
+metadata/_custom_type_script = "uid://ce33osergt2y8"

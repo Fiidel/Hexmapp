@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://cw6mrq6a853mw"]
+
+[ext_resource type="Texture2D" uid="uid://bo7ow17moxko7" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/barren.png" id="1_7qf3b"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_8qetd"]
+
+[resource]
+script = ExtResource("1_8qetd")
+Texture = ExtResource("1_7qf3b")
+TilesetId = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"

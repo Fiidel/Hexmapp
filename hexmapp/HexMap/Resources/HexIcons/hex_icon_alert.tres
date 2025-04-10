@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://bds7wu50fnme7"]
+
+[ext_resource type="Texture2D" uid="uid://bpjcrcn8nv2gj" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/alert.png" id="1_7tnk6"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_xyjsp"]
+
+[resource]
+script = ExtResource("1_xyjsp")
+Texture = ExtResource("1_7tnk6")
+TilesetId = 1
+AssetType = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"

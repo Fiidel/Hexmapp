@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://s3siigh6a3un"]
+
+[ext_resource type="Texture2D" uid="uid://c0qonml1w87cg" path="res://HexMap/HexAssets/HK-Ordinal Simple/Symbols/town.png" id="1_hvbxr"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_kttih"]
+
+[resource]
+script = ExtResource("1_kttih")
+Texture = ExtResource("1_hvbxr")
+TilesetId = 6
+AssetType = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"

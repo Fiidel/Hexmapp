@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://vkl0nygadoia"]
+
+[ext_resource type="Texture2D" uid="uid://cpcfvaigdt4ev" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/mountains.png" id="1_61b70"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_ovbms"]
+
+[resource]
+script = ExtResource("1_ovbms")
+Texture = ExtResource("1_61b70")
+TilesetId = 8
+metadata/_custom_type_script = "uid://ce33osergt2y8"

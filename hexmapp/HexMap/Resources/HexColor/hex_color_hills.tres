@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://3j67o2utb21v"]
+
+[ext_resource type="Texture2D" uid="uid://cgsf3i7k11y28" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/hills.png" id="1_j0jro"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_pfsof"]
+
+[resource]
+script = ExtResource("1_pfsof")
+Texture = ExtResource("1_j0jro")
+TilesetId = 7
+metadata/_custom_type_script = "uid://ce33osergt2y8"

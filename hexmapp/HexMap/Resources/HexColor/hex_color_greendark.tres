@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://b7sd4s1lu7e75"]
+
+[ext_resource type="Texture2D" uid="uid://03y74lhtwiql" path="res://HexMap/HexAssets/HK-Ordinal Simple/Hexes/forest.png" id="1_71e5a"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="2_ernsg"]
+
+[resource]
+script = ExtResource("2_ernsg")
+Texture = ExtResource("1_71e5a")
+TilesetId = 4
+metadata/_custom_type_script = "uid://ce33osergt2y8"

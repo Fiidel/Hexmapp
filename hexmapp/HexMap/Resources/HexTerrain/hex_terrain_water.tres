@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://ctj380ye241rl"]
+
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_8ueky"]
+[ext_resource type="Texture2D" uid="uid://cqe3c6f41v8ke" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Water/water2.png" id="1_k3upm"]
+
+[resource]
+script = ExtResource("1_8ueky")
+Texture = ExtResource("1_k3upm")
+TilesetId = 7
+AssetType = 1
+metadata/_custom_type_script = "uid://ce33osergt2y8"

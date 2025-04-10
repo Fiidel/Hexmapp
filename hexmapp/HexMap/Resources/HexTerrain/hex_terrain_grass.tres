@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://byhmoie82f2o4"]
+
+[ext_resource type="Texture2D" uid="uid://cnpgfnfl4072f" path="res://HexMap/HexAssets/HK-Ordinal Simple/Terrain/Grass/hex_grass3.png" id="1_6idbr"]
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_7shs5"]
+
+[resource]
+script = ExtResource("1_7shs5")
+Texture = ExtResource("1_6idbr")
+TilesetId = 1
+AssetType = 1
+metadata/_custom_type_script = "uid://ce33osergt2y8"

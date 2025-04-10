@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HexAsset" load_steps=3 format=3 uid="uid://m84epll4836t"]
+
+[ext_resource type="Script" uid="uid://ce33osergt2y8" path="res://HexMap/Resources/HexAsset.cs" id="1_t2j37"]
+[ext_resource type="Texture2D" uid="uid://cxen26mgxuvjy" path="res://HexMap/HexAssets/HK-Ordinal Simple/Buildings/Small/hex_small1.png" id="1_u8tfs"]
+
+[resource]
+script = ExtResource("1_t2j37")
+Texture = ExtResource("1_u8tfs")
+TilesetId = 8
+AssetType = 2
+metadata/_custom_type_script = "uid://ce33osergt2y8"
