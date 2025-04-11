@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class HexMap : Node2D
 {
@@ -66,6 +67,63 @@ public partial class HexMap : Node2D
         else if (hexGrid.GetCellTileData(tileIndex) != null)
         {
             hexGrid.EraseCell(tileIndex);
+        }
+    }
+
+    public Godot.Collections.Dictionary<string, Variant> Save()
+    {
+        var hexGridDictionary = GetTilemaplayerDictionary(hexGrid);
+        var terrainGridDictionary = GetTilemaplayerDictionary(terrainGrid);
+        var iconsGridDictionary = GetTilemaplayerDictionary(iconsGrid);
+
+        var allTiles = new Godot.Collections.Dictionary<string, Variant>
+        {
+            {"hexGrid", hexGridDictionary},
+            {"terrainGrid", terrainGridDictionary},
+            {"iconsGrid", iconsGridDictionary}
+        };
+
+        GD.Print(allTiles);
+        
+        return allTiles;
+    }
+
+    private Godot.Collections.Dictionary<Vector2I, int> GetTilemaplayerDictionary(TileMapLayer tileMapLayer)
+    {
+        var dictionary = new Godot.Collections.Dictionary<Vector2I, int>();
+        var usedCells = tileMapLayer.GetUsedCells();
+        foreach (var tile in usedCells)
+        {
+            dictionary.Add(tile, tileMapLayer.GetCellSourceId(tile));
+        }
+        return dictionary;
+    }
+
+    public void Load(Godot.Collections.Dictionary<string, Variant> data)
+    {
+        try
+        {
+            var hexGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["hexGrid"];
+            var terrainGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["terrainGrid"];
+            var iconsGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["iconsGrid"];
+
+            foreach (var tile in hexGridDictionary)
+            {
+                hexGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+            }
+            foreach (var tile in terrainGridDictionary)
+            {
+                terrainGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+            }
+            foreach (var tile in iconsGridDictionary)
+            {
+                iconsGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.Message);
+            return;
         }
     }
 }
