@@ -120,7 +120,7 @@ sources/5 = SubResource("TileSetAtlasSource_qrwmh")
 sources/4 = SubResource("TileSetAtlasSource_t050u")
 sources/3 = SubResource("TileSetAtlasSource_lf8jj")
 sources/2 = SubResource("TileSetAtlasSource_sc8mn")
-sources/1 = SubResource("TileSetAtlasSource_hf63k")
+sources/0 = SubResource("TileSetAtlasSource_hf63k")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mutbn"]
 texture = ExtResource("15_yeyed")
