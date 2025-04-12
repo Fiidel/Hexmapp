@@ -7,4 +7,5 @@
 script = ExtResource("1_1gg8r")
 Texture = ExtResource("1_jbuwv")
 TilesetId = 12
+AssetType = 0
 metadata/_custom_type_script = "uid://ce33osergt2y8"
