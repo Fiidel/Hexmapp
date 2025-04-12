@@ -8,7 +8,7 @@ public partial class CameraMovement : Camera2D
 	[Export]
 	private float minZoom = 0.125f;
 	[Export]
-	private float maxZoom = 1f;
+	private float maxZoom = 1.5f;
 	[Export]
 	private float zoomStep = 0.125f;
 	private bool isPanning;
