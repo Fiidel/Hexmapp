@@ -10,17 +10,21 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_164lu"]
 bg_color = Color(0.18359, 0.18359, 0.18359, 1)
 
-[node name="NoteEntry" type="Control"]
+[node name="NoteEntryLayer" type="CanvasLayer"]
+
+[node name="NoteEntry" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme = ExtResource("1_164lu")
 script = ExtResource("2_7y1yp")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="NoteEntry"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -35,12 +39,12 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="TopPanel" type="PanelContainer" parent="VBoxContainer"]
+[node name="TopPanel" type="PanelContainer" parent="NoteEntry/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_164lu")
 
-[node name="CloseButton" type="TextureButton" parent="VBoxContainer/TopPanel"]
+[node name="CloseButton" type="TextureButton" parent="NoteEntry/VBoxContainer/TopPanel"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("2_3of4s")
@@ -49,42 +53,42 @@ texture_pressed = ExtResource("4_6cq24")
 texture_hover = ExtResource("5_7y1yp")
 stretch_mode = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="NoteEntry/VBoxContainer"]
 custom_minimum_size = Vector2(600, 700)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="NoteEntry/VBoxContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
 
-[node name="SaveButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SaveButton" type="Button" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Save"
 
-[node name="SaveAndCloseButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SaveAndCloseButton" type="Button" parent="NoteEntry/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Save & Close"
 
-[connection signal="mouse_entered" from="VBoxContainer/TopPanel" to="." method="IsDraggable" binds= [true]]
-[connection signal="mouse_exited" from="VBoxContainer/TopPanel" to="." method="IsDraggable" binds= [false]]
-[connection signal="pressed" from="VBoxContainer/TopPanel/CloseButton" to="." method="CloseNote"]
+[connection signal="mouse_entered" from="NoteEntry/VBoxContainer/TopPanel" to="NoteEntry" method="IsDraggable" binds= [true]]
+[connection signal="mouse_exited" from="NoteEntry/VBoxContainer/TopPanel" to="NoteEntry" method="IsDraggable" binds= [false]]
+[connection signal="pressed" from="NoteEntry/VBoxContainer/TopPanel/CloseButton" to="NoteEntry" method="CloseNote"]

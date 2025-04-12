@@ -15,6 +15,10 @@ public class HexSelectState : IMapState
 
     public void ProcessInput(InputEvent @event)
     {
-        
+        if (@event.IsActionPressed("left_click"))
+        {
+            var tileIndex = context.GetTileIndex();
+            context.DisplayNoteEntry(tileIndex);
+        }
     }
 }

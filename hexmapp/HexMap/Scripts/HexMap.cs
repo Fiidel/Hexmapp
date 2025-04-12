@@ -9,6 +9,8 @@ public partial class HexMap : Node2D
     private TileMapLayer hexGrid;
     private TileMapLayer terrainGrid;
     private TileMapLayer iconsGrid;
+    private PackedScene noteEntryScene;
+    private const string noteEntryUid = "uid://cyqo0vkbkvfxf";
 
 
     public override void _Ready()
@@ -20,6 +22,8 @@ public partial class HexMap : Node2D
         hexGrid = GetNode<TileMapLayer>("%HexGrid");
         terrainGrid = GetNode<TileMapLayer>("%TerrainGrid");
         iconsGrid = GetNode<TileMapLayer>("%IconsGrid");
+
+        noteEntryScene = GD.Load<PackedScene>(noteEntryUid);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -68,6 +72,13 @@ public partial class HexMap : Node2D
         {
             hexGrid.EraseCell(tileIndex);
         }
+    }
+
+    public void DisplayNoteEntry(Vector2I tileIndex)
+    {
+        var noteEntry = noteEntryScene.Instantiate();
+        // TODO: log file paths (file names), load data for that tileIndex from file
+        AddChild(noteEntry);
     }
 
     public Godot.Collections.Dictionary<string, Variant> Save()
