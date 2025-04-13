@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://5fylr8f87fqr"]
+[gd_scene load_steps=11 format=3 uid="uid://5fylr8f87fqr"]
 
 [ext_resource type="Script" uid="uid://dumieebkdy6mq" path="res://UI/MainMenu.cs" id="1_d8nwk"]
 [ext_resource type="FontFile" uid="uid://d1pja8kg83o4a" path="res://Common/Fonts/CinzelDecorative-Bold.ttf" id="1_p8ccj"]
@@ -6,8 +6,8 @@
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="4_4cwpn"]
 [ext_resource type="Script" uid="uid://gg05ckju8rf8" path="res://UI/JoinCampaignPopup.cs" id="5_8ctay"]
 [ext_resource type="Script" uid="uid://cwuulax4t1hwq" path="res://UI/CreateCampaignPopup.cs" id="5_ev3b6"]
-[ext_resource type="PackedScene" uid="uid://b3rk0gac0ce02" path="res://Common/UI/basic_unstyled_button.tscn" id="5_f40uw"]
 [ext_resource type="Theme" uid="uid://dqqcbxj7iho6i" path="res://Common/Theme/basic_unstyled_theme.tres" id="6_k0a0m"]
+[ext_resource type="Script" uid="uid://vjqwbkmbmqqv" path="res://UI/LoadCampaignPopup.cs" id="7_k0a0m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cwpn"]
 bg_color = Color(0, 0, 0, 0.376471)
@@ -25,8 +25,6 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0.509804)
 shadow_size = 16
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_8ctay"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -204,8 +202,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_4cwpn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_4cwpn")
+script = ExtResource("7_k0a0m")
 
 [node name="LoadCampaignPopupBg" type="PanelContainer" parent="LoadCampaignPopup"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -223,9 +223,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_f40uw")
 [node name="MarginContainer" type="MarginContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/margin_left = 64
+theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 64
+theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
 [node name="VBoxContainer" type="VBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer"]
@@ -246,13 +246,9 @@ size_flags_vertical = 8
 theme_override_constants/separation = 32
 
 [node name="CampaignsContainer" type="VBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
-
-[node name="CampaignButton" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/CampaignsContainer" instance=ExtResource("5_f40uw")]
-layout_mode = 2
-size_flags_horizontal = 4
-button_group = SubResource("ButtonGroup_8ctay")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -374,5 +370,8 @@ text = "Cancel
 [connection signal="pressed" from="CenterContainer/MenuButtonsContainer/QuitButton" to="." method="OnQuitButtonPressed"]
 [connection signal="pressed" from="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/OkButton" to="CreateCampaignPopup" method="OnCreateCampaignPopupOk"]
 [connection signal="pressed" from="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/CancelButton" to="CreateCampaignPopup" method="OnCreateCampaignPopupCancel"]
+[connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/DeleteButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupDelete"]
+[connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/OkButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupOk"]
+[connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/CancelButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupCancel"]
 [connection signal="pressed" from="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/OkButton" to="JoinCampaignPopup" method="OnRoomCodePopupOk"]
 [connection signal="pressed" from="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/CancelButton" to="JoinCampaignPopup" method="OnRoomCodePopupCancel"]

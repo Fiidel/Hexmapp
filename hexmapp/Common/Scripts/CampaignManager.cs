@@ -76,4 +76,16 @@ public partial class CampaignManager : Node
             // TODO: load all campaign data
         }
     }
+
+    public void DeleteCampaign(string campaignName)
+    {
+        var path = Path.Combine(campaignsDirectoryPath, campaignName);
+        if (!Directory.Exists(path))
+        {
+            GD.PrintErr($"Directory does not exist: {path}");
+            return;
+        }
+        GD.Print($"Deleting directory: {path}");
+        Directory.Delete(path, true);
+    }
 }

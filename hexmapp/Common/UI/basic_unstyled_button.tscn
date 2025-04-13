@@ -4,7 +4,7 @@
 [ext_resource type="ButtonGroup" uid="uid://e4c8yockpkxv" path="res://Common/UI/ListedCampaignsButtonGroup.tres" id="2_5e4rl"]
 
 [node name="CampaignButton" type="Button"]
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme = ExtResource("1_rw574")
 theme_override_font_sizes/font_size = 24
 toggle_mode = true
