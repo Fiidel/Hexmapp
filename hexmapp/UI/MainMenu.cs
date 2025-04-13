@@ -3,31 +3,25 @@ using System;
 
 public partial class MainMenu : Control
 {
-    private Panel roomCodePopup;
-    private LineEdit nicknameInput;
-    private LineEdit roomCodeInput;
+    private Panel createCampaignPopup;
+    private Panel loadCampaignPopup;
+    private Panel joinRoomPopup;
 
     public override void _Ready()
     {
-        roomCodePopup = GetNode<Panel>("%RoomCodePopup");
-        roomCodeInput = roomCodePopup.GetNode<LineEdit>("%RoomCodeInput");
-        nicknameInput = GetNode<LineEdit>("%NicknameInput");
+        createCampaignPopup = GetNode<Panel>("%CreateCampaignPopup");
+        loadCampaignPopup = GetNode<Panel>("%LoadCampaignPopup");
 
-        if (roomCodePopup == null)
+        joinRoomPopup = GetNode<Panel>("%JoinCampaignPopup");
+        
+
+        if (joinRoomPopup == null)
         {
-            GD.Print("roomCodePopup failed to load.");
-        }
-        if (roomCodeInput == null)
-        {
-            GD.Print("roomCodeInput failed to load.");
-        }
-        if (nicknameInput == null)
-        {
-            GD.Print("nicknameInput failed to load.");
+            GD.Print("joinRoomPopup failed to load.");
         }
 
-        roomCodeInput.TextChanged += (_) => ResetInputColorToDefault(roomCodeInput);
-        nicknameInput.TextChanged += (_) => ResetInputColorToDefault(nicknameInput);
+        // signals
+        SignalBus.Instance.MainMenu_CloseJoinCampaignPopup += () => HidePopup(joinRoomPopup);
     }
 
     private void OnCreateCampaignButtonPressed()
@@ -37,43 +31,11 @@ public partial class MainMenu : Control
 
     private void OnJoinCampaignButtonPressed()
     {
-        roomCodePopup.Visible = true;
+        joinRoomPopup.Visible = true;
     }
 
-    private void ResetInputColorToDefault(LineEdit lineEdit)
+    private void HidePopup(Panel popup)
     {
-        lineEdit.Modulate = new Color(1, 1, 1, 1);
-    }
-
-    private void OnRoomCodePopupOk()
-    {
-        // validate input
-        bool invalid = false;
-        if (roomCodeInput.Text == "" || roomCodeInput.Text.Length != 8)
-        {
-            invalid = true;
-            roomCodeInput.Modulate = new Color(1, 0, 0, 1);
-        }
-        if (nicknameInput.Text == "" || nicknameInput.Text.Contains(':'))
-        {
-            invalid = true;
-            nicknameInput.Modulate = new Color(1, 0, 0, 1);
-        }
-        if (invalid)
-        {
-            return;
-        }
-
-        // join room
-        WsClient.Instance.JoinRoom(roomCodeInput.Text, nicknameInput.Text);
-        
-        // TODO: load actual campaign data instead
-        GameManager.Instance.LoadCampaign();
-    }
-
-    private void OnRoomCodePopupCancel()
-    {
-        roomCodeInput.Text = "";
-        roomCodePopup.Visible = false;
+        popup.Visible = false;
     }
 }

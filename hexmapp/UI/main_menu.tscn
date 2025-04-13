@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://5fylr8f87fqr"]
+[gd_scene load_steps=10 format=3 uid="uid://5fylr8f87fqr"]
 
 [ext_resource type="Script" uid="uid://dumieebkdy6mq" path="res://UI/MainMenu.cs" id="1_d8nwk"]
 [ext_resource type="FontFile" uid="uid://d1pja8kg83o4a" path="res://Common/Fonts/CinzelDecorative-Bold.ttf" id="1_p8ccj"]
 [ext_resource type="Texture2D" uid="uid://c0vw6k0qywo1b" path="res://UI/MainMenuBg.png" id="1_tk8dj"]
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="4_4cwpn"]
+[ext_resource type="Script" uid="uid://gg05ckju8rf8" path="res://UI/JoinCampaignPopup.cs" id="5_8ctay"]
+[ext_resource type="PackedScene" uid="uid://b3rk0gac0ce02" path="res://Common/UI/basic_unstyled_button.tscn" id="5_f40uw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cwpn"]
 bg_color = Color(0, 0, 0, 0.376471)
@@ -21,6 +23,8 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0.509804)
 shadow_size = 16
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_8ctay"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -69,7 +73,7 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 24
 
 [node name="CreateCampaignButton" type="Button" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -90,9 +94,16 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("4_4cwpn")
 theme_override_font_sizes/font_size = 36
-text = "Join"
+text = "Join Game Session"
 
-[node name="RoomCodePopup" type="Panel" parent="."]
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_4cwpn")
+theme_override_font_sizes/font_size = 36
+text = "Quit"
+
+[node name="CreateCampaignPopup" type="Panel" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -104,7 +115,7 @@ grow_vertical = 2
 theme = ExtResource("4_4cwpn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_4cwpn")
 
-[node name="RoomCodePopupBg" type="PanelContainer" parent="RoomCodePopup"]
+[node name="CreateCampaignPopupBg" type="PanelContainer" parent="CreateCampaignPopup"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -119,29 +130,113 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_f40uw")
 
-[node name="MarginContainer" type="MarginContainer" parent="RoomCodePopup/RoomCodePopupBg"]
+[node name="MarginContainer" type="MarginContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg"]
 layout_mode = 2
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 32
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Label" type="Label" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 36
-text = "Enter Room Code"
+text = "Create Campaign"
+horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="NicknameInput" type="LineEdit" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NameInput" type="LineEdit" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_4cwpn")
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Name"
+alignment = 1
+max_length = 8
+
+[node name="InputWarning" type="RichTextLabel" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="OkButton" type="Button" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "OK"
+
+[node name="CancelButton" type="Button" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Cancel
+"
+
+[node name="JoinCampaignPopup" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_4cwpn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_4cwpn")
+script = ExtResource("5_8ctay")
+
+[node name="RoomCodePopupBg" type="PanelContainer" parent="JoinCampaignPopup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.5
+offset_top = -56.0
+offset_right = 86.5
+offset_bottom = 56.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f40uw")
+
+[node name="MarginContainer" type="MarginContainer" parent="JoinCampaignPopup/RoomCodePopupBg"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 36
+text = "Enter Room Code"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="NicknameInput" type="LineEdit" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("4_4cwpn")
@@ -150,7 +245,7 @@ placeholder_text = "Nickname"
 alignment = 1
 max_length = 8
 
-[node name="RoomCodeInput" type="LineEdit" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="RoomCodeInput" type="LineEdit" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -158,25 +253,113 @@ placeholder_text = "Code"
 alignment = 1
 max_length = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
-[node name="OkButton" type="Button" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="OkButton" type="Button" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "OK"
 
-[node name="CancelButton" type="Button" parent="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="CancelButton" type="Button" parent="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Cancel
 "
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/CreateCampaignButton" to="." method="OnCreateCampaignButtonPressed"]
+[node name="LoadCampaignPopup" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_4cwpn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_4cwpn")
+
+[node name="LoadCampaignPopupBg" type="PanelContainer" parent="LoadCampaignPopup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.5
+offset_top = -134.5
+offset_right = 199.5
+offset_bottom = 134.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f40uw")
+
+[node name="MarginContainer" type="MarginContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 36
+text = "Load Campaign"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 32
+
+[node name="CampaignsContainer" type="VBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CampaignButton" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/CampaignsContainer" instance=ExtResource("5_f40uw")]
+layout_mode = 2
+size_flags_horizontal = 4
+button_group = SubResource("ButtonGroup_8ctay")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DeleteButton" type="Button" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 24
+text = "Delete"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 16
+
+[node name="OkButton" type="Button" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 24
+text = "OK"
+
+[node name="CancelButton" type="Button" parent="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 24
+text = "Cancel
+"
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/JoinCampaignButton" to="." method="OnJoinCampaignButtonPressed"]
-[connection signal="pressed" from="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="OnRoomCodePopupOk"]
-[connection signal="pressed" from="RoomCodePopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="OnRoomCodePopupCancel"]
+[connection signal="pressed" from="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/OkButton" to="JoinCampaignPopup" method="OnRoomCodePopupOk"]
+[connection signal="pressed" from="JoinCampaignPopup/RoomCodePopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/CancelButton" to="JoinCampaignPopup" method="OnRoomCodePopupCancel"]

@@ -10,6 +10,9 @@ public partial class SignalBus : Node
         Instance = this;
     }
 
+    // MainMenu
+    [Signal] public delegate void MainMenu_CloseJoinCampaignPopupEventHandler();
+
     // PlayerMap
     [Signal] public delegate void ClickedPlayerMapObjectEventHandler(Area2D playerMapObject);
     [Signal] public delegate void ClickedPlayerMapBackgroundEventHandler();
