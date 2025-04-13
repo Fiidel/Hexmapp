@@ -43,7 +43,6 @@ public partial class JoinCampaignPopup : Panel
         WsClient.Instance.JoinRoom(roomCodeInput.Text, nicknameInput.Text);
         
         // TODO: load actual campaign data instead
-        GameManager.Instance.LoadCampaign();
     }
 
     private void OnRoomCodePopupCancel()
@@ -52,6 +51,6 @@ public partial class JoinCampaignPopup : Panel
         ResetInputColorToDefault(nicknameInput);
         roomCodeInput.Text = "";
         ResetInputColorToDefault(roomCodeInput);
-        SignalBus.Instance.EmitSignal(SignalBus.SignalName.MainMenu_CloseJoinCampaignPopup);
+        Visible = false;
     }
 }

@@ -11,7 +11,6 @@ public partial class MainMenu : Control
     {
         createCampaignPopup = GetNode<Panel>("%CreateCampaignPopup");
         loadCampaignPopup = GetNode<Panel>("%LoadCampaignPopup");
-
         joinRoomPopup = GetNode<Panel>("%JoinCampaignPopup");
         
 
@@ -19,14 +18,16 @@ public partial class MainMenu : Control
         {
             GD.Print("joinRoomPopup failed to load.");
         }
-
-        // signals
-        SignalBus.Instance.MainMenu_CloseJoinCampaignPopup += () => HidePopup(joinRoomPopup);
     }
 
     private void OnCreateCampaignButtonPressed()
     {
-        GameManager.Instance.LoadCampaign();
+        createCampaignPopup.Visible = true;
+    }
+
+    private void OnLoadCampaignButtonPressed()
+    {
+        loadCampaignPopup.Visible = true;
     }
 
     private void OnJoinCampaignButtonPressed()
@@ -34,8 +35,9 @@ public partial class MainMenu : Control
         joinRoomPopup.Visible = true;
     }
 
-    private void HidePopup(Panel popup)
+    private void OnQuitButtonPressed()
     {
-        popup.Visible = false;
+        GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+        GetTree().Quit();
     }
 }

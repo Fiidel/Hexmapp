@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 public partial class GameManager : Node
 {
@@ -53,7 +55,7 @@ public partial class GameManager : Node
     }
 
 
-    public void LoadCampaign()
+    public void LoadScenesOnStartup()
     {
         leftNavbarInstance = GD.Load<PackedScene>(leftNavbarSceneUid).Instantiate();
         AddChild(leftNavbarInstance);

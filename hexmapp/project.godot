@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 SignalBus="*res://Common/Scripts/SignalBus.cs"
 WsClient="*res://Common/Scripts/WsClient.cs"
+CampaignManager="*res://Common/Scripts/CampaignManager.cs"
 
 [display]
 
