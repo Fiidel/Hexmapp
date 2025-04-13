@@ -1,6 +1,0 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dqqcbxj7iho6i"]
-
-[ext_resource type="FontFile" uid="uid://cs375svc66bio" path="res://Common/Fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf" id="1_ojlyg"]
-
-[resource]
-default_font = ExtResource("1_ojlyg")
