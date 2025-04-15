@@ -1,26 +1,29 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.IO;
 
 public partial class GameManager : Node
 {
     public static GameManager Instance { get; private set; }
-    private const string mainMenuSceneUid = "uid://5fylr8f87fqr";
-    private const string playerMapSceneUid = "uid://crmhpjvlveoy2";
-    private Node playerMapInstance;
+    private string currentSceneUid;
+    private Node currentScene;
+
+    // persistent, always visible scenes
     private const string leftNavbarSceneUid = "uid://dqahxqpqd1cql";
     private Node leftNavbarInstance;
     private const string chatSceneUid = "uid://dt22gmsms27up";
     private Node chatInstance;
-    private Node currentScene;
-    private string currentSceneUid;
-    private PackedScene mainMenuScene;
-    private PackedScene playerMapScene;
-    // room code popup scene for hosting game
-    private const string roomCodePopupSceneUid = "uid://bfagl48eikacy";
-    private PackedScene roomCodePopupScene;
 
+    // persistent module scenes (hex map, player map, etc.)
+    private const string mainMenuSceneUid = "uid://5fylr8f87fqr";
+    private PackedScene mainMenuScene;
+    private const string playerMapSceneUid = "uid://crmhpjvlveoy2";
+    private Node playerMapInstance;
+    private const string hexMapSceneUid = "uid://cbs7jcluvxucs";
+    private Node hexMapInstance;
+    
+    // other scenes
+    private const string roomCodePopupSceneUid = "uid://bfagl48eikacy"; // room code popup scene for hosting game
+    private PackedScene roomCodePopupScene;
 
     public override void _Ready()
     {
@@ -36,8 +39,11 @@ public partial class GameManager : Node
         // load the main menu on startup
         currentScene = mainMenu;
 
-        playerMapScene = GD.Load<PackedScene>(playerMapSceneUid);
-        playerMapInstance = playerMapScene.Instantiate();
+        playerMapInstance = GD.Load<PackedScene>(playerMapSceneUid).Instantiate();
+        hexMapInstance = GD.Load<PackedScene>(hexMapSceneUid).Instantiate();
+
+        // listen to scene switch signal
+        SignalBus.Instance.SwitchScene += SetCurrentScene;
 
         // listen to room code received signal
         WsClient.Instance.RoomCodeReceived += DisplayRoomCodePopup;
@@ -83,6 +89,11 @@ public partial class GameManager : Node
                 AddChild(playerMapInstance);
                 currentScene = playerMapInstance;
                 break;
+            case hexMapSceneUid:
+                DeactivateCurrentScene(currentSceneUid);
+                AddChild(hexMapInstance);
+                currentScene = hexMapInstance;
+                break;
             default:
                 currentScene.QueueFree();
                 var newScene = GD.Load<PackedScene>(sceneUid);
@@ -109,7 +120,7 @@ public partial class GameManager : Node
 
     private bool IsAlwaysActiveScene(string sceneUid)
     {
-        return sceneUid == playerMapSceneUid; // add any more always-loaded uids (||)
+        return sceneUid == playerMapSceneUid || sceneUid == hexMapSceneUid; // add any more always-loaded uids (||)
     }
 
 

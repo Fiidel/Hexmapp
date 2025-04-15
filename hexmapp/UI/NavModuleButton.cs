@@ -43,7 +43,19 @@ public partial class NavModuleButton : TextureButton
     }
 
 
-    public void OnHostButtonPressed()
+    private void OnHexMapButtonPressed()
+    {
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.SwitchScene, "uid://cbs7jcluvxucs");
+    }
+
+
+    private void OnPlayerMapButtonPressed()
+    {
+        SignalBus.Instance.EmitSignal(SignalBus.SignalName.SwitchScene, "uid://crmhpjvlveoy2");
+    }
+
+
+    private void OnHostButtonPressed()
     {
         WsClient.Instance.HostGame();
     }

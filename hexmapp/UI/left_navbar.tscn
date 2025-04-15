@@ -36,4 +36,6 @@ layout_mode = 2
 texture_normal = ExtResource("4_diq0c")
 moduleName = "Host Game"
 
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HexMap" to="PanelContainer/VBoxContainer/HexMap" method="OnHexMapButtonPressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PlayerMap" to="PanelContainer/VBoxContainer/PlayerMap" method="OnPlayerMapButtonPressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Network" to="PanelContainer/VBoxContainer/Network" method="OnHostButtonPressed"]
