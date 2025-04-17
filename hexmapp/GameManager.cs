@@ -61,6 +61,38 @@ public partial class GameManager : Node
     }
 
 
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event.IsActionPressed("save"))
+        {
+            SaveGame();
+        }
+    }
+
+
+    public void SaveGame()
+    {
+        // call all of the save methods of each class that needs to be saved (hex map, player map, ...)
+        // which return a Dictionary with all the data
+        var hexMapScript = hexMapInstance as HexMap;
+        var hexData = hexMapScript.Save();
+
+        var saveData = new Godot.Collections.Dictionary<string, Variant>
+        {
+            {"hexMap", hexData},
+            {"playerMap", new Godot.Collections.Dictionary<string, Variant>()},
+            {"timeline", new Godot.Collections.Dictionary<string, Variant>()}
+        };
+
+        // save the dictionaries into JSON
+        var saveFilePath = ProjectSettings.GlobalizePath($"user://Campaigns/{CampaignManager.Instance.currentCampaignName}/save.json");
+        using var saveFile = FileAccess.Open(saveFilePath, FileAccess.ModeFlags.Write);
+        
+        var jsonString = Json.Stringify(saveData);
+        saveFile.StoreLine(jsonString);
+    }
+
+
     public void LoadScenesOnStartup()
     {
         leftNavbarInstance = GD.Load<PackedScene>(leftNavbarSceneUid).Instantiate();
@@ -69,7 +101,24 @@ public partial class GameManager : Node
         chatInstance = GD.Load<PackedScene>(chatSceneUid).Instantiate();
         AddChild(chatInstance);
 
+        SetCurrentScene(hexMapSceneUid);
         SetCurrentScene(playerMapSceneUid);
+    }
+
+
+    public void LoadCampaignData(Godot.Collections.Dictionary<string, Variant> data)
+    {
+        try
+        {
+            var hexMapData = (Godot.Collections.Dictionary<string, Variant>) data["hexMap"];
+            var hexMapScript = hexMapInstance as HexMap;
+            hexMapScript.Load(hexMapData);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error loading campaign data: {e.Message}");
+            return;
+        }
     }
 
 

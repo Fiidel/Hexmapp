@@ -1,12 +1,14 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Text.Json;
 
 public partial class CampaignManager : Node
 {
     public static CampaignManager Instance { get; private set; }
+    public string currentCampaignName { get; private set; }
     private readonly string campaignsDirectoryPath = ProjectSettings.GlobalizePath("user://Campaigns");
 
     public override void _Ready()
@@ -49,31 +51,53 @@ public partial class CampaignManager : Node
 
     public void LoadCampaign(string campaignName, bool newCampaign = false)
     {
+        currentCampaignName = campaignName;
+
         if (newCampaign)
         {
             var campaignDirectory = Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName));
             Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "hexnotes"));
             Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "playernotes"));
 
-            // create the save file
-            var saveDictionary = new Godot.Collections.Dictionary<string, Variant>
-            {
-                {"hexMap", new Godot.Collections.Dictionary<string, Variant>()},
-                {"playerMap", new Godot.Collections.Dictionary<string, Variant>()},
-                {"timeline", new Godot.Collections.Dictionary<string, Variant>()}
-            };
-
-            string jsonString = JsonSerializer.Serialize(saveDictionary);
-            File.WriteAllText(Path.Combine(campaignsDirectoryPath, campaignName, "save.json"), jsonString);
+            // create an empty save file
+            var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
+            File.CreateText(savePath).Close();
         }
 
         // load in all the necessary game scenes
         GameManager.Instance.LoadScenesOnStartup();
 
-        // load data for saved campaigns
+        // load data for a saved campaign
         if (!newCampaign)
         {
-            // TODO: load all campaign data
+            var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
+            if (!Godot.FileAccess.FileExists(savePath))
+            {
+                GD.Print($"Save file not found.");
+                return;
+            }
+            using var saveFile = Godot.FileAccess.Open(savePath, Godot.FileAccess.ModeFlags.Read);
+            var jsonString = saveFile.GetAsText();
+            var json = new Json();
+            var parseResult = json.Parse(jsonString);
+
+            if (parseResult != Error.Ok)
+            {
+                GD.Print($"Error in json parsing for the save file: {parseResult}");
+                return;
+            }
+
+            try
+            {
+                var data = (Godot.Collections.Dictionary<string, Variant>) json.Data;
+                GD.Print($"Campaign data: {data}");
+                GameManager.Instance.LoadCampaignData(data);
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr($"Error loading save file: {e.Message}");
+                return;
+            }
         }
     }
 

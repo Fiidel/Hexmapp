@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 
 public partial class HexMap : Node2D
 {
@@ -114,27 +113,44 @@ public partial class HexMap : Node2D
     {
         try
         {
-            var hexGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["hexGrid"];
-            var terrainGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["terrainGrid"];
-            var iconsGridDictionary = (Godot.Collections.Dictionary<Vector2I, int>) data["iconsGrid"];
+            // Dictionary<Vector2I, int> isn't parsed correctly, always returning (0,0) as the vector
+            // -> using a string and parsing it into a vector
+            var hexGridDictionary = (Godot.Collections.Dictionary<string, int>) data["hexGrid"];
+            var terrainGridDictionary = (Godot.Collections.Dictionary<string, int>) data["terrainGrid"];
+            var iconsGridDictionary = (Godot.Collections.Dictionary<string, int>) data["iconsGrid"];
 
             foreach (var tile in hexGridDictionary)
             {
-                hexGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+                hexGrid.SetCell(str2vec(tile.Key), tile.Value, Vector2I.Zero);
             }
             foreach (var tile in terrainGridDictionary)
             {
-                terrainGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+                terrainGrid.SetCell(str2vec(tile.Key), tile.Value, Vector2I.Zero);
             }
             foreach (var tile in iconsGridDictionary)
             {
-                iconsGrid.SetCell(tile.Key, tile.Value, Vector2I.Zero);
+                iconsGrid.SetCell(str2vec(tile.Key), tile.Value, Vector2I.Zero);
             }
         }
         catch (Exception e)
         {
             GD.PrintErr(e.Message);
             return;
+        }
+    }
+
+    private Vector2I str2vec(string str)
+    {
+        try
+        {
+            var trimmed = str.Trim('(', ')');
+            var split = trimmed.Split(',');
+            return new Vector2I(int.Parse(split[0]), int.Parse(split[1]));
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.Message);
+            return Vector2I.Zero;
         }
     }
 }
