@@ -56,7 +56,7 @@ public class TileMapDrawTool
 
 
     // Assign the selected tile texture to the clicked tile on the base grid
-	private void AddTile(Vector2I tileIndex, Tile tileType)
+	public void AddTile(Vector2I tileIndex, Tile tileType)
 	{
 		if (tileIndex.X < 0 || tileIndex.X >= baseMapData.mapWidth || tileIndex.Y < 0 || tileIndex.Y >= baseMapData.mapHeight)
 		{

@@ -77,10 +77,13 @@ public partial class GameManager : Node
         var hexMapScript = hexMapInstance as HexMap;
         var hexData = hexMapScript.Save();
 
+        var playerMapScript = playerMapInstance as PlayerMap;
+        var playerData = playerMapScript.Save();
+
         var saveData = new Godot.Collections.Dictionary<string, Variant>
         {
             {"hexMap", hexData},
-            {"playerMap", new Godot.Collections.Dictionary<string, Variant>()},
+            {"playerMap", playerData},
             {"timeline", new Godot.Collections.Dictionary<string, Variant>()}
         };
 
@@ -113,6 +116,10 @@ public partial class GameManager : Node
             var hexMapData = (Godot.Collections.Dictionary<string, Variant>) data["hexMap"];
             var hexMapScript = hexMapInstance as HexMap;
             hexMapScript.Load(hexMapData);
+
+            var playerMapData = (Godot.Collections.Dictionary<string, Variant>) data["playerMap"];
+            var playerMapScript = playerMapInstance as PlayerMap;
+            playerMapScript.Load(playerMapData);
         }
         catch (Exception e)
         {

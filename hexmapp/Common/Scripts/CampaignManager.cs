@@ -90,7 +90,6 @@ public partial class CampaignManager : Node
             try
             {
                 var data = (Godot.Collections.Dictionary<string, Variant>) json.Data;
-                GD.Print($"Campaign data: {data}");
                 GameManager.Instance.LoadCampaignData(data);
             }
             catch (Exception e)

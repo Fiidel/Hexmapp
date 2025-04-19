@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 public partial class PlayerMap : Node2D
 {
@@ -46,27 +47,14 @@ public partial class PlayerMap : Node2D
 		ValidateLoadsAfterReady();
 
 		// initialize
-		baseMapData = new BaseMapData(200, 150);
-		tileMapDrawTool = new TileMapDrawTool(baseMapData, displayLayersDict);
+		InitializeMapBasedOnSize(200, 150);
 		playerMapFSM = new PlayerMapFSM(this);
 
 		// register signals
 		uiPanel.MouseEntered += OnUiPanelMouseEntered;
 		uiPanel.MouseExited += OnUiPanelMouseExited;
 		terrainToolsUi.SelectedModeChanged += OnSelectedModeChanged;
-
-		// set up background click detection
-		var backgroundDetectCollider = backgroundDetectArea.GetNode<CollisionShape2D>("CollisionShape2D");
-		var tileSize = displayGridLayer.TileSet.TileSize.X;
-		var mapSize = new Vector2(baseMapData.mapWidth * tileSize, baseMapData.mapHeight * tileSize);
-		backgroundDetectCollider.Shape = new RectangleShape2D{Size = mapSize};
-		backgroundDetectCollider.Position = mapSize / 2;
 		backgroundDetectArea.InputEvent += OnBackgroundInputEvent;
-
-		// draw map outline
-		var mapOutline = new RectangleOutline(mapSize, 5, new Color(0.5f, 0.5f, 0.5f));
-		mapOutline.GlobalPosition = mapSize / 2;
-		AddChild(mapOutline);
 	}
 
 
@@ -77,6 +65,25 @@ public partial class PlayerMap : Node2D
 		uiPanel.MouseExited -= OnUiPanelMouseExited;
 		terrainToolsUi.SelectedModeChanged -= OnSelectedModeChanged;
 		backgroundDetectArea.InputEvent -= OnBackgroundInputEvent;
+	}
+
+
+	private void InitializeMapBasedOnSize(int width, int height)
+	{
+		baseMapData = new BaseMapData(width, height);
+		tileMapDrawTool = new TileMapDrawTool(baseMapData, displayLayersDict);
+
+		// set up background click detection
+		var backgroundDetectCollider = backgroundDetectArea.GetNode<CollisionShape2D>("CollisionShape2D");
+		var tileSize = displayGridLayer.TileSet.TileSize.X;
+		var mapSize = new Vector2(baseMapData.mapWidth * tileSize, baseMapData.mapHeight * tileSize);
+		backgroundDetectCollider.Shape = new RectangleShape2D{Size = mapSize};
+		backgroundDetectCollider.Position = mapSize / 2;
+
+		// draw map outline
+		var mapOutline = new RectangleOutline(mapSize, 5, new Color(0.36f, 0.21f, 0.08f));
+		mapOutline.GlobalPosition = mapSize / 2;
+		AddChild(mapOutline);
 	}
 
 
@@ -182,7 +189,7 @@ public partial class PlayerMap : Node2D
 
 	public DrawTilesCommand CreateDrawTilesCommand(Tile tile)
 	{
-        GetOrCreateTileMapLayer(tile.IdName);
+        GetOrCreateTileMapLayer(tile);
 		return new DrawTilesCommand(baseMapData, displayLayersDict, new List<Vector2I>(), GetBrushSize(), tile);
 	}
 
@@ -257,15 +264,15 @@ public partial class PlayerMap : Node2D
 
 
     // Get or create a tile map layer
-    private TileMapLayer GetOrCreateTileMapLayer(string tileName)
+    private TileMapLayer GetOrCreateTileMapLayer(Tile tile)
 	{
 		// if the tile hasn't been used yet, create a new layer
-		if (!displayLayersDict.ContainsKey(tileName) && GetSelectedTool() is Tile tile)
+		if (!displayLayersDict.ContainsKey(tile.IdName))
 		{
 			TileMapLayer newLayer = displayGridLayer.Duplicate() as TileMapLayer;
-			newLayer.Name = $"{tileName}Layer";
+			newLayer.Name = $"{tile.IdName}Layer";
 			newLayer.SetMeta("Tile", tile);
-			for (int x = 0; x <= baseMapData.mapWidth; x++) // <= ... to account for the offset to top left by half a tile
+			for (int x = 0; x <= baseMapData.mapWidth; x++) // <= (less or equal) ... to account for the offset to top left by half a tile
 			{
 				for (int y = 0; y <= baseMapData.mapHeight; y++)
 				{
@@ -282,10 +289,103 @@ public partial class PlayerMap : Node2D
 
 			// add to scene and dictionary
 			terrainGrids.AddChild(newLayer);
-			displayLayersDict.Add(tileName, newLayer);
+			displayLayersDict.Add(tile.IdName, newLayer);
 			return newLayer;
 		}
 		// otherwise get the existing layer for that tile
-		return displayLayersDict[tileName];
+		return displayLayersDict[tile.IdName];
+	}
+
+	public Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		// save the width and height in size, and base tilemap (as number IDs; you can store an ID-for-texturename dict as well)
+		var saveData = new Godot.Collections.Dictionary<string, Variant>();
+		saveData["size"] = new Godot.Collections.Dictionary<string, int>
+		{
+			{"width", baseMapData.mapWidth},
+			{"height", baseMapData.mapHeight}
+		};
+
+		var mapData = new Godot.Collections.Array();
+		for (int y = 0; y < baseMapData.mapHeight; y++)
+		{
+			var row = new Godot.Collections.Array();
+			for (int x = 0; x < baseMapData.mapWidth; x++)
+			{
+				if (baseMapData.baseTiles[x, y] != null)
+				{
+					row.Add(baseMapData.baseTiles[x, y].IdName);
+				}
+				else
+				{
+					row.Add("-");
+				}
+			}
+			mapData.Add(row);
+		}
+		saveData["map"] = mapData;
+
+		return saveData;
+	}
+
+	public void Load(Godot.Collections.Dictionary<string, Variant> data)
+	{
+		// load all Tile resources
+		var tileResources = LoadAllTileResources();
+		if (tileResources.Count == 0)
+		{
+			GD.Print("No tile resources found in TileResources folder.");
+			return;
+		}
+		
+		// load width and height
+		var mapSize = (Godot.Collections.Dictionary<string, int>) data["size"];
+		InitializeMapBasedOnSize(mapSize["width"], mapSize["height"]);
+
+		// load and render base tilemap
+		tileMapDrawTool = new TileMapDrawTool(baseMapData, displayLayersDict);
+		var mapData = (Godot.Collections.Array) data["map"];
+		for (int y = 0; y < baseMapData.mapHeight; y++)
+		{
+			var row = (Godot.Collections.Array) mapData[y];
+			for (int x = 0; x < baseMapData.mapWidth; x++)
+			{
+				var tileName = (string) row[x];
+				if (tileResources.ContainsKey(tileName))
+				{
+					var tile = tileResources[tileName];
+					GetOrCreateTileMapLayer(tile);
+					tileMapDrawTool.AddTile(new Vector2I(x, y), tile);
+				}
+			}
+		}
+	}
+
+	private Godot.Collections.Dictionary<string, Tile> LoadAllTileResources()
+	{
+		var tileResources = new Godot.Collections.Dictionary<string, Tile>();
+		var resourcePath = ProjectSettings.GlobalizePath("res://PlayerMap/Tiles/TileResources/");
+
+		using var resourceDir = DirAccess.Open(resourcePath);
+		if (resourceDir == null)
+		{
+			return tileResources;
+		}
+		foreach (var fileName in resourceDir.GetFiles())
+		{
+			try
+			{
+				var tile = ResourceLoader.Load<Tile>(Path.Combine(resourcePath, fileName));
+				if (tile != null)
+				{
+					tileResources.Add(tile.IdName, tile);
+				}
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Error loading Tile resource {fileName}: {e.Message}");
+			}
+		}
+		return tileResources;
 	}
 }
