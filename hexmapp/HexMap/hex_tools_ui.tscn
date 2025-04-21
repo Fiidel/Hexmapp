@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://d2t53s310dfds"]
+[gd_scene load_steps=37 format=3 uid="uid://d2t53s310dfds"]
 
 [ext_resource type="Script" uid="uid://umotggnxgtxj" path="res://HexMap/Scripts/HexToolsUi.cs" id="1_1kxjq"]
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_8xu51"]
@@ -35,6 +35,7 @@
 [ext_resource type="Resource" uid="uid://m84epll4836t" path="res://HexMap/Resources/HexIcons/hex_icon_small1.tres" id="30_jd4i8"]
 [ext_resource type="Resource" uid="uid://nq5f5o1x8b5o" path="res://HexMap/Resources/HexIcons/hex_icon_small4.tres" id="31_3hl4u"]
 [ext_resource type="Resource" uid="uid://cuf1k0nllrkni" path="res://HexMap/Resources/HexIcons/hex_icon_small5.tres" id="32_k8dtq"]
+[ext_resource type="StyleBox" uid="uid://cinb4ca8bdge7" path="res://UI/StyleBoxFlat_BaseBorderless.tres" id="35_0g27l"]
 
 [node name="HexToolsUI" type="CanvasLayer"]
 script = ExtResource("1_1kxjq")
@@ -68,6 +69,7 @@ anchor_bottom = 1.0
 offset_right = 390.0
 grow_vertical = 2
 theme = ExtResource("1_8xu51")
+theme_override_styles/panel = ExtResource("35_0g27l")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2

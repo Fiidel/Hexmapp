@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dt22gmsms27up"]
+[gd_scene load_steps=6 format=3 uid="uid://dt22gmsms27up"]
 
 [ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_8meuy"]
 [ext_resource type="Script" uid="uid://cpc78w2jbfntd" path="res://Chat/Scripts/Chat.cs" id="1_b0aik"]
 [ext_resource type="FontVariation" uid="uid://cwh1bl2p3qpbo" path="res://UI/chat_font.tres" id="2_3pd0p"]
+[ext_resource type="StyleBox" uid="uid://cinb4ca8bdge7" path="res://UI/StyleBoxFlat_BaseBorderless.tres" id="3_3d8pn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3pd0p"]
 bg_color = Color(0, 0, 0, 0.501961)
@@ -19,6 +20,7 @@ offset_left = -368.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("1_8meuy")
+theme_override_styles/panel = ExtResource("3_3d8pn")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
