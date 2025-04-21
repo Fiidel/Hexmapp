@@ -25,6 +25,10 @@ public partial class GameManager : Node
     private const string roomCodePopupSceneUid = "uid://bfagl48eikacy"; // room code popup scene for hosting game
     private PackedScene roomCodePopupScene;
 
+    // other helpful variables
+    public Vector2I PlayerMapSize = new Vector2I(1, 1);
+
+
     public override void _Ready()
     {
         Instance = this;
@@ -38,9 +42,6 @@ public partial class GameManager : Node
         AddChild(mainMenu);
         // load the main menu on startup
         currentScene = mainMenu;
-
-        playerMapInstance = GD.Load<PackedScene>(playerMapSceneUid).Instantiate();
-        hexMapInstance = GD.Load<PackedScene>(hexMapSceneUid).Instantiate();
 
         // listen to scene switch signal
         SignalBus.Instance.SwitchScene += SetCurrentScene;
@@ -78,12 +79,12 @@ public partial class GameManager : Node
         var hexData = hexMapScript.Save();
 
         var playerMapScript = playerMapInstance as PlayerMap;
-        var playerData = playerMapScript.Save();
+        var playerMapData = playerMapScript.Save();
 
         var saveData = new Godot.Collections.Dictionary<string, Variant>
         {
             {"hexMap", hexData},
-            {"playerMap", playerData},
+            {"playerMap", playerMapData},
             {"timeline", new Godot.Collections.Dictionary<string, Variant>()}
         };
 
@@ -104,6 +105,8 @@ public partial class GameManager : Node
         chatInstance = GD.Load<PackedScene>(chatSceneUid).Instantiate();
         AddChild(chatInstance);
 
+        hexMapInstance = GD.Load<PackedScene>(hexMapSceneUid).Instantiate();
+        playerMapInstance = GD.Load<PackedScene>(playerMapSceneUid).Instantiate();
         SetCurrentScene(hexMapSceneUid);
         SetCurrentScene(playerMapSceneUid);
     }

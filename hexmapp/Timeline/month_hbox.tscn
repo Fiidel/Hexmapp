@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ndbh2bksl174"]
+
+[node name="MonthHBox" type="HBoxContainer"]
+
+[node name="MonthNameInput" type="LineEdit" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Name"
+
+[node name="NumberOfDaysSpinbox" type="SpinBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+min_value = 1.0
+max_value = 500.0
+value = 30.0
+alignment = 1

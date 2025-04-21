@@ -9,6 +9,7 @@ public partial class CampaignManager : Node
 {
     public static CampaignManager Instance { get; private set; }
     public string currentCampaignName { get; private set; }
+    public Calendar currentCalendar { get; private set; }
     private readonly string campaignsDirectoryPath = ProjectSettings.GlobalizePath("user://Campaigns");
 
     public override void _Ready()
@@ -49,54 +50,64 @@ public partial class CampaignManager : Node
     }
 
 
-    public void LoadCampaign(string campaignName, bool newCampaign = false)
+    public void CreateCampaign(string campaignName, Vector2I playerMapSize, Calendar calendar)
     {
         currentCampaignName = campaignName;
 
-        if (newCampaign)
-        {
-            var campaignDirectory = Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName));
-            Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "hexnotes"));
-            Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "playernotes"));
+        // create the campaign directory
+        var campaignDirectory = Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName));
+        Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "hexnotes"));
+        Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName, "playernotes"));
 
-            // create an empty save file
-            var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
-            File.CreateText(savePath).Close();
-        }
+        // create an empty save file
+        var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
+        File.CreateText(savePath).Close();
+
+        // pass the player map size input
+        GameManager.Instance.PlayerMapSize = playerMapSize;
+
+        // pass the calendar
+        currentCalendar = calendar;
+
+        // load in all the necessary game scenes
+        GameManager.Instance.LoadScenesOnStartup();
+    }
+
+
+    public void LoadCampaign(string campaignName)
+    {
+        currentCampaignName = campaignName;
 
         // load in all the necessary game scenes
         GameManager.Instance.LoadScenesOnStartup();
 
         // load data for a saved campaign
-        if (!newCampaign)
+        var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
+        if (!Godot.FileAccess.FileExists(savePath))
         {
-            var savePath = Path.Combine(campaignsDirectoryPath, campaignName, "save.json");
-            if (!Godot.FileAccess.FileExists(savePath))
-            {
-                GD.Print($"Save file not found.");
-                return;
-            }
-            using var saveFile = Godot.FileAccess.Open(savePath, Godot.FileAccess.ModeFlags.Read);
-            var jsonString = saveFile.GetAsText();
-            var json = new Json();
-            var parseResult = json.Parse(jsonString);
+            GD.Print($"Save file not found.");
+            return;
+        }
+        using var saveFile = Godot.FileAccess.Open(savePath, Godot.FileAccess.ModeFlags.Read);
+        var jsonString = saveFile.GetAsText();
+        var json = new Json();
+        var parseResult = json.Parse(jsonString);
 
-            if (parseResult != Error.Ok)
-            {
-                GD.Print($"Error in json parsing for the save file: {parseResult}");
-                return;
-            }
+        if (parseResult != Error.Ok)
+        {
+            GD.Print($"Error in json parsing for the save file: {parseResult}");
+            return;
+        }
 
-            try
-            {
-                var data = (Godot.Collections.Dictionary<string, Variant>) json.Data;
-                GameManager.Instance.LoadCampaignData(data);
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr($"Error loading save file: {e.Message}");
-                return;
-            }
+        try
+        {
+            var data = (Godot.Collections.Dictionary<string, Variant>) json.Data;
+            GameManager.Instance.LoadCampaignData(data);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error loading save file: {e.Message}");
+            return;
         }
     }
 

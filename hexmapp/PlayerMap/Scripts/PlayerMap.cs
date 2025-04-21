@@ -47,7 +47,8 @@ public partial class PlayerMap : Node2D
 		ValidateLoadsAfterReady();
 
 		// initialize
-		InitializeMapBasedOnSize(200, 150);
+		var mapSize = GameManager.Instance.PlayerMapSize;
+		InitializeMapBasedOnSize(mapSize.X, mapSize.Y);
 		playerMapFSM = new PlayerMapFSM(this);
 
 		// register signals

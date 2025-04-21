@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://5fylr8f87fqr"]
+[gd_scene load_steps=12 format=3 uid="uid://5fylr8f87fqr"]
 
 [ext_resource type="Script" uid="uid://dumieebkdy6mq" path="res://UI/MainMenu.cs" id="1_d8nwk"]
 [ext_resource type="FontFile" uid="uid://d1pja8kg83o4a" path="res://Common/Fonts/CinzelDecorative-Bold.ttf" id="1_p8ccj"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" uid="uid://cwuulax4t1hwq" path="res://UI/CreateCampaignPopup.cs" id="5_ev3b6"]
 [ext_resource type="Theme" uid="uid://dqqcbxj7iho6i" path="res://Common/Theme/basic_unstyled_theme.tres" id="6_k0a0m"]
 [ext_resource type="Script" uid="uid://vjqwbkmbmqqv" path="res://UI/LoadCampaignPopup.cs" id="7_k0a0m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0a0m"]
+bg_color = Color(0, 0, 0, 0.376471)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cwpn"]
 bg_color = Color(0, 0, 0, 0.376471)
@@ -112,84 +115,174 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("4_4cwpn")
-theme_override_styles/panel = SubResource("StyleBoxFlat_4cwpn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_k0a0m")
 script = ExtResource("5_ev3b6")
 
-[node name="CreateCampaignPopupBg" type="PanelContainer" parent="CreateCampaignPopup"]
+[node name="CampaignDetails" type="PanelContainer" parent="CreateCampaignPopup"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -86.5
-offset_top = -56.0
-offset_right = 86.5
-offset_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_f40uw")
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("4_4cwpn")
 
-[node name="MarginContainer" type="MarginContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg"]
+[node name="MarginContainer" type="MarginContainer" parent="CreateCampaignPopup/CampaignDetails"]
 layout_mode = 2
-theme_override_constants/margin_left = 64
+theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 64
+theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Label" type="Label" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer"]
+[node name="Heading" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
 theme_override_font_sizes/font_size = 36
-text = "Create Campaign"
-horizontal_alignment = 1
+text = "Campaign Details"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="CampaignName" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("6_k0a0m")
+alignment = 1
 
-[node name="CampaignNameInput" type="LineEdit" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="CampaignNameInput" type="LineEdit" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignName"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("4_4cwpn")
-theme_override_font_sizes/font_size = 24
-placeholder_text = "Name"
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Campaign Name"
 alignment = 1
-max_length = 8
 
-[node name="CampaignNameInputWarning" type="RichTextLabel" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/VBoxContainer"]
+[node name="CampaignNameInputWarning" type="RichTextLabel" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignName"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.975664, 4.57242e-06, 1.54018e-06, 1)
 fit_content = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="CampaignDetailsItems" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="PlayerMapDetails" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Player Map"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails/HBoxContainer"]
+layout_mode = 2
+text = "Map Size"
+
+[node name="PlayerMapWidthInput" type="SpinBox" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 150.0
+alignment = 1
+
+[node name="x" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails/HBoxContainer"]
+layout_mode = 2
+text = " x "
+
+[node name="PlayerMapHeightInput" type="SpinBox" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/PlayerMapDetails/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 150.0
+alignment = 1
+
+[node name="CalendarDetails" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems"]
+layout_mode = 2
+
+[node name="CalendalLabel" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Calendar"
+
+[node name="CalendarItems" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails"]
+layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="OkButton" type="Button" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="NumOfMonthsContainer" type="HBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
-text = "OK"
 
-[node name="CancelButton" type="Button" parent="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="NumOfMonthsLabel" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/NumOfMonthsContainer"]
+layout_mode = 2
+text = "Number of Months"
+
+[node name="NumOfMonthsInput" type="SpinBox" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/NumOfMonthsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+value = 12.0
+alignment = 1
+
+[node name="MonthsListContainer" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer"]
+layout_mode = 2
+
+[node name="MonthNameLabel" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.517184, 0.517184, 0.517184, 1)
+theme_override_font_sizes/font_size = 12
+text = "  Name"
+
+[node name="NumOfDaysLabel" type="Label" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.517184, 0.517184, 0.517184, 1)
+theme_override_font_sizes/font_size = 12
+text = "Number of Days  "
+
+[node name="MonthsScrollbox" type="ScrollContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer"]
+custom_minimum_size = Vector2(0, 270)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer/MonthsScrollbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="MonthsContainer" type="VBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/CampaignDetailsItems/CalendarDetails/CalendarItems/MonthsListContainer/MonthsScrollbox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ControlButtons" type="HBoxContainer" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
-text = "Cancel
-"
+theme_override_constants/separation = 12
+
+[node name="DoneButton" type="Button" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/ControlButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Done"
+
+[node name="CancelButton" type="Button" parent="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/ControlButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Cancel"
 
 [node name="LoadCampaignPopup" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -368,8 +461,8 @@ text = "Cancel
 [connection signal="pressed" from="CenterContainer/MenuButtonsContainer/LoadCampaignButton" to="." method="OnLoadCampaignButtonPressed"]
 [connection signal="pressed" from="CenterContainer/MenuButtonsContainer/JoinCampaignButton" to="." method="OnJoinCampaignButtonPressed"]
 [connection signal="pressed" from="CenterContainer/MenuButtonsContainer/QuitButton" to="." method="OnQuitButtonPressed"]
-[connection signal="pressed" from="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/OkButton" to="CreateCampaignPopup" method="OnCreateCampaignPopupOk"]
-[connection signal="pressed" from="CreateCampaignPopup/CreateCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/CancelButton" to="CreateCampaignPopup" method="OnCreateCampaignPopupCancel"]
+[connection signal="pressed" from="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/ControlButtons/DoneButton" to="CreateCampaignPopup" method="OnDoneButtonPressed"]
+[connection signal="pressed" from="CreateCampaignPopup/CampaignDetails/MarginContainer/VBoxContainer/ControlButtons/CancelButton" to="CreateCampaignPopup" method="OnCancelButtonPressed"]
 [connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/DeleteButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupDelete"]
 [connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/OkButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupOk"]
 [connection signal="pressed" from="LoadCampaignPopup/LoadCampaignPopupBg/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer/HBoxContainer/CancelButton" to="LoadCampaignPopup" method="OnLoadCampaignPopupCancel"]
