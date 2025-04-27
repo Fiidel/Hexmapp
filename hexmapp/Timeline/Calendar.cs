@@ -1,4 +1,4 @@
 public class Calendar
 {
-    public MonthEntity[] Months { get; set; }
+    public Month[] Months { get; set; }
 }

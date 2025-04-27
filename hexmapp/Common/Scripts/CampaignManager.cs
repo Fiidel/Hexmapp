@@ -8,8 +8,8 @@ using System.Text.Json;
 public partial class CampaignManager : Node
 {
     public static CampaignManager Instance { get; private set; }
-    public string currentCampaignName { get; private set; }
-    public Calendar currentCalendar { get; private set; }
+    public string CurrentCampaignName { get; private set; }
+    public Calendar CurrentCalendar { get; private set; }
     private readonly string campaignsDirectoryPath = ProjectSettings.GlobalizePath("user://Campaigns");
 
     public override void _Ready()
@@ -52,7 +52,7 @@ public partial class CampaignManager : Node
 
     public void CreateCampaign(string campaignName, Vector2I playerMapSize, Calendar calendar)
     {
-        currentCampaignName = campaignName;
+        CurrentCampaignName = campaignName;
 
         // create the campaign directory
         var campaignDirectory = Directory.CreateDirectory(Path.Combine(campaignsDirectoryPath, campaignName));
@@ -67,16 +67,19 @@ public partial class CampaignManager : Node
         GameManager.Instance.PlayerMapSize = playerMapSize;
 
         // pass the calendar
-        currentCalendar = calendar;
+        CurrentCalendar = calendar;
 
         // load in all the necessary game scenes
         GameManager.Instance.LoadScenesOnStartup();
+
+        // save the campaign
+        GameManager.Instance.SaveGame();
     }
 
 
     public void LoadCampaign(string campaignName)
     {
-        currentCampaignName = campaignName;
+        CurrentCampaignName = campaignName;
 
         // load in all the necessary game scenes
         GameManager.Instance.LoadScenesOnStartup();

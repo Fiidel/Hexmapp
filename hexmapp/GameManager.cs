@@ -20,6 +20,8 @@ public partial class GameManager : Node
     private Node playerMapInstance;
     private const string hexMapSceneUid = "uid://cbs7jcluvxucs";
     private Node hexMapInstance;
+    private const string timelineSceneUid = "uid://ddyxmv15ykvp";
+    private Node timelineInstance;
     
     // other scenes
     private const string roomCodePopupSceneUid = "uid://bfagl48eikacy"; // room code popup scene for hosting game
@@ -81,15 +83,18 @@ public partial class GameManager : Node
         var playerMapScript = playerMapInstance as PlayerMap;
         var playerMapData = playerMapScript.Save();
 
+        var timelineScript = timelineInstance as TimelineUi;
+        var timelineData = timelineScript.Save();
+
         var saveData = new Godot.Collections.Dictionary<string, Variant>
         {
             {"hexMap", hexData},
             {"playerMap", playerMapData},
-            {"timeline", new Godot.Collections.Dictionary<string, Variant>()}
+            {"timeline", timelineData}
         };
 
         // save the dictionaries into JSON
-        var saveFilePath = ProjectSettings.GlobalizePath($"user://Campaigns/{CampaignManager.Instance.currentCampaignName}/save.json");
+        var saveFilePath = ProjectSettings.GlobalizePath($"user://Campaigns/{CampaignManager.Instance.CurrentCampaignName}/save.json");
         using var saveFile = FileAccess.Open(saveFilePath, FileAccess.ModeFlags.Write);
         
         var jsonString = Json.Stringify(saveData);
@@ -104,6 +109,9 @@ public partial class GameManager : Node
 
         chatInstance = GD.Load<PackedScene>(chatSceneUid).Instantiate();
         AddChild(chatInstance);
+
+        timelineInstance = GD.Load<PackedScene>(timelineSceneUid).Instantiate();
+        AddChild(timelineInstance);
 
         hexMapInstance = GD.Load<PackedScene>(hexMapSceneUid).Instantiate();
         playerMapInstance = GD.Load<PackedScene>(playerMapSceneUid).Instantiate();
@@ -123,6 +131,10 @@ public partial class GameManager : Node
             var playerMapData = (Godot.Collections.Dictionary<string, Variant>) data["playerMap"];
             var playerMapScript = playerMapInstance as PlayerMap;
             playerMapScript.Load(playerMapData);
+
+            var timelineData = (Godot.Collections.Dictionary<string, Variant>) data["timeline"];
+            var timelineScript = timelineInstance as TimelineUi;
+            timelineScript.Load(timelineData);
         }
         catch (Exception e)
         {

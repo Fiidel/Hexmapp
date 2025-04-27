@@ -106,13 +106,13 @@ public partial class CreateCampaignPopup : Panel
 
         // create campaign
         var mapSize = new Vector2I((int)playerMapWidthInput.Value, (int)playerMapHeightInput.Value);
-        var monthArray = new MonthEntity[(int)numOfMonths];
+        var monthArray = new Month[(int)numOfMonths];
         var months = monthList.GetChildren();
         for (int i = 0; i < numOfMonths; i++)
         {
             var monthName = months[i].GetNode<LineEdit>("%MonthNameInput").Text;
             var numOfDays = months[i].GetNode<SpinBox>("%NumberOfDaysSpinbox").Value;
-            monthArray[i] = new MonthEntity { Name = monthName, Days = (int)numOfDays };
+            monthArray[i] = new Month { Name = monthName, Days = (int)numOfDays };
         }
         var calendar = new Calendar { Months = monthArray };
         CampaignManager.Instance.CreateCampaign(campaignNameInput.Text, mapSize, calendar);

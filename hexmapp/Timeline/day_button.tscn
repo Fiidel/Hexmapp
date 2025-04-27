@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3cu22irrhhuq"]
+
+[ext_resource type="ButtonGroup" uid="uid://bh8lus6ojqwn1" path="res://Timeline/DaysInMonthButtonGroup.tres" id="1_v0x41"]
+
+[node name="Expander" type="CenterContainer"]
+custom_minimum_size = Vector2(0, 35)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DayButton" type="Button" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("1_v0x41")
+text = "17"

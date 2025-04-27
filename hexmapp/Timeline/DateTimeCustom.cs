@@ -3,10 +3,10 @@ using Godot;
 public class DateTimeCustom
 {
     private Calendar calendar;
-    public int currentYear { get; set; }
-    public int currentMonthIndex { get; set; }
-    public int currentDay { get; set; }
-    public int currentTime_minutes { get; set; }
+    public int currentYear { get; set; } = 1;
+    public int currentMonthIndex { get; set; } = 0;
+    public int currentDay { get; set; } = 1;
+    public int currentTime_minutes { get; set; } = 0;
 
     public DateTimeCustom(Calendar calendar)
     {

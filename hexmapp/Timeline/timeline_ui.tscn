@@ -1,0 +1,231 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddyxmv15ykvp"]
+
+[ext_resource type="Script" uid="uid://vf3slh0601jj" path="res://Timeline/TimelineUi.cs" id="1_sdgi5"]
+[ext_resource type="Theme" uid="uid://be4h8ib0sdjcp" path="res://Common/Theme/main_theme.tres" id="1_v5xpy"]
+
+[node name="TimelineUI" type="CanvasLayer"]
+script = ExtResource("1_sdgi5")
+
+[node name="MainVBox" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -131.0
+offset_top = 35.0
+offset_right = 131.0
+offset_bottom = 145.0
+grow_horizontal = 2
+theme = ExtResource("1_v5xpy")
+theme_override_constants/separation = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="MainVBox"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainVBox/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainVBox/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopRow" type="HBoxContainer" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Control" type="Control" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow"]
+layout_mode = 2
+alignment = 1
+
+[node name="DateLabel" type="Label" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Midvar 17"
+horizontal_alignment = 1
+
+[node name="YearLabel" type="Label" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "807"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CalendarButton" type="Button" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+toggle_mode = true
+text = "C"
+
+[node name="SettingsButton" type="Button" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+toggle_mode = true
+text = "..."
+
+[node name="BottomRow" type="HBoxContainer" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="RewindButton" type="Button" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/BottomRow"]
+layout_mode = 2
+text = "<"
+
+[node name="TimeLabel" type="Label" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7:10"
+
+[node name="ForwardButton" type="Button" parent="MainVBox/PanelContainer/MarginContainer/VBoxContainer/BottomRow"]
+layout_mode = 2
+text = ">"
+
+[node name="ModeButton" type="Button" parent="MainVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "Prep Mode"
+
+[node name="SetupContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 186.0
+offset_top = 35.0
+offset_right = 411.0
+offset_bottom = 229.0
+grow_horizontal = 2
+theme = ExtResource("1_v5xpy")
+
+[node name="MarginContainer" type="MarginContainer" parent="SetupContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SetupContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="TimeSkipVBox" type="VBoxContainer" parent="SetupContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TimeSkipLabel" type="Label" parent="SetupContainer/MarginContainer/VBoxContainer/TimeSkipVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Time Skip"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SetupContainer/MarginContainer/VBoxContainer/TimeSkipVBox"]
+layout_mode = 2
+
+[node name="TimeSkipInput" type="SpinBox" parent="SetupContainer/MarginContainer/VBoxContainer/TimeSkipVBox/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+max_value = 1.44e+06
+value = 10.0
+alignment = 1
+
+[node name="MinutesLabel" type="Label" parent="SetupContainer/MarginContainer/VBoxContainer/TimeSkipVBox/HBoxContainer"]
+layout_mode = 2
+text = "minutes"
+
+[node name="YearSetupVBox" type="VBoxContainer" parent="SetupContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="YearSetupLabel" type="Label" parent="SetupContainer/MarginContainer/VBoxContainer/YearSetupVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Current Year"
+vertical_alignment = 1
+
+[node name="YearSetupInput" type="SpinBox" parent="SetupContainer/MarginContainer/VBoxContainer/YearSetupVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+max_value = 0.0
+alignment = 1
+
+[node name="CalendarContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 198.0
+offset_right = 20.0
+offset_bottom = 238.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_v5xpy")
+
+[node name="MarginContainer" type="MarginContainer" parent="CalendarContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="MonthAndDaysContainer" type="VBoxContainer" parent="CalendarContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MonthControls" type="HBoxContainer" parent="CalendarContainer/MarginContainer/MonthAndDaysContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PreviousMonthButton" type="Button" parent="CalendarContainer/MarginContainer/MonthAndDaysContainer/MonthControls"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "<"
+
+[node name="MonthYearLabel" type="Label" parent="CalendarContainer/MarginContainer/MonthAndDaysContainer/MonthControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 20
+text = "month + year"
+vertical_alignment = 1
+
+[node name="NextMonthButton" type="Button" parent="CalendarContainer/MarginContainer/MonthAndDaysContainer/MonthControls"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = ">"
+
+[node name="MonthDaysContainer" type="CenterContainer" parent="CalendarContainer/MarginContainer/MonthAndDaysContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer/CalendarButton" to="." method="ToggleCalendarPopup"]
+[connection signal="pressed" from="MainVBox/PanelContainer/MarginContainer/VBoxContainer/TopRow/HBoxContainer/SettingsButton" to="." method="ToggleTimeSkipPopup"]
+[connection signal="pressed" from="MainVBox/PanelContainer/MarginContainer/VBoxContainer/BottomRow/RewindButton" to="." method="OnRewindTimeButtonPressed"]
+[connection signal="pressed" from="MainVBox/PanelContainer/MarginContainer/VBoxContainer/BottomRow/ForwardButton" to="." method="OnForwardTimeButtonPressed"]
+[connection signal="value_changed" from="SetupContainer/MarginContainer/VBoxContainer/YearSetupVBox/YearSetupInput" to="." method="OnCurrentYearChanged"]
+[connection signal="pressed" from="CalendarContainer/MarginContainer/MonthAndDaysContainer/MonthControls/PreviousMonthButton" to="." method="OnPreviousMonthButtonPressed"]
+[connection signal="pressed" from="CalendarContainer/MarginContainer/MonthAndDaysContainer/MonthControls/NextMonthButton" to="." method="OnNextMonthButtonPressed"]
