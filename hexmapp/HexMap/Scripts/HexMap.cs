@@ -15,7 +15,8 @@ public partial class HexMap : Node2D
     public override void _Ready()
     {
         hexToolsUi = GetNode<HexToolsUi>("HexToolsUI");
-        hexToolsUi.SelectedModeChanged += OnSelectedModeChangedd;
+        hexToolsUi.SelectedModeChanged += OnSelectedModeChanged;
+        hexToolsUi.Connect(HexToolsUi.SignalName.AddPartyTokenButtonPressed, Callable.From(AddPartyToken));
         hexMapFSM = new HexMapFSM(this);
 
         hexGrid = GetNode<TileMapLayer>("%HexGrid");
@@ -25,12 +26,20 @@ public partial class HexMap : Node2D
         noteEntryScene = GD.Load<PackedScene>(noteEntryUid);
     }
 
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        hexToolsUi.SelectedModeChanged -= OnSelectedModeChanged;
+        hexToolsUi.AddPartyTokenButtonPressed -= AddPartyToken;
+    }
+
+
     public override void _UnhandledInput(InputEvent @event)
 	{
 		hexMapFSM.currentState.ProcessInput(@event);
 	}
 
-    private void OnSelectedModeChangedd(MapModeEnum mode)
+    private void OnSelectedModeChanged(MapModeEnum mode)
     {
         hexMapFSM.ChangeState(mode);
     }
@@ -152,5 +161,19 @@ public partial class HexMap : Node2D
             GD.PrintErr(e.Message);
             return Vector2I.Zero;
         }
+    }
+
+    private void AddPartyToken()
+    {
+        var partyToken = new Sprite2D();
+        var tokenTexture = GD.Load<Texture2D>("uid://koglkcyjh28q");
+        partyToken.Texture = tokenTexture;
+
+        var screenCenter = GetViewportRect().Size / 2;
+        var screenCenterInMapCoords = hexGrid.LocalToMap(hexGrid.ToLocal(screenCenter));
+        partyToken.GlobalPosition = hexGrid.ToGlobal(hexGrid.MapToLocal(screenCenterInMapCoords));
+        GD.Print(partyToken.GlobalPosition);
+        
+        AddChild(partyToken);
     }
 }

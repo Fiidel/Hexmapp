@@ -121,6 +121,11 @@ text = "Select"
 layout_mode = 2
 theme_override_constants/separation = 36
 
+[node name="AddPartyTokenButton" type="Button" parent="PanelContainer/MarginContainer/TerrainTools/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add Party Token"
+
 [node name="HexColorContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/TerrainTools/Tools"]
 layout_mode = 2
 theme_override_constants/separation = 12

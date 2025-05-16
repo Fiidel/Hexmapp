@@ -10,6 +10,8 @@ public partial class HexToolsUi : CanvasLayer
 	private BaseButton eraseModeButton;
 	private BaseButton selectModeButton;
     [Signal] public delegate void SelectedModeChangedEventHandler(MapModeEnum mode);
+    private BaseButton addPartyTokenButton;
+    [Signal] public delegate void AddPartyTokenButtonPressedEventHandler();
     private TextureRect outline;
     [Export] private PackedScene toolButtonScene;
     [Export] private ButtonGroup hexButtonGroup;
@@ -26,6 +28,7 @@ public partial class HexToolsUi : CanvasLayer
         drawModeButton = GetNode<BaseButton>("%DrawButton");
 		eraseModeButton = GetNode<BaseButton>("%EraseButton");
 		selectModeButton = GetNode<BaseButton>("%SelectButton");
+        addPartyTokenButton = GetNode<Button>("%AddPartyTokenButton");
         outline = GetNode<TextureRect>("SelectionOutline");
         hexColorGrid = GetNode<GridContainer>("%HexColorGrid");
         terrainGrid = GetNode<GridContainer>("%TerrainGrid");
@@ -72,6 +75,7 @@ public partial class HexToolsUi : CanvasLayer
 		drawModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.DRAW);
         eraseModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.ERASE);
         selectModeButton.Pressed += () => EmitSignal(SignalName.SelectedModeChanged, (int)MapModeEnum.SELECT);
+        addPartyTokenButton.Pressed += () => EmitSignal(SignalName.AddPartyTokenButtonPressed);
 
 		// initialize variables
 		drawModeButton.ButtonPressed = true;
